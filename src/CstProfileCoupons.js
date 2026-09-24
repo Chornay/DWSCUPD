@@ -1,47 +1,51 @@
-import React, { Component } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import { View } from 'react-native'
 import { CdsScreen } from './CdsScreen';
-import { CstCouponList } from './CstCouponList'
+import { CmnCouponList } from 'DWcmn/CmnCouponList'
 import GCHeader from 'DWcmn/GCHeader'
-import { GC_STD_MARGIN } from 'DWcmn/Global'
-import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 import { dwdbfsCouponsGetForCustomer } from 'DWcmn/dwdbfsCoupons'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 //20230214 created
+//20260919 converted to functional component
 
 //prop user
-export class CstProfileCoupons extends Component {
+//prop onOkay .. back button pressed
+export function CstProfileCoupons({ user, onOkay }) {
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         isComponentInitialized: false,
-      };
-      this.coupons = []
-   }
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const isMountedRef = useIsMounted()
 
-   async componentDidMount() {
-      try {
-         this.coupons = await dwdbfsCouponsGetForCustomer(this.props.user.id)
-      } catch (error) {
-         cmnAlertPopup(error.message)
+   const couponsRef = useRef([])
+
+
+   //one-time setup: fetch the customer's coupons
+   useEffect(() => {
+
+      async function loadCoupons() {
+         try {
+            couponsRef.current = await dwdbfsCouponsGetForCustomer(user.id)
+         } catch (error) {
+            prjCloudLogError('CstProfileCoupons', error)
+         }
+         if (isMountedRef.current) { setIsComponentInitialized(true) }
       }
-      this.setState({ isComponentInitialized: true })
-   }
 
-   render() {
-      if (!this.state.isComponentInitialized) { return (null); }
+      loadCoupons()
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only setup, as the class did in componentDidMount
+   }, [])
 
-      return (
-         <CdsScreen>
 
-            <GCHeader back={this.props.onOkay} titleI18n='cmnNEW.CouponCode' />
-            <CstCouponList readonly coupons={this.coupons} />
+   if (!isComponentInitialized) { return (null); }
 
-         </CdsScreen >
-      )
-   }
+   return (
+      <CdsScreen>
 
+         <GCHeader back={onOkay} titleI18n='cmnNEW.CouponCode' />
+         <CmnCouponList readonly coupons={couponsRef.current} />
+
+      </CdsScreen>
+   )
 
 }// end CstProfileCoupons

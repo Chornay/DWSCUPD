@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Keyboard, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { Platform } from 'react-native'
-import { Form } from 'native-base';
 import { XFormInput, validateForm } from 'DWcmn/PrjFormInput'
 import firebase from '@react-native-firebase/app';
 import { strX } from 'DWcmn/I18n.js'
@@ -84,14 +83,14 @@ export default class CstSigninEmailSignup extends Component {
                >
                   <View style={{ flex: .7, justifyContent: 'center'}}>
                      <View style={{}}>
-                        <Form>
+                        <View>
                            {this.fields.map((field) => {
                               return (<XFormInput signin key={field.key}
                                  options={field}
                                  refresh={() => { this.refresh() }}
                               ></XFormInput>)
                            })}
-                        </Form>
+                        </View>
                      </View>
                   </View>
 

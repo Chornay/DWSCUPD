@@ -1,4 +1,4 @@
-//changes made to allow build including source from DWCommon as DWcmn/
+//changes made to allow build including source from DWcommon as DWcmn/
 /**
  * Metro configuration for React Native
  * https://github.com/facebook/react-native
@@ -7,10 +7,10 @@
  */
 
  const path = require('path');const extraNodeModules = {
-  'DWcmn': path.resolve(__dirname + '/../DWCommon'),
+  'DWcmn': path.resolve(__dirname + '/../DWcommon'),
 };
 const watchFolders = [
-  path.resolve(__dirname + '/../DWCommon')
+  path.resolve(__dirname + '/../DWcommon')
 ];module.exports = {
   transformer: {
     getTransformOptions: async () => ({

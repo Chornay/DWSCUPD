@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import { View } from 'react-native'
 import firestore from '@react-native-firebase/firestore';
-import { View } from 'native-base';
 
 import GCHeader from 'DWcmn/GCHeader'
 import { PrjTabBar } from 'DWcmn/PrjTabBar'

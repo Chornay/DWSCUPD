@@ -28,7 +28,7 @@ import { prjcmnInShopArea } from 'DWcmn/prjcmnLocationFunctions'
 import { prjToast } from 'DWcmn/PrjToast'
 import moment from 'moment'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
-import { CstCouponList } from './CstCouponList'
+import { CmnCouponList } from 'DWcmn/CmnCouponList'
 import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions';
 
 
@@ -494,7 +494,7 @@ class Coupons extends Component {
          <CdsScreen>
 
             <GCHeader back={this.props.onBack} titleText={this.props.titleText} />
-            <CstCouponList readonly
+            <CmnCouponList readonly
                coupons={this.coupons}
                onSelect={this.props.onSelect}
             />

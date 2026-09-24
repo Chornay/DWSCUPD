@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import { CstScreen } from './CdsScreen';
@@ -21,108 +21,100 @@ import { CST } from './CST'
 //  serviceSurcharge %
 
 //param order
-export default class CstCheckoutServiceLevel extends Component {
+const CstCheckoutServiceLevel = ({ navigation }) => {
 
+    const [serviceLevel, setServiceLevel] = useState('regular')
+    const [surchargePercent, setSurchargePercent] = useState(0)
+    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+    const orderRef = useRef(null)
 
-    constructor() {
-        super();
-        this.state = {
-            serviceLevel: 'regular',
-            surchargePercent: 0,
-            isComponentInitialized: false,
-        };
-        this.order = null
-    } //end constuctor
+    useEffect(() => {
 
+        //CLAUDE no null check on order .. the lines below throw if the param is missing
+        orderRef.current = navigation.getParam('order', null)
 
-    componentDidMount() {
+        setServiceLevel(orderRef.current.serviceLevel)
+        setSurchargePercent(orderRef.current.serviceSurchargePercent)
+        setIsComponentInitialized(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, order nav param is read once
+    }, [])
 
-        this.order = this.props.navigation.getParam('order', null)
-
-        this.setState({ serviceLevel: this.order.serviceLevel })
-        this.setState({ surchargePercent: this.order.serviceSurchargePercent })
-        this.setState({ isComponentInitialized: true });
+    const setLevel = (selected, surcharge) => {
+        setServiceLevel(selected)
+        setSurchargePercent(surcharge)
     }
 
-    render() {
-
-
-        if (!this.state.isComponentInitialized) {
-            return (
-                <CstSpinnerScreen />
-            );
-        }
-        let shop = CST.getShop()
-
+    if (!isComponentInitialized) {
         return (
-
-            <CstScreen>
-
-                <GCHeader back cancel titleI18n='cstNEW.ServiceLevel' />
-
-                <View style={{ flex: 1 }}>
-                    <Section selected={this.state.serviceLevel} onPress={this.setLevel} section='regular' surcharge={0} >
-                        <GCI18n title code="cstNEW.RegularService" />
-                        <GCText>{strX("cstNEW.OrderRequiresTimeReg", { hrs: this.order.procTimeReg })}</GCText>
-                    </Section>
-                    {shop.surchargeExpress != -1 &&
-                        <Section selected={this.state.serviceLevel} onPress={this.setLevel} section='express' surcharge={shop.surchargeExpress}>
-                            <GCI18n title code="cstNEW.ExpressService" />
-                            <GCText>{strX("cstNEW.OrderRequiresTimeExp", { hrs: this.order.procTimeExp })}</GCText>
-                            <GCText>{strX("cstNEW.SurchargeIsPercentExp", { percent: shop.surchargeExpress })}</GCText>
-                        </Section>}
-                    {shop.surchargeSameDay != -1 &&
-                        <Section selected={this.state.serviceLevel} onPress={this.setLevel} section='sameDay' surcharge={shop.surchargeSameDay}>
-                            <GCI18n title code="cstNEW.SameDayService" />
-                            <GCText>{strX("cstNEW.OrderRequiresTimeSameDay", { hrs: this.order.procTimeSameDay })}</GCText>
-                            <GCText>{strX("cstNEW.SurchargeIsPercentSameDay", { percent: shop.surchargeSameDay })}</GCText>
-                        </Section>
-                    }
-                </View>
-
-                <GCFooterWithSingleIcon
-                    code={"NEXT_IS_PICKUP"}
-                    onPress={() => {
-                        this.order.serviceLevel = this.state.serviceLevel
-                        this.order.serviceSurchargePercent = this.state.surchargePercent
-                        prjUpdateOrderPricing(this.order) //reprice including surcharge
-                        this.props.navigation.navigate('CstCheckoutSelectRoutePickup', { 'order': this.order })
-                    }} />
-
-            </CstScreen >
+            <CstSpinnerScreen />
         );
-    } //end render
-
-    setLevel = (selected, surcharge) => {
-        this.setState({ serviceLevel: selected })
-        this.setState({ surchargePercent: surcharge })
     }
+    const shop = CST.getShop()
+
+    //CLAUDE -1 means 'not offered' .. should be a named constant (also in CstCheckout)
+    //CLAUDE the service level strings 'regular', 'express', 'sameDay' should be named constants too
+    return (
+
+        <CstScreen>
+
+            <GCHeader back cancel titleI18n='cstNEW.ServiceLevel' />
+
+            <View style={{ flex: 1 }}>
+                <Section selected={serviceLevel} onPress={setLevel} section='regular' surcharge={0} >
+                    <GCI18n title code="cstNEW.RegularService" />
+                    <GCText>{strX("cstNEW.OrderRequiresTimeReg", { hrs: orderRef.current.procTimeReg })}</GCText>
+                </Section>
+                {shop.surchargeExpress != -1 &&
+                    <Section selected={serviceLevel} onPress={setLevel} section='express' surcharge={shop.surchargeExpress}>
+                        <GCI18n title code="cstNEW.ExpressService" />
+                        <GCText>{strX("cstNEW.OrderRequiresTimeExp", { hrs: orderRef.current.procTimeExp })}</GCText>
+                        <GCText>{strX("cstNEW.SurchargeIsPercentExp", { percent: shop.surchargeExpress })}</GCText>
+                    </Section>}
+                {shop.surchargeSameDay != -1 &&
+                    <Section selected={serviceLevel} onPress={setLevel} section='sameDay' surcharge={shop.surchargeSameDay}>
+                        <GCI18n title code="cstNEW.SameDayService" />
+                        <GCText>{strX("cstNEW.OrderRequiresTimeSameDay", { hrs: orderRef.current.procTimeSameDay })}</GCText>
+                        <GCText>{strX("cstNEW.SurchargeIsPercentSameDay", { percent: shop.surchargeSameDay })}</GCText>
+                    </Section>
+                }
+            </View>
+
+            <GCFooterWithSingleIcon
+                code={"NEXT_IS_PICKUP"}
+                onPress={() => {
+                    orderRef.current.serviceLevel = serviceLevel
+                    orderRef.current.serviceSurchargePercent = surchargePercent
+                    prjUpdateOrderPricing(orderRef.current) //reprice including surcharge
+                    navigation.navigate('CstCheckoutSelectRoutePickup', { 'order': orderRef.current })
+                }} />
+
+        </CstScreen >
+    );
 
 }// end CstCheckoutServiceLevel
+
+export default CstCheckoutServiceLevel
 
 //prop selected
 //prop section
 //prop surcharge
 //prop onPress()
-class Section extends Component {
-    render() {
-        const active = this.props.selected == this.props.section
-        const backgroundColor = active ? COLORS.GC_SHADE_SELECTED : 'transparent'
-        let maybeHighlightStyle = ((active) ? styles.highlight : null)
+const Section = ({ selected, section, surcharge, onPress, children }) => {
+    const active = selected == section
+    const maybeHighlightStyle = ((active) ? styles.highlight : null)
 
-        return (
-            <TouchableOpacity
-                disabled={active}
-                onPress={() => this.props.onPress(this.props.section, this.props.surcharge)}
-            >
-                <View style={maybeHighlightStyle}>
-                    <View style={{ flexDirection: 'column', paddingHorizontal: 10, paddingVertical: 20, alignItems: 'center' }}>
-                        {this.props.children}
-                    </View>
+    return (
+        <TouchableOpacity
+            disabled={active}
+            onPress={() => onPress(section, surcharge)}
+        >
+            <View style={maybeHighlightStyle}>
+                <View style={{ flexDirection: 'column', paddingHorizontal: 10, paddingVertical: 20, alignItems: 'center' }}>
+                    {children}
                 </View>
-            </TouchableOpacity>
-        )
-    }
+            </View>
+        </TouchableOpacity>
+    )
 }
 
 const styles = StyleSheet.create({

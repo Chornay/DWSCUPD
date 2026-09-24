@@ -7,6 +7,7 @@ import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MapViewDirections from 'react-native-maps-directions';
 import GLOBALS from 'DWcmn/Global';
+import {COLORS} from 'DWcmn/Global'
 //GCimport Boundary, { Events } from 'react-native-boundary';
 import DsOrderTile from './DsOrderTile'
 import { PrjIcon } from 'DWcmn/PrjIconComponents'
@@ -14,7 +15,7 @@ import { PrjMapIcon } from 'DWcmn/Prj'
 import { prjcmnCalculateEnclosingMapRegion } from 'DWcmn/prjcmnLocationFunctions'
 import { prjCheckLocationPermission } from 'DWcmn/prjcmnLocationFunctions'
 import { cmnOrderActiveLocation } from 'DWcmn/CmnFunctions'
-import { PrjFabMapShowAll, PrjFabExpandable } from 'DWcmn/Prj'
+import { PrjFab, PrjFabExpandable } from 'DWcmn/PrjFab'
 
 // { latitude:43.803586, longitude:-79.401574} //Canada 4 elspeth
 // { latitude:2.9222, longitude:101.6511} //Cyberjaya D'Pulze
@@ -213,7 +214,7 @@ class DrvViewRouteTabMap extends Component {
                         < DsOrderTile style={{ flex: .3 }} order={this.state.displayOrder} /> : null}
 
                     {/* display the FAB that does the selection of orders for routing */}
-                    {this.displayDirectionsFab()}
+                    {this.renderDirectionsFab()}
                 </View >
 
             </Container>
@@ -259,7 +260,7 @@ class DrvViewRouteTabMap extends Component {
         return -1;
     } //end indexInPath
 
-displayDirectionsFab = () => {
+renderDirectionsFab = () => {
     //NOTE used to be bottomright and up .. but got in the way of the tile
     return (
         <PrjFabExpandable
@@ -309,8 +310,19 @@ displayDirectionsFab = () => {
             ]}
         />
     )
-}//end displayDirectionsFab
+}//end renderDirectionsFab
 } //end DrvViewRouteTabMap
+
+//prop onPress()
+export const PrjFabMapShowAll = ({ onPress }) => (
+  <PrjFab
+    icon="MAP_SHOW_ALL"
+    color={COLORS.GC_MAP_FAB_SHOWALL}
+    position="topRight"
+    onPress={onPress}
+  />
+);
+
 
 
 const styles = {

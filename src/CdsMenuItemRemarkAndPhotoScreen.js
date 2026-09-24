@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View, StyleSheet, Image } from 'react-native';
 
 import GCHeader from 'DWcmn/GCHeader'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import { GCText, GCI18n } from 'DWcmn/Gc'
 import { CmnTouchableEdit } from 'DWcmn/CmnTouchableEdit'
 import { COLORS } from 'DWcmn/Global'
@@ -11,10 +10,8 @@ import { CdsScreen } from './CdsScreen';
 import { PrjIcon } from 'DWcmn/PrjIconComponents'
 import { PrjSpacer } from 'DWcmn/Prj';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { PrjIconForRemark } from 'DWcmn/PrjIconForRemark'
 import { prjIconEditableBox } from 'DWcmn/PrjIconComponents'
 import storage from '@react-native-firebase/storage';
-import { dwdbfsOrderUpdateFields } from 'DWcmn/dwdbfsOrder'
 import { CST } from './CST'
 import { prjToast } from 'DWcmn/PrjToast'
 import { useRefresh } from 'DWcmn/prjUseRefresh'

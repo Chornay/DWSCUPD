@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Keyboard } from 'react-native';
-import { Form } from 'native-base';
 import { XFormInput, validateForm } from 'DWcmn/PrjFormInput'
 import GCHeader from 'DWcmn/GCHeader'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
@@ -73,13 +72,13 @@ export default function CdsSigninEmailForgot(props) {
                <CdsSigninNotation size={14} i18n='cmnNEW.EnterEmailAddress' />
             </View>
             <View style={{ flex: .4, justifyContent: 'center' }}>
-               <Form >
+               <View>
                   {fields.map((field) => {
                      return (
                         <XFormInput signin key={field.key} options={field} />
                      )
                   })}
-               </Form>
+               </View>
                {errorMessage && <PrjMsgBox text={errorMessage} />}
             </View>
 

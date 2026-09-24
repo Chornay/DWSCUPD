@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Keyboard, ImageBackground } from 'react-native';
-import { Form } from 'native-base';
 import { XFormInput, validateForm } from 'DWcmn/PrjFormInput'
-import { isBlank } from 'DWcmn/PrjCmnFunctions'
 import GCHeader from 'DWcmn/GCHeader'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 import { CdsScreen } from './CdsScreen'
 import firebase from '@react-native-firebase/app';
 import { strX } from 'DWcmn/I18n.js'
-import { GCI18n } from 'DWcmn/Gc'
 import { navigateForAuthorizedCust } from './CdsSigninFunctions'
 import { PrjMsgBox } from 'DWcmn/PrjMsgBox'
 import { CdsSigninButton, CdsSigninNotation } from './CdsSigninComponents'
 import { COLORS } from 'DWcmn/Global'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 
 export default function CdsSigninEmail(props) {
@@ -22,6 +21,7 @@ export default function CdsSigninEmail(props) {
    const [isLoginInProgress, setIsLoginInProgress] = useState(false);
    const [errorMessage, setErrorMessage] = useState(null);
    const refresh = useRefresh();
+   const isMountedRef = useIsMounted()
 
    // genuine refs: mutable values that must survive renders without triggering one
    const emailAddressRef = useRef("");
@@ -66,7 +66,7 @@ export default function CdsSigninEmail(props) {
       // emailAddressRef.current = "Novum@FOOBAR.COM"
       // emailPasswordRef.current = "Test%000"
       if (!validateForm(fields)) {
-      // if(false){
+         // if(false){
          //DEBUG
          refresh();
          setErrorMessage(null);
@@ -78,28 +78,42 @@ export default function CdsSigninEmail(props) {
          //NOTE we have to be careful resetting isLoginInProgress
          setIsLoginInProgress(true)
          const { user } = await firebase.auth().signInWithEmailAndPassword(emailAddressRef.current, emailPasswordRef.current);
-         // setIsLoginInProgress(false) ///used to do it here
          if (!(user.email.toLowerCase().includes('foobar.com') || user.emailVerified)) {
             setIsLoginInProgress(false)
             props.navigation.navigate('CdsSigninEmailNotVerified')
          }
          else {
             //NOTE isLoginInProgress is not reset until we have read the database
-            navigateForAuthorizedCust(props.navigation, appTypeRef.current, { 'authType': 'email' },
-               () => setIsLoginInProgress(false))
+            await navigateForAuthorizedCust(props.navigation, appTypeRef.current, { 'authType': 'email' })
          }
-      }
-      catch (e) { //unsuccessful login goes here
-         setIsLoginInProgress(false)
-         if (e.code === 'auth/user-not-found') {
+      } catch (error) { //unsuccessful login goes here
+         if (error.code === 'auth/user-not-found') {
             setErrorMessage(strX('cmnNEW.EmailNotFound'))
          }
-         else if (e.code === 'auth/wrong-password') {
+         else if (error.code === 'auth/wrong-password') {
             setErrorMessage(strX('cmnNEW.EmailBadPassword'))
          }
-         else {
-            setErrorMessage(e.message);
+         else if (error.code === 'auth/invalid-credential') { //replaces bad user or password depending on config
+            setErrorMessage(strX('cmnNEW.EmailInvalidCredential'))
          }
+         else if (error.code === 'auth/invalid-email') {
+            setErrorMessage(strX('cmnNEW.EmailInvalid'))
+         }
+         else if (error.code === 'auth/user-disabled') {
+            setErrorMessage(strX('cmnNEW.EmailUserDisabled'))
+         }
+         else if (error.code === 'auth/too-many-requests') {
+            setErrorMessage(strX('cmnNEW.EmailTooManyAttempts'))
+         }
+         else if (error.code === 'auth/network-request-failed') {
+            setErrorMessage(strX('cmnNEW.EmailNetworkError'))
+         }
+         else { //unexpected .. customer gets something readable, we get the real error
+            setErrorMessage(strX('cmnNEW.EmailSomethingWentWrong'))
+            prjCloudLogError('CdsSigninEmail', error, { toast: false }) //No need for a toast
+         }
+      } finally {
+         if (isMountedRef.current) { setIsLoginInProgress(false) }
       }
    } //handleSignIn
 
@@ -112,13 +126,13 @@ export default function CdsSigninEmail(props) {
                image={require('../images/company/textNoShadow.png')} />
             {/* TODO changing is .1 seem to break ImageBackground */}
             <View style={{ flex: .6, justifyContent: 'center' }}>
-               <Form >
+               <View>
                   {fields.map((field) => {
                      return (
                         <XFormInput signin key={field.key} options={field} />
                      )
                   })}
-               </Form>
+               </View>
                {errorMessage && <PrjMsgBox text={errorMessage} />}
             </View>
 

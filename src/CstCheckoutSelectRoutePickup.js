@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
-import firestore from '@react-native-firebase/firestore';
+import React, { useState, useRef, useEffect } from 'react'
+import { StyleSheet, View, FlatList, TouchableOpacity, AppState } from 'react-native'
 import { ListItemXYZ } from 'DWcmn/GCNB';
-import { dwdbfsRouteLoadSnapshots } from 'DWcmn/DWDBfs'
+import { dwdbfsShopGetRoutesAsArray } from 'DWcmn/dwdbfsShop'
 import { prjRouteName } from 'DWcmn/PrjCmnFunctions'
 import { CstScreen } from './CdsScreen';
 import { PrjSpacer } from 'DWcmn/Prj'
@@ -21,6 +20,9 @@ import { GCStaticMap } from 'DWcmn/GCStaticMap'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { prjToast } from 'DWcmn/PrjToast'
 import { CST } from './CST'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 //20221003 changed route select to be full wide touchable
 //20231107 added check for processing time adjustment in route
@@ -32,7 +34,7 @@ import { CST } from './CST'
 //
 
 //param order
-//param reschedule flag true iff this is an existing order begin rescheduled
+//param reschedule flag true iff this is an existing order being rescheduled
 //on entry we expect the following in the order
 //    shopId
 //    service level
@@ -45,249 +47,164 @@ import { CST } from './CST'
 //     pickup route time docId
 //     pickup stop
 
-export default class CstCheckoutSelectRoutePickup extends Component {
+//returns either the current time or the end of the curfew if we are in curfew window
+const getCurrentMomentAdjustedForCurfew = (order) => {
+
+   const { curfewStart, curfewEnd } = order
+   const now = moment();
+   const currentHour = now.hour() + now.minute() / 60; // fractional hour
+
+   //no action if either is missing
+   if (!(curfewStart && curfewEnd)) {
+      return now
+   }
+
+   else if (withinCurfew(currentHour, curfewStart, curfewEnd)) {
+      return (getCurfewEnd(currentHour, curfewStart, curfewEnd))
+   }
+
+   else {
+      return now
+   }
+}
+
+//returns true iif the current hour is within the curfew hours (including overnight case)
+const withinCurfew = (currentHour, curfewStart, curfewEnd) => {
+   if (curfewStart <= curfewEnd) {
+      // Same-day range, e.g. 09:00–17:00
+      return currentHour >= curfewStart && currentHour < curfewEnd;
+   } else {
+      // Overnight range, e.g. 23:00–07:00
+      return currentHour >= curfewStart || currentHour < curfewEnd;
+   }
+}
+
+//returns moment that is the time of the end of the curfew
+//  ..the curfew end hour ... but remember it may be tomorrow.
+const getCurfewEnd = (currentHour, curfewStart, curfewEnd) => {
+
+   const isOvernight = curfewStart > curfewEnd;
+   const pastMidnight = isOvernight && currentHour < curfewEnd;
+
+   return moment()
+      .startOf('day')
+      .add(pastMidnight ? 0 : (isOvernight ? 1 : 0), 'days')
+      .add(curfewEnd, 'hours');
+}
 
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         isComponentInitialized: false,
-         selIndex: -1,
-         toggle: false
-      };
-      this.order = null
-      this.reschedule = false
-      this.routes = []
-      this._staticMapRef = null
-   } //end constuctor
+//returns true iff the route is to be included for display
+//for express pickup the route must be marked as eligible (ie perhaps not late day ones)
+//for sameday pickup the same .... ie perhaps only early morning pickup eligible)
+const serviceLevelFilter = (route, serviceLevel) => {
+   //CLAUDE the service level strings ('express', 'sameDay') should be named constants
+   if (serviceLevel == 'express') return route.pickupExp
+   if (serviceLevel == 'sameDay') return route.pickupSameDay
+   return true
+}
 
 
-   componentDidMount() {
+const CstCheckoutSelectRoutePickup = ({ navigation }) => {
+
+   const refresh = useRefresh()
+   const isMountedRef = useIsMounted()
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const [selIndex, setSelIndex] = useState(-1)
+   const [routes, setRoutes] = useState([])
+   const orderRef = useRef(null)
+   const rescheduleRef = useRef(false)
+   const staticMapPointerRef = useRef(null)
+
+   //load the routes for the pickup window .. called at mount and again when we come back to the foreground
+   const loadRoutes = async () => {
+
+      //by design a failure leaves this empty .. an empty but functional screen plus a toast, never a stuck spinner
+      let newRoutes = []
+      try {
+         const minMinutesTillPickup = CST.getShop().routeAvailableOffset
+         const hoursToDisplay = CST.getShop().hoursOfPickupRoutes
+         const shopId = orderRef.current.shopId
+
+         const adjustedCurrentMoment = getCurrentMomentAdjustedForCurfew(orderRef.current)
+         const earliestMoment = adjustedCurrentMoment.add(minMinutesTillPickup, "minutes")
+
+         const earliestTime = earliestMoment.toDate()
+         const latestTime = earliestMoment.add(hoursToDisplay, "hours").toDate()
+
+         const allRoutes = await dwdbfsShopGetRoutesAsArray(shopId, earliestTime, latestTime)
+         newRoutes = allRoutes.filter((route) => serviceLevelFilter(route, orderRef.current.serviceLevel))
+      }
+      catch (error) {
+         prjCloudLogError('CstCheckoutSelectRoutePickup', error)
+      }
+      finally {
+         if (isMountedRef.current) {
+            setSelIndex(-1) //a selection is an index into the old array so it can't survive a reload
+            setRoutes(newRoutes)
+            setIsComponentInitialized(true)
+         }
+      }
+   }//end loadRoutes
+
+
+   useEffect(() => {
 
       //ASSERT check that shop.id === cust.shopId === order.shopId
       //ASSERT order is not null
-      this.order = this.props.navigation.getParam('order', null)
-      this.reschedule = this.props.navigation.getParam('reschedule', false)
+      orderRef.current = navigation.getParam('order', null)
+      rescheduleRef.current = navigation.getParam('reschedule', false)
+
+      loadRoutes() //NOTE we do NOT set isComponentInitialized here .. loadRoutes does that when the first load completes
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, nav params are read once, loadRoutes only uses refs and setters
+   }, [])
 
 
-      const minMinutesTillPickup = CST.getShop().routeAvailableOffset
-      const hoursToDisplay = CST.getShop().hoursOfPickupRoutes
-      const shopId = this.order.shopId
+   //the routes (and the time window they were loaded for) go stale if we are away for a while
+   //so reload when the app comes back to the foreground from the background.
+   //NOTE 'inactive' alone (eg iOS notification shade) does not count .. it would wipe the customer's selection
+   useEffect(() => {
 
-      const adjustedCurrentMoment = this.getCurrentMomentAdjustedForCurfew()
-      const earliestMoment = adjustedCurrentMoment.add(minMinutesTillPickup, "minutes")
-
-      const earliestTime = earliestMoment.toDate()
-      const latestTime = earliestMoment.add(hoursToDisplay, "hours").toDate()
-      this.unsubscribeRoutes = firestore().collection("ShopTop").doc(shopId).collection("Routes")
-         .where("archive", "==", false)
-         .where("schedDate", ">=", earliestTime)
-         .where("schedDate", "<=", latestTime)
-         .orderBy("schedDate") //.limit(6)
-         .onSnapshot(this.getRoutes);
-
-      //NOTE we do NOT set isComponentInitialized .. that is done when the first snapshot is received
-   }
-
-   //returns either the current time or the end of the curfew if we are in curfew window
-   getCurrentMomentAdjustedForCurfew = () => {
-
-      const { curfewStart, curfewEnd } = this.order
-      const now = moment();
-      const currentHour = now.hour() + now.minute() / 60; // fractional hour
-
-      //no action if either is missing
-      if (!(curfewStart && curfewEnd)) {
-         return now
+      let wasInBackground = false
+      const handleAppStateChange = (nextAppState) => {
+         if (nextAppState === 'background') {
+            wasInBackground = true
+         }
+         else if (nextAppState === 'active' && wasInBackground) {
+            wasInBackground = false
+            loadRoutes()
+         }
       }
-
-      else if (this.withinCurfew(currentHour, curfewStart, curfewEnd)) {
-         return (this.getCurfewEnd(currentHour, curfewStart, curfewEnd))
+      //NOTE Claude code handles R/N above and below 7.0
+      const appStateSubscription = AppState.addEventListener('change', handleAppStateChange)
+      return () => {
+         if (appStateSubscription && appStateSubscription.remove) { appStateSubscription.remove() }
+         else { AppState.removeEventListener('change', handleAppStateChange) }
       }
-
-      else {
-         return now
-      }
-   }
-
-   //returns true iif the current hour is within the curfew hours (including overnight case)
-   withinCurfew(currentHour, curfewStart, curfewEnd) {
-      if (curfewStart <= curfewEnd) {
-         // Same-day range, e.g. 09:00–17:00
-         return currentHour >= curfewStart && currentHour < curfewEnd;
-      } else {
-         // Overnight range, e.g. 23:00–07:00
-         return currentHour >= curfewStart || currentHour < curfewEnd;
-      }
-   }
-
-   //returns moment that is the time of the end of the curfew
-   //  ..the curfew end hour ... but remember it may be tomorrow.
-   getCurfewEnd(currentHour, curfewStart, curfewEnd) {
-
-      const isOvernight = curfewStart > curfewEnd;
-      const pastMidnight = isOvernight && currentHour < curfewEnd;
-
-      return moment()
-         .startOf('day')
-         .add(pastMidnight ? 0 : (isOvernight ? 1 : 0), 'days')
-         .add(curfewEnd, 'hours');
-   }
-
-   //get rid of the database listeners
-   componentWillUnmount() {
-      this.unsubscribeRoutes && this.unsubscribeRoutes();
-   } //end componentWillUnmount
-
-   getRoutes = async (querySnapshot) => {
-      const allRoutes = await dwdbfsRouteLoadSnapshots(querySnapshot)
-      if (this.order.serviceLevel == 'express') {
-         let filteredRoutes = []
-         allRoutes.forEach((route) => {
-            if (route.pickupExp) { filteredRoutes.push(route) }
-         });
-         this.routes = filteredRoutes
-      }
-      else if (this.order.serviceLevel == 'sameDay') {
-         let filteredRoutes = []
-         allRoutes.forEach((route) => {
-            if (route.pickupSameDay) { filteredRoutes.push(route) }
-         });
-         this.routes = filteredRoutes
-
-      }
-      else {
-         this.routes = allRoutes
-      }
-      this.setState({ isComponentInitialized: true });
-   }//end getRoutes
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, loadRoutes only uses refs and setters
+   }, [])
 
 
-   render() {
-
-      if (!this.state.isComponentInitialized) {
-         return (
-            <CstSpinnerScreen />
-         );
-      }
-      //KLUDGE if we are not going to be drawing a map at the bottom (Custom with no address specified yet)
-      //then we want to null the map reference ... if we change back to HOME eg then we will try to center the
-      //map but it won't be there yet.
-      // if (!Boolean(this.order.pickupStop.location)) {
-      //    this._staticMapRef = null
-      // }
-      //CORRECTION .. the above does NOT seem to be necessary
-
+   if (!isComponentInitialized) {
       return (
-
-         <CstScreen>
-            <GCHeader back cancel cancelConfirmI18n={this.reschedule ? "cmnNEW.DiscardTheseChanges_" : null}
-               titleI18n={this.reschedule ? 'cmnNEW.NewPickupDetails' : 'cmnNEW.PickupDetails'}
-               noBottomPadding />
-
-            <View style={{ flex: 1 }}>
-
-               {/* list available routes */}
-               {/*SC The flexBasis used to be .3 but that cause iOS view hide under another when click the schedule tile*/}
-               <View style={{ flexBasis: 120, flexGrow: 1, marginHorizontal: GC_STD_MARGIN }}>
-                  <CmnServiceLevelBanner level={this.order.serviceLevel} />
-                  <PrjSpacer size={10} />
-                  <GCI18n title code="cmnNEW.ChooseYourTime"></GCI18n>
-                  <FlatList
-                     data={this.routes}
-                     renderItem={this.renderRouteButton}
-                     extraData={this.state.selIndex}
-                     keyExtractor={(item, index) => index.toString()}
-                  />
-               </View>
-               {/* show (touchable) location title*/}
-               <PrjSpacer size={10} />
-               <View style={{ flex: 0 }}>
-                  <View style={{ marginHorizontal: GC_STD_MARGIN }}>
-                     <GCText title>{strX("cmnNEW.YourPickupLocation")}</GCText>
-                     <PrjSpacer size={10} />
-                     {/* title and a button to change the address */}
-                     {/*<CstCheckoutSectionTitle style={{ paddingRight: '2%' }} i18n="cstNEW.AddressAndInstructions" />*/}
-                     <CstCheckoutStop
-                        shop={CST.getShop()}
-                        stop={this.order.pickupStop}
-                        pickupStop={null}
-                        // buttonI18n={"cmnNEW.addressCode." + this.order.pickupStop.code}
-                        titleI18n="cmnNEW.ChangePickupLocation_"
-                        onChange={() => {
-                           if (Boolean(this.order.pickupStop.location) && Boolean(this._staticMapRef)) {
-                              this._staticMapRef.recenterMap(this.order.pickupStop.location)
-                           }
-                           this.toggle()
-                        }}
-                        onCustom={() => {
-                           if (Boolean(this.order.pickupStop.location) && Boolean(this._staticMapRef)) {
-                              this._staticMapRef.recenterMap(this.order.pickupStop.location)
-                           }
-                           //they have selected a custom address ... but there will be no address yet.
-                           this.toggle()
-                        }}
-                     >
-                     </CstCheckoutStop>
-                  </View>
-
-                  {/* show an (unmoveable, untouchable) map of current pickup location*/}
-                  {/* NOTE that we get a reference to the map so we can move it       */}
-                  {/* NOTE can't display if there is no address       */}
-
-                  <PrjSpacer size={5} />
-                  {(Boolean(this.order.pickupStop.location)) &&
-                     <GCStaticMap location={this.order.pickupStop.location} height={150}
-                        ref={(component) => this._staticMapRef = component} />}
-
-               </View>
-            </View>
-
-            <GCFooterWithSingleIcon
-               code={"NEXT_IS_DELIVERY"}
-               hide={this.state.selIndex === -1}
-               onPress={() => {
-                  if (!Boolean(this.order.pickupStop.address)) {
-                     prjToast({ type: 'reminder', i18n: 'cmnNEW.PleaseEnterCustomAddress' }) //OK
-                  }
-                  else {
-                     const route = this.routes[this.state.selIndex]
-                     this.order.pickupRouteTime = route.schedDate
-                     this.order.pickupRouteId = route.docId
-                     this.order.pickupRouteDescrip = route.descrip
-                     if (route.procTimeReg) { this.order.procTimeReg = route.procTimeReg }
-                     this.props.navigation.navigate('CstCheckoutSelectRouteDelivery',
-                        { 'order': this.order, 'reschedule': this.reschedule })
-                  }
-               }}
-            />
-         </CstScreen >
+         <CstSpinnerScreen />
       );
-   } //end render
+   }
 
-   //toggle a state variable to cause a render
-   toggle = () => {
-      this.setState({ toggle: !this.state.toggle })
-   } //toggle 
+   const order = orderRef.current
+   const reschedule = rescheduleRef.current
 
-   renderRouteButton = ({ item, index }) => {
+   const renderRouteButton = ({ item, index }) => {
 
-      let maybeHighlightStyle = ((index == this.state.selIndex) ? PRJ_STYLES.highlightSelected : null)
+      const maybeHighlightStyle = ((index == selIndex) ? PRJ_STYLES.highlightSelected : null)
 
       return (
          <ListItemXYZ style={[{ justifyContent: 'center' }, maybeHighlightStyle]}>
 
             <TouchableOpacity
                onPress={() => {
-                  if (this.state.selIndex == -1) { //no button selected yet
-                     this.setState({ selIndex: index })
-                  }
-                  else if (this.state.selIndex == index) { //deselect this button
-                     this.setState({ selIndex: -1 })
-                  }
-                  else { //selIndex != index .. select another button
-                     this.setState({ selIndex: index })
-                  }
+                  //select this button, or deselect it if it is already the selected one
+                  setSelIndex(selIndex == index ? -1 : index)
                }}
                keyExtractor={(item, index) => index.toString()}
             >
@@ -297,4 +214,92 @@ export default class CstCheckoutSelectRoutePickup extends Component {
       )
    }// end renderRouteButton
 
+   return (
+
+      <CstScreen>
+         <GCHeader back cancel cancelConfirmI18n={reschedule ? "cmnNEW.DiscardTheseChanges_" : null}
+            titleI18n={reschedule ? 'cmnNEW.NewPickupDetails' : 'cmnNEW.PickupDetails'}
+            noBottomPadding />
+
+         <View style={{ flex: 1 }}>
+
+            {/* list available routes */}
+            {/*SC The flexBasis used to be .3 but that cause iOS view hide under another when click the schedule tile*/}
+            <View style={{ flexBasis: 120, flexGrow: 1, marginHorizontal: GC_STD_MARGIN }}>
+               <CmnServiceLevelBanner level={order.serviceLevel} />
+               <PrjSpacer size={10} />
+               <GCI18n title code="cmnNEW.ChooseYourTime"></GCI18n>
+               <FlatList
+                  data={routes}
+                  renderItem={renderRouteButton}
+                  extraData={selIndex}
+                  keyExtractor={(item, index) => index.toString()}
+               />
+            </View>
+            {/* show (touchable) location title*/}
+            <PrjSpacer size={10} />
+            <View style={{ flex: 0 }}>
+               <View style={{ marginHorizontal: GC_STD_MARGIN }}>
+                  <GCText title>{strX("cmnNEW.YourPickupLocation")}</GCText>
+                  <PrjSpacer size={10} />
+                  {/* title and a button to change the address */}
+                  {/*<CstCheckoutSectionTitle style={{ paddingRight: '2%' }} i18n="cstNEW.AddressAndInstructions" />*/}
+                  <CstCheckoutStop
+                     shop={CST.getShop()}
+                     stop={order.pickupStop}
+                     pickupStop={null}
+                     // buttonI18n={"cmnNEW.addressCode." + order.pickupStop.code}
+                     titleI18n="cmnNEW.ChangePickupLocation_"
+                     onChange={() => {
+                        if (Boolean(order.pickupStop.location) && Boolean(staticMapPointerRef.current)) {
+                           staticMapPointerRef.current.recenterMap(order.pickupStop.location)
+                        }
+                        refresh()
+                     }}
+                     onCustom={() => {
+                        if (Boolean(order.pickupStop.location) && Boolean(staticMapPointerRef.current)) {
+                           staticMapPointerRef.current.recenterMap(order.pickupStop.location)
+                        }
+                        //they have selected a custom address ... but there will be no address yet.
+                        refresh()
+                     }}
+                  >
+                  </CstCheckoutStop>
+               </View>
+
+               {/* show an (unmoveable, untouchable) map of current pickup location*/}
+               {/* NOTE that we get a reference to the map so we can move it       */}
+               {/* NOTE can't display if there is no address       */}
+
+               <PrjSpacer size={5} />
+               {(Boolean(order.pickupStop.location)) &&
+                  <GCStaticMap location={order.pickupStop.location} height={150}
+                     ref={staticMapPointerRef} />}
+
+            </View>
+         </View>
+
+         <GCFooterWithSingleIcon
+            code={"NEXT_IS_DELIVERY"}
+            hide={selIndex === -1}
+            onPress={() => {
+               if (!Boolean(order.pickupStop.address)) {
+                  prjToast({ type: 'reminder', i18n: 'cmnNEW.PleaseEnterCustomAddress' }) //OK
+               }
+               else {
+                  const route = routes[selIndex]
+                  order.pickupRouteTime = route.schedDate
+                  order.pickupRouteId = route.docId
+                  order.pickupRouteDescrip = route.descrip
+                  if (route.procTimeReg) { order.procTimeReg = route.procTimeReg }
+                  navigation.navigate('CstCheckoutSelectRouteDelivery',
+                     { 'order': order, 'reschedule': reschedule })
+               }
+            }}
+         />
+      </CstScreen >
+   );
+
 }// end CstCheckoutSelectRoutePickup
+
+export default CstCheckoutSelectRoutePickup

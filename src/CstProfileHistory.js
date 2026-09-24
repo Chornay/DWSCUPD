@@ -1,63 +1,58 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, FlatList } from 'react-native'
 
-import firestore from '@react-native-firebase/firestore';
 import { SpinnerXYZ } from 'DWcmn/GCNB'
 
 import { CstScreen } from './CdsScreen';
 import { GCI18n } from 'DWcmn/Gc'
 import GCHeader from 'DWcmn/GCHeader'
 import CstOrderTile from './CstOrderTile'
-import { dwdbfsOrderLoadSnapshots } from 'DWcmn/DWDBfs'
+import { dwdbfsOrderGetCustHistoryAsArray } from 'DWcmn/dwdbfsOrder'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { CST } from './CST'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 //20250302 removed readonly from CstOrderTile render
+//20260919 converted to functional component
 
 //TODO disable back handler?
 //prop onOkay
-export class CstProfileHistory extends Component {
+export function CstProfileHistory({ onOkay }) {
 
-   constructor() {
-      super();
-      this.state = {
-         orders: [],
-         isComponentInitialized: false,
-      };
-   }
+   const [orders, setOrders] = useState([])
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const isMountedRef = useIsMounted()
 
-   async componentDidMount() {
-      let querySnapshot = await firestore().collection("Orders")
-         .where("custId", "==", CST.getCustId())
-         .where("archive", "==", true)
-         .orderBy("creationDate", "desc")
-         .get();
-      this.setState({ orders: dwdbfsOrderLoadSnapshots(querySnapshot) })
-      this.setState({ isComponentInitialized: true })
-   }
 
-   render() {
+   //one-time setup: fetch the customer's archived orders
+   useEffect(() => {
 
-      return (
-         <CstScreen>
-            <GCHeader back={this.props.onOkay} titleI18n='cmnNEW.OrderHistory' />
-            <View style={{ height: 10 }} />
-            {this.renderContent()}
-         </CstScreen >
-      )
+      async function loadOrders() {
+         try {
+            const loadedOrders = await dwdbfsOrderGetCustHistoryAsArray(CST.getCustId())
+            if (isMountedRef.current) { setOrders(loadedOrders) }
+         } catch (error) {
+            prjCloudLogError('CstProfileHistory', error)
+         }
+         if (isMountedRef.current) { setIsComponentInitialized(true) }
+      }
 
-   } //end render
+      loadOrders()
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only setup, as the class did in componentDidMount
+   }, [])
 
-   renderContent() {
 
-      if (!this.state.isComponentInitialized) {
+   function renderContent() {
+
+      if (!isComponentInitialized) {
          return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                <SpinnerXYZ />
             </View>)
       }
 
-      if (this.state.orders.length == 0) {
+      if (orders.length == 0) {
          return (
             <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN, justifyContent: 'center', alignItems: 'center' }}>
                <GCI18n large code='cmnNEW.NoOrdersArchived' style={{ textAlign: 'center' }} />
@@ -67,18 +62,25 @@ export class CstProfileHistory extends Component {
       return (
          <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
             <FlatList
-               data={this.state.orders}
+               data={orders}
                keyExtractor={(item, index) => index.toString()}
                renderItem={({ item }) => {
                   return (
                      <CstOrderTile order={item} />
                   )
                }}
-            ></FlatList>
+            />
          </View>)
 
    }//end renderContent
 
+
+   return (
+      <CstScreen>
+         <GCHeader back={onOkay} titleI18n='cmnNEW.OrderHistory' />
+         <View style={{ height: 10 }} />
+         {renderContent()}
+      </CstScreen>
+   )
+
 } //end CstProfileHistory
-
-

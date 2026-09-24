@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React, { useRef, useState } from 'react'
 
-import { StyleSheet, View } from 'react-native'
-import { Form } from 'native-base'
+import { View } from 'react-native'
 import { CdsScreen } from './CdsScreen';
 import GCHeader from 'DWcmn/GCHeader'
 import { GCFooterWithTwoIcons } from 'DWcmn/GCFooterForIcons'
@@ -10,30 +9,32 @@ import { XFormInput, validateForm } from 'DWcmn/PrjFormInput'
 import { dwdbfsCustUpdateProfile } from 'DWcmn/dwdbfsCust'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { CST } from './CST'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 //20230214 created
+//20260919 converted to functional component
 
 //prop onOkay()
 //prop onCancel()
-export class CstProfilePersonal extends Component {
+export function CstProfilePersonal({ onOkay, onCancel }) {
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         isCustomerDbInProgress: false,
-         changed: false,
-      }
+   const [isCustomerDbInProgress, setIsCustomerDbInProgress] = useState(false)
+   const [changed, setChanged] = useState(false)
+   const isMountedRef = useIsMounted()
 
-      this.shop = CST.getShop()
-      this.user = CST.getCust()
+   //the initial values come from the current customer .. after that the refs own the values (the form fields assign to them)
+   const user = CST.getCust()
+   const idRef = useRef(user.id)
+   const nameRef = useRef(user.name)
+   const phoneNumberRef = useRef(user.phoneNumber)
+   const emailRef = useRef(user.email)
 
-      this.name = this.user.name
-      this.phoneNumber = this.user.phoneNumber
-      this.email = this.user.email
-      this.id = this.user.id
-
-
-      this.fields = [
+   //the fields are built ONCE (as the constructor did) so the same objects are used for the life of the screen
+   const fieldsRef = useRef(null)
+   if (fieldsRef.current === null) {
+      //CLAUDE: hard-coded English titles - should be i18n keys like the rest of the screen
+      fieldsRef.current = [
          {
             key: -1,
             mandatory: true,
@@ -41,83 +42,82 @@ export class CstProfilePersonal extends Component {
             title: "Customer Id",
             type: "name",
             assign: (val) => { }, //never changes
-            init: () => { return (this.id) }
+            init: () => { return (idRef.current) }
          },
          {
             key: 1,
             mandatory: true,
             title: "Name",
             type: "name",
-            assign: (val) => { this.name = val; this.setState({ changed: true }) },
-            init: () => { return (this.name) }
+            assign: (val) => { nameRef.current = val; setChanged(true) },
+            init: () => { return (nameRef.current) }
          },
          {
             key: 2,
             mandatory: false,
             title: "Phone Number",
             type: "phoneNumber",
-            assign: (val) => { this.phoneNumber = val; this.setState({ changed: true }) },
-            init: () => { return (this.phoneNumber) }
+            assign: (val) => { phoneNumberRef.current = val; setChanged(true) },
+            init: () => { return (phoneNumberRef.current) }
          },
          {
             key: 3,
             mandatory: true,
             title: "Email",
             type: "email",
-            assign: (val) => { this.email = val; this.setState({ changed: true }) },
-            init: () => { return (this.email) }
+            assign: (val) => { emailRef.current = val; setChanged(true) },
+            init: () => { return (emailRef.current) }
          },
       ]
    }
-   componentDidMount() {
+
+
+async function saveChanges() {
+   let valid = validateForm(fieldsRef.current)
+   if (valid) {
+      setIsCustomerDbInProgress(true)
+      try {
+         await dwdbfsCustUpdateProfile(idRef.current, nameRef.current, phoneNumberRef.current, emailRef.current)
+         onOkay()
+      }
+      catch (error) {
+         prjCloudLogError('CstProfilePersonal', error)
+      }
+      finally {
+         if (isMountedRef.current) { setIsCustomerDbInProgress(false) }
+      }
    }
+}//end saveChanges
 
-   render() {
+   return (
+      <CdsScreen>
 
-      return (
-         <CdsScreen>
+         {/* if the caller is doing something lengthy he will set the disabled flag */}
+         {/* and we will cover the screen with a modal to prevent clicking         */}
+         {isCustomerDbInProgress && <PrjBusyMask />}
 
-            {/* if the caller is doing something lengthy he will set the disabled flag */}
-            {/* and we will cover the screen with a modal to prevent clicking         */}
-            {this.state.isCustomerDbInProgress && <PrjBusyMask />}
-
-            <GCHeader back={!this.state.changed && this.props.onCancel}
-               titleI18n='cmnNEW.PersonalDetails'
-            />
-            <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-               <Form>
-                  {this.fields.map((field) => {
-                     return (
-                        <XFormInput key={field.key}
-                           options={field}></XFormInput>
-                     )
-                  })}
-               </Form>
+         <GCHeader back={!changed && onCancel}
+            titleI18n='cmnNEW.PersonalDetails'
+         />
+         <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
+            <View>
+               {fieldsRef.current.map((field) => {
+                  return (
+                     <XFormInput key={field.key}
+                        options={field} />
+                  )
+               })}
             </View>
-            {this.state.changed &&
-               <GCFooterWithTwoIcons
-                  onOkayCode='NEXT_IS_SAVE'
-                  onOkay={async () => {
-                     let valid = validateForm(this.fields)
-                     if (valid) {
-                        this.setState({ isCustomerDbInProgress: true })
-                        if (await dwdbfsCustUpdateProfile(this.user.id, this.name, this.phoneNumber, this.email)) {
-                           this.setState({ isCustomerDbInProgress: false })
-                           this.props.onOkay()
-                        }
-                        else {
-                           this.setState({ isCustomerDbInProgress: false })
-                        }
-                     }
-                  }
-                  }
-                  onCancel={this.props.onCancel}
+         </View>
+         {changed &&
+            <GCFooterWithTwoIcons
+               onOkayCode='NEXT_IS_SAVE'
+               onOkay={saveChanges}
+               onCancel={onCancel}
 
-               />}
+            />}
 
-         </CdsScreen >
-      )
-   }
-
+      </CdsScreen>
+   )
 
 }// end CstProfilePersonal

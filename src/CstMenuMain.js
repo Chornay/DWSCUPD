@@ -38,6 +38,8 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window') || {};
 //         added selection of categories
 //20250629 separated EZ and normal categories
 //20250802 add categories style with image and description
+//20260919 tightened selection layout, added CTA to detail choice, bulleted EZ copy, fixed typo
+//20260924 functionalized
 
 
 //NOTES on rendering the pricelist
@@ -62,9 +64,8 @@ const MODES = {
    DETAIL: 50
 }
 
-function CstMenuMain(props) {
+function CstMenuMain({ navigation }) {
 
-   const [toggle, setToggle] = useState(false) //NOTE unused elsewhere - carried over as-is
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [mode, setMode] = useState(MODES.INIT)
 
@@ -83,7 +84,7 @@ function CstMenuMain(props) {
    //this would pop on an unmounted screen.
    useEffect(() => {
       (async () => {
-         const codeFromQr = props.navigation.getParam('codeFromQr', null)
+         const codeFromQr = navigation.getParam('codeFromQr', null)
          let priceList = await dwdbfsShopGetPriceList(CST.getShopId())
          if (!priceList) {
             priceList = { isCategory: true, isTiled: true, top: { entries: [] } }
@@ -95,7 +96,7 @@ function CstMenuMain(props) {
 
          if (!prjVersionCheck(priceList.appVersion)) {
             { prjToast({ type: 'warning', pad: 3, i18n: 'cmnNEW.PleaseUpdateYourApp' }) }
-            props.navigation.pop()
+            navigation.pop()
          }
 
          priceListRef.current = priceList
@@ -110,7 +111,7 @@ function CstMenuMain(props) {
 
    //focus listener
    useEffect(() => {
-      const unsubscribeMenuMainFocusListener = props.navigation.addListener('didFocus', gotFocus)
+      const unsubscribeMenuMainFocusListener = navigation.addListener('didFocus', gotFocus)
 
       return () => {
          unsubscribeMenuMainFocusListener?.remove();
@@ -133,6 +134,7 @@ function CstMenuMain(props) {
 
             <View style={styles.selection}>
                {renderDetailChoice()}
+               {renderDivider()}
                {renderEZ()}
             </View>
 
@@ -158,7 +160,7 @@ function CstMenuMain(props) {
                      <GCText>   </GCText>
                      <PrjIconButton id='SEARCH'
                         style={[PRJ_STYLES.headerIcon]}
-                        onPress={() => { props.navigation.navigate('CdsMenuSearchScreen', { 'priceList': priceListRef.current }) }}
+                        onPress={() => { navigation.navigate('CdsMenuSearchScreen', { 'priceList': priceListRef.current }) }}
                      />
                   </>}
                </View>
@@ -177,7 +179,7 @@ function CstMenuMain(props) {
                code='NEXT_IS_OPTIONS'
                hide={priceListRef.current.count == 0}
                onPress={() => {
-                  props.navigation.navigate('CstMenuOptions', { 'priceList': priceListRef.current })
+                  navigation.navigate('CstMenuOptions', { 'priceList': priceListRef.current })
                }}
             />
          </CstScreen>
@@ -185,67 +187,78 @@ function CstMenuMain(props) {
       );
    }
 
+   //thin "or" divider between the two order-start choices
+   const renderDivider = () => {
+      return (
+         <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            {/* //TODO put translation */}
+            <GCText>OR</GCText>
+            <View style={styles.dividerLine} />
+         </View>
+      )
+   }
+   
    const renderEZ = () => {
       return (
          <View style={styles.ez}>
-            {/* Big title */}
-            <View style={{ flex: .3 }}>
-               <Image
-                  style={styles.image}
-                  source={require('../images/pricelist/ezBag.png')}
-               />
-            </View>
-            <PrjSpacer size={10} />
-            {/* Image and description*/}
-            <View style={{ flex: .7 }}>
-               <View style={{}}>
-                  <GCI18n fit large bold inverse code='cmnNEW.EZ_QUICK' />
+            <View style={styles.cardHeaderRow}>
+               <View style={styles.iconCircle}>
+                  <Image
+                     style={styles.image}
+                     source={require('../images/pricelist/ezBag.png')}
+                  />
                </View>
-               <PrjSpacer size={10} />
-               <View>
+               <View style={{ flex: 1 }}>
+                  <GCI18n title inverse bold code='cmnNEW.EZ_QUICK' />
                   {/* //TODO put translation */}
-                  <GCText inverse>Give use your laundry bag</GCText>
-                  <GCText inverse>We will count your items and update the price in the app for you</GCText>
+                  <GCText inverse detail>Fastest way to start</GCText>
                </View>
-               <PrjSpacer size={10} />
-               <TouchableOpacity
-                  onPress={() => { setMode(MODES.EZ) }}
-                  style={styles.button}>
-                  <GCText title>START EZ ORDER</GCText>
-               </TouchableOpacity>
             </View>
+            <PrjSpacer size={14} />
+            <View>
+               {/* //TODO put translation */}
+               <GCText inverse style={styles.txtHorizSpc}>{'\u2713  '}Hand us your laundry bag</GCText>
+               {/* //TODO put translation */}
+               <GCText inverse style={styles.txtHorizSpc}>{'\u2713  '}We count items and update the price for you</GCText>
+            </View>
+            <PrjSpacer size={16} />
+            <TouchableOpacity
+               onPress={() => { setMode(MODES.EZ) }}
+               style={styles.button}>
+               {/* //TODO put translation */}
+               <GCText title>Start EZ order</GCText>
+            </TouchableOpacity>
          </View>
       )
    }
 
+
    const renderDetailChoice = () => {
       return (
-         <TouchableOpacity
-            onPress={() => { setMode(MODES.DETAIL) }}
-         >
-            <View style={styles.detailChoice}>
-               {/* Big title */}
-               <View style={{ flex: .3 }}>
-                  <GCI18n fit large bold code='cmnNEW.ITEMIZE_YOUR_ORDER' />
+         <View style={styles.detailChoice}>
+            <View style={styles.cardHeaderRow}>
+               <View style={styles.iconCircle}>
+                  <Image
+                     source={require('../images/pricelist/Detail.png')}
+                     style={styles.image}
+                  />
                </View>
-               <PrjSpacer size={10} />
-               {/* Image and description*/}
-               <View style={{ flex: .7, }}>
-                  <View style={styles.bodyTile}>
-                     <View style={{ flex: .3, paddingRight: 10 }}>
-                        <Image
-                           source={require('../images/pricelist/Detail.png')}
-                           style={styles.image}
-                        />
-                     </View>
-                     {/* //TODO put translation */}
-                     <View style={{ flex: .7 }}>
-                        <GCText>Prefer to count your own clothes? List your own items for full control and clarity.</GCText>
-                     </View>
-                  </View>
+               <View style={{ flex: 1 }}>
+                  {/* //TODO put translation */}
+                  <GCI18n title bold code='cmnNEW.ITEMIZE_YOUR_ORDER' />
+                  {/* //TODO put translation */}
+                  <GCText>Count each item yourself for full control.</GCText>
                </View>
             </View>
-         </TouchableOpacity>
+            <PrjSpacer size={16} />
+            <TouchableOpacity
+               onPress={() => { setMode(MODES.DETAIL) }}
+               style={styles.buttonOutline}>
+               {/* //TODO put translation */}
+               <GCText title>Start manual order</GCText>
+            </TouchableOpacity>
+         </View>
       )
 
    }
@@ -264,7 +277,7 @@ function CstMenuMain(props) {
       case MODES.SELECT:
          return (renderSelection())
       case MODES.EZ:
-         return (renderCategories(selectedCategoriesEZRef.current, allowSearch = false))
+         return (renderCategories(selectedCategoriesEZRef.current, false))
       case MODES.DETAIL:
          return (renderCategories(selectedCategoriesDetailRef.current))
    }
@@ -276,31 +289,73 @@ export default withNavigation(CstMenuMain)
 const styles = StyleSheet.create({
    selection: {
       flex: 1,
-      justifyContent: 'space-between',
-      paddingTop: 100,
+      paddingTop: 20,
       paddingHorizontal: GC_STD_MARGIN,
-      backgroundColor: COLORS.GC_TILE_BK,
+   },
 
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      shadowColor: 'rgba(0, 0, 0, 0.1)',
-      shadowOpacity: 2,
-      shadowRadius: 5,
-      shadowOffset: { height: 4 }, // SC added shadowOffset for iOS
-      elevation: 5,
-      borderWidth: 10,
-      borderTopColor: COLORS.GC_ABS_WHITE,
-      borderLeftColor: COLORS.GC_ABS_WHITE,
-      borderRightColor: COLORS.GC_ABS_WHITE,
+   cardHeaderRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+   },
+   iconCircle: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 14,
+      overflow: 'hidden',
+   },
+   image: {
+      width: 26,
+      height: 26,
+      resizeMode: 'contain',
+   },
+   cardTitle: {
+      fontSize: 16,
+      fontWeight: '600',
+      marginBottom: 4,
+   },
+   cardTitleInverse: {
+      fontSize: 16,
+      fontWeight: '600',
+      marginBottom: 4,
+      color: COLORS.GC_ABS_WHITE,
+   },
+   cardSubtitle: {
+      fontSize: 13,
+      opacity: 0.7,
+   },
+   cardSubtitleAccent: {
+      fontSize: 13,
+      color: COLORS.GC_BUTTON_TEXT,
+   },
+   txtHorizSpc: {
+      marginBottom: 4,
+   },
 
+   dividerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: 12,
+   },
+   dividerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: COLORS.GC_TILE_BORDER || 'rgba(0,0,0,0.1)',
+   },
+   dividerText: {
+      marginHorizontal: 10,
+      fontSize: 12,
+      opacity: 0.6,
    },
 
    detailChoice: {
+      justifyContent:'space-between',
       width: '100%',
-      height: 200,
+      height:200,
       padding: 20,
       borderRadius: 10,
-      marginBottom: 10,
       backgroundColor: COLORS.GC_ABS_WHITE,
       shadowColor: 'rgba(0, 0, 0, 0.1)',
       shadowOpacity: 2,
@@ -310,12 +365,11 @@ const styles = StyleSheet.create({
 
    },
    ez: {
-      flexDirection: 'row',
+      justifyContent:'space-between',
       width: '100%',
-      height: 200,
+      height:200,
       padding: 20,
       borderRadius: 10,
-      marginBottom: 10,
       backgroundColor: COLORS.GC_THEME_DARK,
 
       shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -332,26 +386,35 @@ const styles = StyleSheet.create({
       borderStyle: 'solid',
       paddingTop: 10,
       paddingBottom: 10,
-      paddingLeft: 30,
-      paddingRight: 30,
-      width: 'auto',
-      height: 40,
-      shadowColor: 'rgba(0, 0, 0, 0.1)',
-      shadowOpacity: 2,
-      shadowRadius: 5,
-      shadowOffset: { height: 4 }, // SC added shadowOffset for iOS
-      elevation: 5,
+      width: '100%',
+      height: 44,
       backgroundColor: COLORS.GC_BUTTON_TEXT
+   },
+   buttonOutline: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: COLORS.GC_THEME_DARK,
+      borderStyle: 'solid',
+      paddingTop: 10,
+      paddingBottom: 10,
+      width: '100%',
+      height: 44,
+      backgroundColor: 'transparent'
    },
    image: {
       flex: 1,
       resizeMode: 'contain',
       width: '100%'
    },
+   detailImageWrap: {
+      width: 50,
+      height: 50,
+      marginRight: 12
+   },
    bodyTile: {
-      flex: 1,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center'
    }
 

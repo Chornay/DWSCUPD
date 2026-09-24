@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import { View, StyleSheet } from 'react-native'
-import { Form } from 'native-base'
 import { CdsScreen } from './CdsScreen';
 import GCHeader from 'DWcmn/GCHeader'
 import { GCFooterWithTwoIcons } from 'DWcmn/GCFooterForIcons'
@@ -59,7 +58,7 @@ export default class CstSignupProfilePersonal extends Component {
          <CdsScreen>
             <GCHeader titleI18n='cmnNEW.PersonalDetails' />
             <View style={{ flex: 1, paddingHorizontal: 10 }}>
-               <Form>
+               <View>
                   {this.fields.map((field) => {
                      return (
                         <XFormInput key={field.key}
@@ -68,7 +67,7 @@ export default class CstSignupProfilePersonal extends Component {
                         </XFormInput>
                      )
                   })}
-               </Form>
+               </View>
             </View>
             <GCFooterWithTwoIcons
                onOkayCode='NEXT_IS_CREATE_ACCOUNT'

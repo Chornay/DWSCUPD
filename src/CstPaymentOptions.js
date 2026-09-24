@@ -1,22 +1,20 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { BackHandler } from 'react-native'
 import { Platform } from 'react-native'
 
-import { ListItem } from 'native-base';
 import GCHeader from 'DWcmn/GCHeader'
 import { CstScreen } from './CdsScreen';
 import { PaymentMethodEnum } from 'DWcmn/Global'
-import { dwdbfsOrderUpdateFields } from 'DWcmn/dwdbfsOrder'
+import { dwdbfsOrderUpdateFieldsThrows } from 'DWcmn/dwdbfsOrder'
 import { hasBeenPickedUp } from 'DWcmn/PrjCmnFunctions'
 import { GCI18n, GCText } from 'DWcmn/Gc'
 import { PrjIcon } from 'DWcmn/PrjIconComponents';
 import CstSpinnerScreen from './CstSpinnerScreen';
-import { GCFooterWithSingleIcon } from 'DWcmn/GCFooterForIcons'
-import { GC_STD_MARGIN } from 'DWcmn/Global'
-import { prjToast } from 'DWcmn/PrjToast'
-import { CST } from './CST'
 import { COLORS } from 'DWcmn/Global'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 //20241017 removed the NO CHANGE command at bottom
 //  if this is an existing order they can use BACK at header
@@ -33,203 +31,147 @@ import { COLORS } from 'DWcmn/Global'
 
 //param order
 //param isNewOrder
-export default class CstPaymentOptions extends Component {
+export default function CstPaymentOptions({ navigation }) {
 
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const [applyMask, setApplyMask] = useState(false)
+   const orderRef = useRef(null)
+   const isNewOrderRef = useRef(false)
+   const isMountedRef = useIsMounted()
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-      };
-      this.order = null
-      this.isNewOrder = false
-   } //end constuctor
+   //pull nav params and mark initialized
+   useEffect(() => {
+      orderRef.current = navigation.getParam('order', null)
+      isNewOrderRef.current = navigation.getParam('isNewOrder', false)
+      setIsComponentInitialized(true)
+   }, [])
 
+   //android hardware back handler subscription
+   useEffect(() => {
+      if (Platform.OS !== 'android') { return }
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => { return true })
+      return () => { subscription.remove() }
+   }, [])
 
-   async componentDidMount() {
-      this.order = this.props.navigation.getParam('order', null)
-      this.isNewOrder = this.props.navigation.getParam('isNewOrder', false)
-      if (Platform.OS === 'android') {
-         this.unsubscribeBackHandler = BackHandler.addEventListener(
-            'hardwareBackPress', () => { return true })
-      }
-
-      this.setState({ isComponentInitialized: true });
-   }
-
-   componentWillUnmount() {
-      if (Platform.OS === 'android') { this.unsubscribeBackHandler && this.unsubscribeBackHandler.remove() }
-   } //end componentWillUnmount
-
-
-   render() {
-
-      if (!this.state.isComponentInitialized) {
-         return (
-            <CstSpinnerScreen />
-         );
-      }
-
-      //NOTE order is approved only for a shop that approves all fully priced orders by cust
-      let cashOnPickupOkay = (this.order.isApproved && this.order.allowCashOnPickup && !hasBeenPickedUp(this.order.status))
-      //TODO add special case where unpriced, driver can weigh and no specials //TODO
-
-      return (
-         <CstScreen>
-            <GCHeader titleI18n='cstNEW.PaymentOptions'
-               back={!this.isNewOrder} />
-            <View style={styles.spacyBox}>
-               <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
-                  {this.isNewOrder && this.titleText('cstNEW.PaymentOptionsNewOrder')}
-
-                  {(this.order.isApproved) ? <View>
-                     {this.titleText('cstNEW.PaymentOptionsApproved')}
-                  </View>
-                     : <View>
-                        {this.titleText('cstNEW.PaymentOptionsUnapproved')}
-                     </View>}
-               </View>
-
-               {/* give pay now option if pay online available AND order is approved*/}
-               {/* REALISTICALLY pay online will always be available                */}
-               <View style={{ flex: .3 }}>
-                  <View style={styles.paymentOption}>
-                     {(this.order.allowOnline && this.order.isApproved) &&
-                        <PaymentOption
-                           id="KEYBOARD"
-                           i18n="cstNEW.PayNow"
-                           onPress={() => {
-                              // if (true) { //TODO //DEBUG NO PAYMENT NOW
-                              //    // if (CST.isDemoUser()) {
-                              //    prjToast({ type: 'warning', text: 'Payment not allowed in demo mode' })
-                              // }
-                              // else {
-                              //    this.props.navigation.navigate('CstPayment', { 'order': this.order })
-                              // }
-                              this.props.navigation.navigate('CstPayment', { 'order': this.order })
-                           }
-                           } />}
-
-                     {/* give cash on pickup option if available*/}
-                     {(cashOnPickupOkay) &&
-                        <PaymentOption
-                           id="ARROW_UP_OUTLINE"
-                           i18n="cstNEW.PayCashOnPickup"
-                           onPress={async () => {
-                              await this.handleClick(this.order.id, PaymentMethodEnum.payPickup)
-                           }} />
-                     }
-
-                     {/* give cash on delivery option if available */}
-                     {this.order.allowCashOnDelivery &&
-                        <PaymentOption
-                           id="ARROW_DOWN_OUTLINE"
-                           i18n="cstNEW.PayCashOnDelivery"
-                           onPress={async () => {
-                              await this.handleClick(this.order.id, PaymentMethodEnum.payDelivery)
-                              // await dwdbfsOrderUpdatePaymentMethod(this.order.id, PaymentMethodEnum.payDelivery)
-                              // this.props.navigation.popToTop()
-                           }} />
-                     }
-                     {/* <View style={{ flex: .2, justifyContent: 'center', alignItems: 'center' }}> */}
-                     {/* if no online payment then pay later makes no sense  */}
-                     {/* they will choose pay on P or D */}
-                     {(this.order.allowOnline) &&
-                        <PaymentOption
-                           id="CLOCK"
-                           i18n={!this.order.isApproved ? "cmn.OKAY" : "cstNEW.PayOnlineLater"}
-                           onPress={async () => {
-                              await this.handleClick(this.order.id, PaymentMethodEnum.payLater)
-                              // await dwdbfsOrderUpdatePaymentMethod(this.order.id, PaymentMethodEnum.payLater)
-                              // this.props.navigation.popToTop()
-                           }} />
-                     }
-                  </View>
-               </View>
-               <View style={{ flex: .2 }} />
-            </View>
-            {/* give padding at the buttom */}
-            <View style={{ flex: .1 }} />
-
-            {/* <GCFooterWithSingleIcon
-               hide={this.order.paymentMethod == PaymentMethodEnum.initial}
-               onPress={() => {
-                  this.props.navigation.popToTop()
-               }} /> */}
-
-         </CstScreen>
-      )
-   } //end render
-
-   titleText = (code) => {
+   const titleText = (code) => {
       return (
          <GCI18n title code={code} style={{ textAlign: 'center' }} />
       )
-
    }
 
    //method will update the db and if successful do a nav goBack
    //on error it annunicates and returs
-   handleClick = async (orderId, method) => {
+   const handleClick = async (orderId, method) => {
+      setApplyMask(true)
       try {
-
-         await dwdbfsOrderUpdateFields(this.order.id, { paymentMethod: method.enumKey })
-         this.props.navigation.popToTop()
+         await dwdbfsOrderUpdateFieldsThrows(orderRef.current.id, { paymentMethod: method.enumKey })
+         navigation.popToTop()
       }
       catch (error) {
-         //any errors should have been handled by the dwdbfs call
+         prjCloudLogError('CstPaymentOptions', error, { toast: 'Error changing payment method' }) //OKAY
+      }
+      finally {
+         if (isMountedRef.current) { setApplyMask(false) }
       }
    }
 
-}// end CstPaymentOptions 
+   if (!isComponentInitialized) {
+      return (
+         <CstSpinnerScreen />
+      );
+   }
+
+   //NOTE order is approved only for a shop that approves all fully priced orders by cust
+   let cashOnPickupOkay = (orderRef.current.isApproved && orderRef.current.allowCashOnPickup && !hasBeenPickedUp(orderRef.current.status))
+   //TODO add special case where unpriced, driver can weigh and no specials //TODO
+
+   return (
+      <CstScreen>
+         {applyMask && <PrjBusyMask />}
+         <GCHeader titleI18n='cstNEW.PaymentOptions'
+            back={!isNewOrderRef.current} />
+         <View style={styles.spacyBox}>
+            <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
+               {isNewOrderRef.current && titleText('cstNEW.PaymentOptionsNewOrder')}
+
+               {(orderRef.current.isApproved) ? <View>
+                  {titleText('cstNEW.PaymentOptionsApproved')}
+               </View>
+                  : <View>
+                     {titleText('cstNEW.PaymentOptionsUnapproved')}
+                  </View>}
+            </View>
+
+            {/* give pay now option if pay online available AND order is approved*/}
+            {/* REALISTICALLY pay online will always be available                */}
+            <View style={{ flex: .3 }}>
+               <View style={styles.paymentOption}>
+                  {(orderRef.current.allowOnline && orderRef.current.isApproved) &&
+                     <PaymentOption
+                        id="KEYBOARD"
+                        i18n="cstNEW.PayNow"
+                        onPress={() => {
+                           navigation.navigate('CstPayment', { 'order': orderRef.current })
+                        }
+                        } />}
+
+                  {/* give cash on pickup option if available*/}
+                  {(cashOnPickupOkay) &&
+                     <PaymentOption
+                        id="ARROW_UP_OUTLINE"
+                        i18n="cstNEW.PayCashOnPickup"
+                        onPress={async () => {
+                           await handleClick(orderRef.current.id, PaymentMethodEnum.payPickup)
+                        }} />
+                  }
+
+                  {/* give cash on delivery option if available */}
+                  {orderRef.current.allowCashOnDelivery &&
+                     <PaymentOption
+                        id="ARROW_DOWN_OUTLINE"
+                        i18n="cstNEW.PayCashOnDelivery"
+                        onPress={async () => {
+                           await handleClick(orderRef.current.id, PaymentMethodEnum.payDelivery)
+                        }} />
+                  }
+                  {/* if no online payment then pay later makes no sense — they will choose pay on P or D */}
+                  {(orderRef.current.allowOnline) &&
+                     <PaymentOption
+                        id="CLOCK"
+                        i18n={!orderRef.current.isApproved ? "cmn.OKAY" : "cstNEW.PayOnlineLater"}
+                        onPress={async () => {
+                           await handleClick(orderRef.current.id, PaymentMethodEnum.payLater)
+                        }} />
+                  }
+               </View>
+            </View>
+            <View style={{ flex: .2 }} />
+         </View>
+         <View style={{ flex: .1 }} />
+
+      </CstScreen>
+   )
+
+}// end CstPaymentOptions
 
 //prop id .. the icon id
 //prop i18n .. the text
 //prop onPress
-class PaymentOption extends Component {
-   render() {
-      return (
-         <TouchableOpacity
-            onPress={this.props.onPress}>
-            <View style={styles.button}>
-               <PrjIcon style={{ fontSize: 16, color: 'white' }} id={this.props.id} />
-               <GCText>    </GCText>
-               <GCI18n style={{ fontSize: 16, color: 'white' }} code={this.props.i18n} />
-            </View>
-         </TouchableOpacity>
-      )
-   }
-   renderOLD() {
-      return (
-         <ListItem style={{ paddingTop: 10, paddingBottom: 10, marginLeft: 0 }} >
-            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '100%', alignItems: 'center' }}
-               onPress={this.props.onPress}>
-               <PrjIcon style={{ fontSize: 20, color: 'grey' }} id={this.props.id} />
-               <GCText>    </GCText>
-               <GCI18n style={{ fontSize: 20, color: 'grey' }} code={this.props.i18n} />
-            </TouchableOpacity>
-         </ListItem>
-      )
-   }
+function PaymentOption({ id, i18n, onPress }) {
+   return (
+      <TouchableOpacity
+         onPress={onPress}>
+         <View style={styles.button}>
+            <PrjIcon style={{ fontSize: 16, color: 'white' }} id={id} />
+            <GCText>    </GCText>
+            <GCI18n style={{ fontSize: 16, color: 'white' }} code={i18n} />
+         </View>
+      </TouchableOpacity>
+   )
 }
 
 const styles = StyleSheet.create({
-   paymentOption: {
-      // borderWidth: .2,
-      // borderColor: 'grey',
-      // borderRadius: 10,
-      // paddingTop: 10,
-      // paddingBottom: 30,
-      // paddingLeft: 20,
-      // marginHorizontal: 10,
-      // justifyContent: 'center',
-      // alignItems: 'center',
-      // backgroundColor: '#f7f7f7',
-      // shadowColor: 'rgba(0, 0, 0, 0.1)',
-      // shadowOpacity: .1,
-      // elevation: 5,
-      // shadowRadius: .8
-   },
+   paymentOption: {},
    spacyBox: {
       flex: .9,
       width: 'auto',
@@ -241,7 +183,6 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderRadius: 10,
       borderColor: COLORS.GC_THEME_DARK,
-
    },
    button: {
       flexDirection: 'row',
@@ -264,5 +205,4 @@ const styles = StyleSheet.create({
       color: 'white',
       overflow: 'hidden', //add to show borderRadius on iOS
    }
-
 })

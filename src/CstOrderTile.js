@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
@@ -11,6 +11,9 @@ import { OrderStatusEnum } from "DWcmn/Global";
 import { PrjSpacer } from 'DWcmn/Prj'
 import storage from '@react-native-firebase/storage';
 import { dwdbfsOrderUpdateFields } from 'DWcmn/dwdbfsOrder'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 import GLOBALS from 'DWcmn/Global';
 import { COLORS } from 'DWcmn/Global'
@@ -20,7 +23,6 @@ import { PrjIcon, PrjIconForTileAction } from 'DWcmn/PrjIconComponents'
 import { PrjIconForRemark } from 'DWcmn/PrjIconForRemark'
 import { strX } from 'DWcmn/I18n';
 import { PRJ_STYLES } from 'DWcmn/PrjStyles'
-import { prjToast } from 'DWcmn/PrjToast'
 
 import { cstGenerateTileActions, cstProcessAction, cstProcessActionOnEvent } from './cstActionProcessing'
 import { hasBeenPickedUpNEW } from 'DWcmn/PrjCmnFunctions'
@@ -31,93 +33,55 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 //20220918 created by moving code from CstCmnOrderTile and CmnOrderTile
 //20230526 removed obsolete commented code
 //20250214 action processing re-org
+//20260923 converted class -> functional
 
 //prop order
 //prop readonly
 
-class CstOrderTile extends Component {
+function CstOrderTile({ order, readonly, navigation }) {
 
-   constructor() {
-      super();
-      this.state = {
-         isItemsVisible: false,
-         action: OrderActionEnum.noop,
-         isComponentInitialized: false,
-      };
-   }
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true })
-   }
+   const [isItemsVisible, setIsItemsVisible] = useState(false)
+   const [action, setAction] = useState(OrderActionEnum.noop)
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const [applyMask, setApplyMask] = useState(false)
+   const isMountedRef = useIsMounted()
 
-   render() {
+   // single independent effect -> its own useEffect, mirrors old componentDidMount
+   useEffect(() => {
+      setIsComponentInitialized(true)
+   }, [])
 
-      if (!this.state.isComponentInitialized) {
-         return null
+   //CLAUDE PrjBusyMask is a screen-level masking convention, but this component is a single
+   //tile inside a list. Masking here blocks interaction with every other tile while this
+   //tile's photo uploads, not just this one. Confirm that's the intent vs. some local/inline
+   //busy indicator on just this tile.
+   const savePhoto = async (orderId, uri) => {
+      setApplyMask(true)
+      try {
+         //store the picture in the cloud
+         const path = `/orders/${orderId.toString()}.imageForPickup.png`
+         let reference = storage().ref(path)
+         await reference.putFile(uri);
+         //and update customer with the uri of the picture
+         await dwdbfsOrderUpdateFields(orderId, { imageForPickup: path })
       }
-      const order = this.props.order;
-      const readonly = this.props.readonly
-      let actions = cstGenerateTileActions(order)
+      catch (error) {
+         prjCloudLogError('CstOrderTile', error)
+      }
+      finally {
+         if (isMountedRef.current) {
+            setApplyMask(false)
+         }
+      }
+   } //end savePhoto
 
-      return (
-         <View>
-            {/* the method should handle any action .. then call the third parameter to finish */}
-            {(this.state.action != OrderActionEnum.noop) && cstProcessAction(this.props.navigation, order, this.state.action, () => { this.setState({ action: OrderActionEnum.noop }) })}
-            {/* we would usually put in a flex:1 here BUT that seems to break our use at the bottom of maps. Sigh */}
-            <View style={PRJ_STYLES.tile}>
-               <View style={{ flex: 1, flexDirection: 'column' }}>
-
-                  {/* <TouchableOpacity
-                                        onPress={() => {
-                                            //NOTE we don't really have to pass AppType ... we go to the right app based on stack.
-                                            this.props.navigation.navigate('OrderDetail', { 'order': order, 'readonly': this.props.readonly });
-                                        }}> */}
-                  <PrjSpacer size={10} />
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                     <View style={{ flexDirection: 'column' }}>
-                        <GCI18n title code='cmnNEW.ORDER_ID' />
-                     </View>
-                     <View style={{ alignItems: 'flex-end' }}>
-                        <GCText details color={COLORS.GC_TEXT_GREY}  >{order.id}</GCText>
-                     </View>
-                  </View>
-                  <View style={styles.horizontalLine} />
-                  <PrjSpacer size={20} />
-                  <GCText details bold color={cmnOrderStatusColor('cst', order.status)} >{cmnOrderStatusStr('cst', order.status)}</GCText>
-                  {this.renderAddressAndDate(order)}
-                  <PrjSpacer size={10} />
-                  {cmnPaymentSummary(order)}
-                  <PrjSpacer size={20} />
-                  {this.renderPhotoInvitation(order)}
-                  <PrjSpacer size={10} />
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                     {this.props.readonly ? null :
-                        actions.map((action, index) =>
-                           <PrjIconForTileAction
-                              key={index}
-                              action={action}
-                              onPress={() => {
-                                 if (!cstProcessActionOnEvent(this.props.navigation, order, action)) {
-                                    this.setState({ action: action })
-                                 }
-                              }}
-                           />
-                        )}
-                  </View>
-               </View>
-            </View>
-            {this.state.isItemsVisible &&
-               <CmnItemsList order={order} readonly={readonly} />}
-         </View>
-      )
-   }//end render
-
-   renderPhotoInvitation = (order) => {
+   const renderPhotoInvitation = (order) => {
 
       if (hasBeenPickedUpNEW(order) || order.imageForPickup) { return null }
       return (
          <TouchableOpacity
             onPress={() => {
-               this.props.navigation.navigate('CdsCamera', { onSave: (uri) => this.savePhoto(order.id, uri) })
+               navigation.navigate('CdsCamera', { onSave: (uri) => savePhoto(order.id, uri) })
             }}>
             <View style={styles.photoInvitation}>
                <PrjIcon id="CAMERA" />
@@ -129,8 +93,7 @@ class CstOrderTile extends Component {
 
    } //end renderPhotoInvitation
 
-
-   renderAddressAndDate(order) {
+   const renderAddressAndDate = (order) => {
       let output = []
       switch (order.status) {
 
@@ -142,8 +105,7 @@ class CstOrderTile extends Component {
          case OrderStatusEnum.readyForPickup:
          case OrderStatusEnum.assignedForPickup:
          case OrderStatusEnum.outForPickup:
-            return (<GCStopDetails routeTime={order.pickupRouteTime}  routeDescrip={order.pickupRouteDescrip} stop={order.pickupStop} />)
-            break;
+            return (<GCStopDetails routeTime={order.pickupRouteTime} routeDescrip={order.pickupRouteDescrip} stop={order.pickupStop} />)
 
          // picked up or in shop - no address to show
          case OrderStatusEnum.missedPickup:
@@ -152,13 +114,11 @@ class CstOrderTile extends Component {
          case OrderStatusEnum.inShop:
             break;
 
-
          // pending delivery show delivery info
          case OrderStatusEnum.readyForDelivery:
          case OrderStatusEnum.assignedForDelivery:
          case OrderStatusEnum.outForDelivery:
             return (<GCStopDetails routeTime={order.deliveryRouteTime} routeDescrip={order.deliveryRouteDescrip} stop={order.deliveryStop} />)
-            break;
 
          //delivered (or missed) .. no need to show anything
          case OrderStatusEnum.missedDelivery:
@@ -175,25 +135,63 @@ class CstOrderTile extends Component {
 
       return output
 
+   } //end renderAddressAndDate
+
+   if (!isComponentInitialized) {
+      return null
    }
 
-   savePhoto = async (orderId, uri) => {
-      try {
-         //store the picture in the cloud
-         const path = `/orders/${orderId.toString()}.imageForPickup.png`
-         let reference = storage().ref(path)
-         await reference.putFile(uri);
-         //and update customer with the uri of the picture
-         await dwdbfsOrderUpdateFields(orderId, { imageForPickup: path })
-      }
-      catch (error) {
-         prjToast({ type: 'danger', text: error.message }) //OK
-      }
+   let actions = cstGenerateTileActions(order)
 
-   }
+   return (
+      <View>
+         {applyMask && <PrjBusyMask />}
+         {/* the method should handle any action .. then call the third parameter to finish */}
+         {(action != OrderActionEnum.noop) && cstProcessAction(navigation, order, action, () => { setAction(OrderActionEnum.noop) })}
+         {/* we would usually put in a flex:1 here BUT that seems to break our use at the bottom of maps. Sigh */}
+         <View style={PRJ_STYLES.tile}>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
 
-}// end CstCmnOrderTile
+               <PrjSpacer size={10} />
+               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'column' }}>
+                     <GCI18n title code='cmnNEW.ORDER_ID' />
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                     <GCText details color={COLORS.GC_TEXT_GREY}  >{order.id}</GCText>
+                  </View>
+               </View>
+               <View style={styles.horizontalLine} />
+               <PrjSpacer size={20} />
+               <GCText details bold color={cmnOrderStatusColor('cst', order.status)} >{cmnOrderStatusStr('cst', order.status)}</GCText>
+               {renderAddressAndDate(order)}
+               <PrjSpacer size={10} />
+               {cmnPaymentSummary(order)}
+               <PrjSpacer size={20} />
+               {renderPhotoInvitation(order)}
+               <PrjSpacer size={10} />
+               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                  {readonly ? null :
+                     actions.map((actionItem, index) =>
+                        <PrjIconForTileAction
+                           key={index}
+                           action={actionItem}
+                           onPress={() => {
+                              if (!cstProcessActionOnEvent(navigation, order, actionItem)) {
+                                 setAction(actionItem)
+                              }
+                           }}
+                        />
+                     )}
+               </View>
+            </View>
+         </View>
+         {isItemsVisible &&
+            <CmnItemsList order={order} readonly={readonly} />}
+      </View>
+   )
 
+} // end CstOrderTile
 
 
 const styles = StyleSheet.create({
