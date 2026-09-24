@@ -1,0 +1,12 @@
+aaa.txt
+accessories.png
+dry-cleaning.png
+gent.png
+handwash.png
+household_cleaning.png
+ironing.png
+ladies.png
+leather.png
+Wash-_-Fold-Household-Items.png
+wash-_-fold.png
+wash-_-press-household.png

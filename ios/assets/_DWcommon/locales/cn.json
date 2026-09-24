@@ -1,0 +1,347 @@
+{
+  "cmn": {
+    "alert":{
+      "Please_enter_valid_count":"请输入有效数量",
+      "Please_enter_valid_price":"请输入有效价格",
+      "Please_enter_valid_weight":"请输入有效重量"
+    },
+    "date":{
+      "Today":"今天",
+      "Tomorrow":"明天",
+      "Yesterday":"昨天"
+    },
+    "filterModeSelection": {
+      "all": "所有订单",
+      "delivery": "仅送货",
+      "pickup": "自取"
+    },
+    "geolocat": {
+      "title": "地理位置权限",
+      "message": "应用程序需要使用您的位置信息",
+      "buttonNeutral": "请稍后再询问",
+      "buttonNegative": "取消",
+      "buttonPositive": "好"
+    },
+    "sortModeSelection": {
+      "name": "按名字",
+      "order": "按订单号",
+      "distance": "按距离"
+    },
+    "question": {
+      "How_many":"多少？",
+      "Price":"价格？",
+      "Weight":"重量？"
+      },
+    "Active_Routes":"活跃路线",
+    "Action":"行动",
+    "Address":"地址",
+    "all":"全部",
+    "ALL":"全部",
+    "b_each":" 个/各",
+    "cancel":"取消",
+    "CANCEL":"取消",
+    "CLOSE":"关闭",
+    "CUSTOM":"定制",
+    "custom":"定制",
+    "CustomPriceAtShop":"店内定价",
+    "delivery":"递送",
+    "DELIVERY":"递送",
+    "distance":"距离",
+    "DISTANCE":"距离",
+    "ENTER":"输入",
+    "Error":"错误",
+    "ERROR":"错误",
+    "History":"历史订单",
+    "ID":"会员号",
+    "Interim_Price":"暂时价格",
+    "Items":"物件",
+    "b_per_kg":" / 公斤",
+    "LIST":"列表",
+    "MAP":"地图",
+    "name":"名字",
+    "Name":"名字",
+    "NAME":"名字",
+    "Net":"净",
+    "NEXT":"下一步",
+    "Notes":"注释",
+    "OK":"好",
+    "okay":"好的",
+    "OKAY":"好的",
+    "OPEN":"开启",
+    "order":"下单",
+    "ORDER":"下单",
+    "Order_Detail":"订单详情",
+    "Phone":"手机号码",
+    "pickup":"自取",
+    "PICKUP":"自取",
+    "PREVIOUS":"上一步",
+    "Remarks":"备注",
+    "Route_Detail":"路线详情",
+    "SETTINGS":"设定",
+    "Special":"特殊",
+    "Status":"状态",
+    "summary":"总结",
+    "SUMMARY":"总结",
+    "System_Error":"系统错误",
+    "Time":"时间",
+    "Total_Price":"总金额",
+    "Unit_Price":"单价"
+  },
+  "cst": {
+    "phrase": {
+      "OrderCreated":"您的订单已成功创建"
+      },
+      "question": {
+        "ConfirmDelivery":"确认送洗衣物",
+        "CancelOrder":"您要取消此订单吗？"
+        },
+        "orderStatusDescrip": {
+        "initial"             : "正在创建订单",                    
+        "cancelled"           : "已取消",
+        "assignedForPickup"      : "已安排配送员接送",
+        "readyForPickup"      : "准备取货",
+        "outForPickup"         : "配送员外出接送",
+        "pickedUp"            : "已取货",
+        "atShop"              : "在洗衣店",
+        "inShop"             : "正在清洗您的衣物",
+        "readyForDelivery"    : "您的衣物已清洗完毕",
+        "assignedForDelivery" : "已安排配送员接送",
+        "outForDelivery"      : "您的衣物前往目的地",
+        "delivered"      : "已完成配送",
+        "confirmed"      : "您已确认收据，谢谢",
+        "completed"      : "订单完成",
+        "Invalid"             : "状态无效"
+      },
+      "orderActionConfirm": {
+        "cancel": "确定取消此订单？",
+        "confirm": "确认送洗衣物？",
+        "pay": "确认支付订单？"
+      },
+      "CHECKOUT":"结账",
+      "Checkout_Summary":"总结",
+      "Delivery_Options":"配送选择",
+      "New_Order":"新订单",
+      "NEW_ORDER":"新订单",
+      "Order_Submission":"提交订单",
+      "Payment":"付款",
+      "PAYMENT":"付款",
+      "Pickup_Options":"自取选择",
+      "Select_Address":"选择地址",
+      "SELECT_ADDRESS":"选择地址",
+      "Your_Order":"您的订单",
+      "YOUR_ORDER":"您的订单",
+      
+      "serviceNotAvailable": "抱歉，该服务在您所在的地区暂时无法使用"
+      },
+
+    "driver": {
+      "question": {
+        "ConfirmDelivery":"确认配送？",
+        "ConfirmPickup":"确认取货？",
+        "WasDeliveryMistake":"送货有误？",
+        "WasPickupMistake":"取货有误？"
+        },
+      "tab": {
+        "LIST":"列表",
+        "MAP":"地图",
+        "SUMMARY":"总结"
+        }
+      },
+      "drv": {
+        "orderStatusDescrip": {
+          "initial": "使用者正在创建订单",
+          "cancelled": "订单取消",
+          "readyForPickup": "准备取货",
+          "assignedForPickup":"准备取货",
+          "outForPickup":"准备取货",
+          "pickedUp": "在货车上",
+          "atShop": "在洗衣店内",
+          "inShop": "在洗衣店内",
+          "readyForDelivery": "已清洗",
+          "assignedForDelivery": "准备配送",
+          "outForDelivery": "准备配送",
+          "delivered": "已送货",
+          "confirmed": "配送已配送",
+          "completed": "店家已关闭此订单",
+          "invalid": "订单状况无效"
+        },
+  
+      "routeStatusDescrip": {
+        "pending": "增加订单中",
+        "locked": "已无订单，尚未有配送员",
+        "assigned": "已安排配送员",
+        "open": "配送员已外出",
+        "completedNeedsAction": "配送员已完成订单，正在结算",
+        "completed": "配送员已完成订单",
+        "acceptedNeedsAction": "路线已确认，订单需确认价格",
+        "accepted": "洗衣店已确认完成所有订单",
+        "done": "全部完成",
+        "invalid": "状态无效"
+        }
+
+    },
+    "dsRteSumm": {
+      "TITLE":"总结",
+      "DELIVERIES:":"配送:",
+      "PICKUPS:":"取货:",
+      "OTHERS:":"其他:",
+      "Done:":"完成:",
+      "Others:":"其他:",
+      "Remaining:":"剩余:",
+      "Total:":"共计:"
+    },
+
+    "err":{
+      "DbOpen":"访问数据库时出错",
+      "errorDetected":"检测到错误，请报告后面的所有消息",
+      "invalidOrderStatusText":"无效的订单状态"
+    },
+
+    "login": {
+      "welcome": "欢迎{{名字}}使用我们的本地化应用程序！",
+      "login_button": "登录",
+      "signup_button": "注册"
+    },
+
+    "route": {
+      "STATUS": {
+        "pending": "待办",
+        "locked": "锁定",
+        "assigned": "已分配",
+        "open": "开启",
+        "completed": "已完成",
+        "accepted": "已接受",
+        "done": "完成",
+        "invalid":"无效"
+        },
+          "ACTION": {
+          "view": "展开",
+          "open": "开启",
+          "continue": "继续",
+          "addOrders": "增添",
+          "lock": "锁",
+          "unlock": "解锁",
+          "assign": "增加配送员",
+          "unassign": "取消分配",
+          "complete": "完成",
+          "accept": "接受",
+          "close": "关闭",
+          "noop": "错误",
+          "invalid": "错误"
+        }
+    },
+  
+    "shp": {
+      "orderStatusDescrip": {
+        "initial": "用户正在创建订单",
+        "cancelled": "订单已取消",
+        "readyForPickup": "准备取货",
+        "assignedForPickup":"订单已安排配送路线",
+        "outForPickup":"配送员正前往取货",
+        "pickedUp": "订单在车内",
+        "atShop": "订单已送到洗衣店",
+        "inShop": "订单已被洗衣店接受",
+        "readyForDelivery": "订单已准备配送",
+        "assignedForDelivery": "订单已安排配送路线",
+        "outForDelivery": "配送员正前往配送",
+        "delivered": "订单已被配送",
+        "confirmed": "订单配送已被顾客确认",
+        "completed": "订单已被洗衣店关闭",
+        "invalid": "订单状态无效"
+      },
+      "orderActionConfirm": {
+        "view": "查看此订单",
+        "price": "为订单定价？",
+        "addToRoute": "增加此订单?",
+        "removeFromRoute": "取消此订单?",
+        "accept":"洗衣店接受此订单？",
+        "cleaned":"此订单已被清洗",
+        "noop": "动作枚举错误",
+        "invalid": "动作枚举错误"
+      },
+      "routeActionConfirm": {
+        "lock": "为配送员准备配送路线，没有更多订单了吗？",
+        "unlock": "允许更多订单？"
+      },
+    "routeStatusDescrip": {
+        "pending": "正在增加订单",
+        "locked": "不接受更多订单",
+        "assigned": "已安排至配送员",
+        "open": "配送员已外出",
+        "completedNeedsAction": "配送员已完成订单，正在结算",
+        "completed": "配送员已完成订单",
+        "acceptedNeedsAction": "路线已接受，订单需定价",
+        "accepted": "商店已接受路线",
+        "done": "全部完成",
+        "invalid": "状态无效"
+        },
+        "tab_DONE":"完成",
+        "tab_INCOMING":"传入",
+        "tab_INSHOP":"在洗衣店内",
+        "tab_OUTGOING":"已离开洗衣店",
+        "tab_PRICING":"价格",
+        "tab_RECEIVE":"接受",
+        "tab_ROUTES":"路线",
+        "tab_UNPAID":"未付款"
+      },
+      "history": {
+        "orderStatusDescrip": {
+          "initial": "用户正在创建订单",
+          "cancelled": "订单已取消",
+          "readyForPickup": "准备取货",
+          "assignedForPickup":"订单分配到取货路线",
+          "outForPickup":"取货配送员",
+          "pickedUp": "订单在车内",
+          "atShop": "订单在洗衣店内",
+          "inShop": "订单在洗衣店内",
+          "readyForDelivery": "衣服已清洗",
+          "assignedForDelivery": "订单正在被配送中",
+          "outForDelivery": "配送员外出配送",
+          "delivered": "订单已经送达",
+          "confirmed": "已确认收货",
+          "completed": "店家已关闭此订单",
+          "invalid": "订单状态无效"
+        }
+      },
+
+    "toast": {
+      "test":"测试",
+      "shp": {
+        "routeStatusChange": {
+          "lock": "不能再向该路线添加订单",
+          "unlock": "您现在可以将订单添加到路线",
+          "assign": "该路线订单以分配给配送员$1",
+          "unassign": "该配送员路线已被取消",
+          "invalid": "该动作未定义"
+        }
+      },
+      "drv":{
+        "noLocNoPath":"必须具有位置权限才能启用路线"
+      }
+
+    },
+    "drvshp": {
+      "orderActionConfirm": {
+        "view": "查看此订单",
+        "price": "为订单定价？",
+        "addToRoute": "将订单添加到该路线?",
+        "removeFromRoute": "取消路线此订单?",
+        "accept":"洗衣店确定接受此订单?",
+        "cleaned":"订单已清洗?",
+        "noop": "动作枚举错误",
+        "invalid": "动作枚举错误",
+        "pickup": "取货此订单？",
+        "undoPickup":"此取货有误？",
+        "dropoff":"配送此订单？",
+        "undoDropoff":"此配送有误？",
+        "paymentReminder":"请问需要发提醒吗？"
+      },
+      "routeActionConfirm": {
+        "open": "已准备开启路程？",
+        "close": "完成该路线?"
+      }
+      },
+      "trans":{
+        "pricingComplete":"定价完成"
+      }
+  }

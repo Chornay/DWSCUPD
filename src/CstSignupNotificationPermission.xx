@@ -1,0 +1,48 @@
+import React, { Component } from 'react';
+import { Platform } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import { PERMISSIONS, requestNotifications } from 'react-native-permissions';
+import CdsQuestionScreen from './CdsQuestionScreen'
+
+
+
+export default class CstSignupNotificationPermission extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            isComponentInitialized: false,
+        };
+    }
+
+    componentDidMount() {
+        this.setState({ isComponentInitialized: true });
+    }
+
+    render() {
+        console.log('we are requesting permission1')
+
+        return (
+            <CdsQuestionScreen
+                text='cmnNEW.EmailForgotSent'
+                onOkay={async () => {
+                    console.log('we are requesting permission2')
+                    if (Platform.OS === 'android') {
+                        requestNotifications(['alert', 'sound']).then(({ status, settings }) => {
+                            // …
+                        });
+                    }
+                    else {
+                        const authStatus = await messaging().requestPermission({})
+                        console.log(authStatus)
+                        // const enabled =
+                        //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                        //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+                    }
+                }}
+            />
+        )
+    }
+
+}// end CstSignupNotificationPermission

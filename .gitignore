@@ -1,0 +1,10 @@
+android/build/
+android/app/build/
+android/.gradle/
+ios/build/
+ios/Pods/
+node_modules/
+android/app/.cxx/
+*.apk
+*.aab
+*.log

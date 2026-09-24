@@ -1,0 +1,185 @@
+
+require_relative'../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+permissions_path = '../node_modules/react-native-permissions/ios'
+platform :ios, '13.0'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+target 'DW' do
+  config = use_native_modules!
+
+  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
+  pod 'RNPermissions', :path =>  '../node_modules/react-native-permissions'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'GoogleSignIn'
+  # pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
+  # pod 'FacebookSDK' //DEBUG for duplicate archeticture 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+  pod 'Permission-Calendars', :path => "#{permissions_path}/Calendars"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts"
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+  pod 'Permission-PhotoLibraryAddOnly', :path => "#{permissions_path}/PhotoLibraryAddOnly"
+  pod 'Permission-Reminders', :path => "#{permissions_path}/Reminders"
+  pod 'BEMCheckBox'
+  pod 'RNSha256', :path => '../node_modules/react-native-sha256'
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
+  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
+  pod 'RNFBFunctions', :path => '../node_modules/@react-native-firebase/functions'
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+  pod 'RNFBStorage', :path => '../node_modules/@react-native-firebase/storage'
+  pod 'RNFBRemoteConfig', :path => '../node_modules/@react-native-firebase/remote-config'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  pod 'RNAppleAuthentication', :path => '../node_modules/@invertase/react-native-apple-authentication'
+  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
+  pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+  pod 'react-native-geolocation-service', :path => '../node_modules/react-native-geolocation-service'
+  pod 'react-native-device-country', :path => '../node_modules/react-native-device-country'
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+  pod 'RNLocalize', :path => '../node_modules/react-native-localize'
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+  pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+  pod 'RNQrGenerator', :path => '../node_modules/rn-qr-generator'
+  # pod 'RNThermalReceiptPrinterImageQr', :path => '../node_modules/react-native-thermal-receipt-printer-image-qr'
+
+  # pod 'RNHTMLtoPDF', :path => '../node_modules/react-native-html-to-pdf'
+
+  # pod 'RNContainsLocation', path: '../node_modules/react-native-contains-location'
+  # pod 'RNDatePicker', :path => '../node_modules/react-native-date-picker'
+
+
+  use_react_native!(:path => config["reactNativePath"])
+
+
+  pod 'react-native-html-to-pdf', :path => '../node_modules/react-native-html-to-pdf'
+
+  target 'DWTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable these next few lines.
+  # use_flipper!
+  # post_install do |installer|
+  #   flipper_post_install(installer)
+  # end
+  
+end
+# post_install do |installer|
+#   installer.pods_project.build_configurations.each do |config|
+#     config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+#   end
+
+# # target 'DW-tvOS' do
+# #   # Pods for DW-tvOS
+# #   target 'DW-tvOSTests' do
+# #     inherit! :search_paths
+# #     # Pods for testing
+# #   end
+# # end
+# end
+
+
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+#    target.build_configurations.each do |config|
+#      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+#      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+#    end
+  
+#    if target.name == 'BoringSSL-GRPC'
+#      target.source_build_phase.files.each do |file|
+#        if file.settings && file.settings['COMPILER_FLAGS']
+#          flags = file.settings['COMPILER_FLAGS'].split
+#          flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+#          file.settings['COMPILER_FLAGS'] = flags.join(' ')
+#        end
+#      end
+#    end
+#   end
+# end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      
+      # Base build settings for Xcode 26
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+        config.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
+
+        # Warnings
+        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+        config.build_settings['CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS'] = 'NO'
+        config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+        config.build_settings['SWIFT_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+
+        # Swift runtime
+        config.build_settings['SWIFT_INSTALL_OBJC_HEADER'] = 'NO'
+        config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -lswift_Concurrency -lswift_StringProcessing'
+        config.build_settings['OTHER_LDFLAGS'] += ' -lswift_Concurrency -lswift_StringProcessing'
+      end
+
+      # BoringSSL tweak
+      if target.name == 'BoringSSL-GRPC'
+        target.source_build_phase.files.each do |file|
+          if file.settings && file.settings['COMPILER_FLAGS']
+            flags = file.settings['COMPILER_FLAGS'].split
+            flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+            file.settings['COMPILER_FLAGS'] = flags.join(' ')
+          end
+        end
+      end
+
+      # Geolocation Swift concurrency
+      if target.name == 'react-native-geolocation-service'
+        target.build_configurations.each do |config|
+          config.build_settings['SWIFT_VERSION'] = '5.0'
+          config.build_settings['OTHER_SWIFT_FLAGS'] = '$(inherited) -disable-experimental-feature Concurrency'
+          config.build_settings['SWIFT_CONCURRENCY_BACK_DEPLOYMENT_TARGET'] = 'none'
+        end
+      end
+
+      # FirebaseFirestore ABSL_CONST_INIT patch
+      if target.name == 'FirebaseFirestore'
+        target.build_configurations.each do |config|
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'ABSL_CONST_INIT='
+        end
+      end
+
+      # Force glog / leveldb to build arm64 only
+      if ['glog', 'leveldb-library'].include?(target.name)
+        target.build_configurations.each do |config|
+          config.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
+          config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+        end
+      end
+
+    end
+  end
+
+
+

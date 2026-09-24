@@ -1,0 +1,12 @@
+diff --git a/node_modules/@react-native-picker/picker/android/build.gradle b/node_modules/@react-native-picker/picker/android/build.gradle
+index a511923..255c36c 100644
+--- a/node_modules/@react-native-picker/picker/android/build.gradle
++++ b/node_modules/@react-native-picker/picker/android/build.gradle
+@@ -21,6 +21,7 @@ def getExtOrIntegerDefault(name) {
+ apply plugin: 'com.android.library'
+ 
+ android {
++    namespace "com.reactnativecommunity.picker"
+   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+   buildToolsVersion getExtOrDefault('buildToolsVersion')
+ 

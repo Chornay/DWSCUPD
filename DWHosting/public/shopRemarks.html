@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onload="document.forms[0].submit(); ">
+  <div>
+    <div class="bar">
+      <p style="text-align:center;">This is Shop Webview remarks. This is Shop Webview remarks. This is Shop Webview remarks. This is Shop Webview remarks</p>
+    </div>
+  </div>
+</body>
+
+
+<style>
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 60px;
+    height: 60px;
+    /* justify-content: center; */
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .foo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 200px
+  }
+
+  .bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+</html>

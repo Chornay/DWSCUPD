@@ -1,0 +1,12 @@
+diff --git a/node_modules/@react-native-community/datetimepicker/android/build.gradle b/node_modules/@react-native-community/datetimepicker/android/build.gradle
+index 012bf16..f8566ff 100644
+--- a/node_modules/@react-native-community/datetimepicker/android/build.gradle
++++ b/node_modules/@react-native-community/datetimepicker/android/build.gradle
+@@ -5,6 +5,7 @@ def safeExtGet(prop, fallback) {
+ }
+ 
+ android {
++    namespace "com.reactcommunity.rndatetimepicker"
+     compileSdkVersion safeExtGet('compileSdkVersion', 28)
+     buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
+ 

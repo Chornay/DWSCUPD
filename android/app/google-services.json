@@ -1,0 +1,199 @@
+{
+  "project_info": {
+    "project_number": "906880565549",
+    "firebase_url": "https://dobby-ba6e8-default-rtdb.firebaseio.com",
+    "project_id": "dobby-ba6e8",
+    "storage_bucket": "dobby-ba6e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906880565549:android:77f1ce8ac30e6f484393a4",
+        "android_client_info": {
+          "package_name": "com.dobby_walla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906880565549-flsdf1ijf1ttt74hmts9si2r7tjddjrs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dobby_walla",
+            "certificate_hash": "975824ee9b7164d0fd7ca2efdb37725a208482dd"
+          }
+        },
+        {
+          "client_id": "906880565549-b9ql6k1b9r0ne6i3gj8fe3s8ebaco5ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWJHXmu4XklJBidVN_zR-hFHzQp7q1hmA"
+        },
+        {
+          "current_key": "AIzaSyAy4hLx00nCaZCoMLKMYsez7JB2YrppPfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906880565549-4eht3d0vre8g20r4rf08g7t3aq5t2lpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906880565549-c464jf6gqafkpe12almnsr506ha51av5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.dobby-walla"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906880565549:android:fac02866ccb664054393a4",
+        "android_client_info": {
+          "package_name": "com.dobbywalla.cust"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906880565549-hftitd553d8doansvbvpr5ndh3gfk51i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dobbywalla.cust",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "906880565549-b9ql6k1b9r0ne6i3gj8fe3s8ebaco5ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWJHXmu4XklJBidVN_zR-hFHzQp7q1hmA"
+        },
+        {
+          "current_key": "AIzaSyAy4hLx00nCaZCoMLKMYsez7JB2YrppPfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906880565549-4eht3d0vre8g20r4rf08g7t3aq5t2lpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906880565549-c464jf6gqafkpe12almnsr506ha51av5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.dobby-walla"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906880565549:android:e32a9ef11fea55484393a4",
+        "android_client_info": {
+          "package_name": "com.dobbywalla.dw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906880565549-fpflj2buc47cs59ubj88r4tmfsnkaj6d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dobbywalla.dw",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "906880565549-b9ql6k1b9r0ne6i3gj8fe3s8ebaco5ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWJHXmu4XklJBidVN_zR-hFHzQp7q1hmA"
+        },
+        {
+          "current_key": "AIzaSyAy4hLx00nCaZCoMLKMYsez7JB2YrppPfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906880565549-4eht3d0vre8g20r4rf08g7t3aq5t2lpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906880565549-c464jf6gqafkpe12almnsr506ha51av5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.dobby-walla"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906880565549:android:6b8401d4041e0d414393a4",
+        "android_client_info": {
+          "package_name": "com.dw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906880565549-mb6t2t026flcjc1ikqfj9pgp4qpd4m1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dw",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "906880565549-b9ql6k1b9r0ne6i3gj8fe3s8ebaco5ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWJHXmu4XklJBidVN_zR-hFHzQp7q1hmA"
+        },
+        {
+          "current_key": "AIzaSyAy4hLx00nCaZCoMLKMYsez7JB2YrppPfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906880565549-4eht3d0vre8g20r4rf08g7t3aq5t2lpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906880565549-c464jf6gqafkpe12almnsr506ha51av5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.dobby-walla"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

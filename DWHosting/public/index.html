@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onload="document.forms[0].submit(); ">
+  <!-- <body onload="test();document.forms[0].submit(); "> -->
+    <!-- <body onload="exampleFunction() "> -->
+  <div>
+    <div class="bar">
+      <h4 style="text-align:center;">You are being redirected to the payment gateway, Ipay88...XXX</h4>
+    </div>
+    <div class="foo">
+      <div class="loader"></div>
+    </div>
+  </div>
+  </div>
+  <FORM method="post" name="ePayment" action="https://payment.ipay88.com.my/ePayment/entry.asp">
+    <INPUT type="hidden" name="MerchantCode" value="M28157">
+    <INPUT type="hidden" name="MerchantKey" value="Vo85pJ1XuI">
+    <INPUT type="hidden" name="PaymentId" value=2>
+    <INPUT type="hidden" name="RefNo" value="Z00000008">
+    <INPUT type="hidden" name="Amount" value=1.00>
+    <INPUT type="hidden" name="Currency" value="MYR">
+    <INPUT type="hidden" name="ProdDesc" value="Foobar">
+    <INPUT type="hidden" name="UserName" value="Soung Chornay">
+    <INPUT type="hidden" name="UserEmail" value="soung.chornay21@gmail.com">
+    <INPUT type="hidden" name="UserContact" value="0123456789">
+    <INPUT type="hidden" name="Remark" value="Test Acctount">
+    <INPUT type="hidden" name="Lang" value="UTF-8">
+    <INPUT type="hidden" name="SignatureType" value="SHA256">
+    <INPUT type="hidden" name="Signature" value="1216ee40e910428463691fe49fb7344c7c2231dd8bb4b40c919f9ef058ffa2d6">
+    <!-- <input type="submit" value="Proceed with Payment" name="Submit"> -->
+  </FORM>
+  <script>
+    // function exampleFunction() { alert('You triggered an alert!'); }
+    function test() {
+      alert('You triggered an aler abc!');
+      if (window.ReactNativeWebView) {
+        window.addEventListener("message", this.webViewEventHandler); //android 
+        document.addEventListener("message", this.webViewEventHandler); //ios
+      }
+
+      webViewEventHandler = (event) => {
+        if (event.origin == 'react-native') {
+          console.log(event.data) //get dataObject
+        }
+      }
+    }
+
+  </script>
+</body>
+
+
+<style>
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 60px;
+    height: 60px;
+    /* justify-content: center; */
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .foo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 200px
+  }
+
+  .bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+</html>

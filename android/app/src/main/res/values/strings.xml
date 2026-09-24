@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DOBBY WALLA</string>
+    <!-- <string name="facebook_app_id">1805316099817841</string>     //BEFORE changing name -->
+    <string name="facebook_app_id">1217855562174423</string>
+    <!-- <string name="facebook_client_token">f8a72c2d4d71647505d9078bd3f30baf</string> //BEFORE changing name -->
+    <string name="facebook_client_token">a806846e4bcfe92afd5d49bf7357463d</string> 
+    <!-- <string name="app_name">com.dw</string>
+    <string name="facebook_app_id">399296398172593</string>
+    <string name="facebook_client_token">f881c772219e48bb2bca3723a5f3fa9e6</string>     -->
+</resources>

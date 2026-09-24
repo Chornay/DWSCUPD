@@ -1,0 +1,131 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        // compileSdkVersion = 35
+        // targetSdkVersion = 35
+        compileSdkVersion = 36
+        targetSdkVersion = 36
+        buildToolsVersion = "36.0.0"
+        // minSdkVersion = 21
+        minSdkVersion = 23
+        // buildToolsVersion = "34.0.0"
+        googlePlayServicesAuthVersion = "19.2.0"
+        hermesEnabled = project.hasProperty('hermesEnabled') ? project.hermesEnabled : true
+        SOLOADER_VERSION = "0.10.4"
+
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        // classpath("com.android.tools.build:gradle:3.5.3")
+        classpath 'com.google.gms:google-services:4.3.13'
+        // classpath 'com.google.gms:google-services:4.3.10' 
+        classpath("com.android.tools.build:gradle:8.13.0")
+        // classpath("com.android.tools.build:gradle:7.4.0") //B4 SDK 35
+        // classpath("com.android.tools.build:gradle:7.4.2")
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"   // <--- THIS
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
+
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
+
+    allprojects {
+        configurations.all {
+            resolutionStrategy {
+                force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+                
+            }
+        }
+    }
+
+
+    repositories {
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+
+        google()
+        mavenCentral()
+        // jcenter()
+        maven { url 'https://www.jitpack.io' }
+    }
+    subprojects { subproject ->
+        if(project['name'] == 'react-native-reanimated'){
+            project.configurations { compile { } }
+        }
+    }
+}
+subprojects { subproject ->
+    afterEvaluate {
+        if (subproject.hasProperty('android')) {
+            subproject.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+        }
+        subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+}
+
+//need this block for generating aab file 
+gradle.projectsEvaluated {
+    def appProject = project(':app')
+    def bundleJsTask = appProject.tasks.findByName('bundleReleaseJsAndAssets')
+    def copyJsTask = appProject.tasks.findByName('copyReleaseBundledJs')
+    def bundleResourcesTask = appProject.tasks.findByName('bundleReleaseResources')
+
+    if (bundleJsTask != null && copyJsTask != null) {
+        copyJsTask.mustRunAfter(bundleJsTask)
+    }
+    if (copyJsTask != null && bundleResourcesTask != null) {
+        bundleResourcesTask.mustRunAfter(copyJsTask)
+    }
+
+    // Force JS tasks to run after every release task in OTHER modules
+    [bundleJsTask, copyJsTask].findAll { it != null }.each { jsTask ->
+        rootProject.subprojects.each { subproject ->
+            if (subproject.path != ':app') {
+                subproject.tasks.matching { it.name.toLowerCase().contains('release') }.each { t ->
+                    jsTask.mustRunAfter(t)
+                }
+            }
+        }
+    }
+
+    // Force every OTHER :app release task to run after copyReleaseBundledJs,
+    // since its output overlaps AGP's shared intermediates directory.
+    def upstreamOfCopyJs = ['mergeReleaseAssets', 'compileReleaseShaders', 'mergeReleaseShaders', 'generateReleaseAssets', 'preReleaseBuild']
+    if (copyJsTask != null) {
+        appProject.tasks.matching {
+            it.name.toLowerCase().contains('release') &&
+            it.name != 'copyReleaseBundledJs' &&
+            it.name != 'bundleReleaseJsAndAssets' &&
+            !upstreamOfCopyJs.contains(it.name)
+        }.each { t ->
+            t.mustRunAfter(copyJsTask)
+        }
+    }
+    
+}

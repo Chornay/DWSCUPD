@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>906880565549-kkrfflmma1ar17ile4b83v27thdb6s11.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.906880565549-kkrfflmma1ar17ile4b83v27thdb6s11</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>906880565549-afjqht0496ceuit046at0jvlmq7tnliq.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBiUo4ivvv3QVEBPkvuLrh3SimEqMzpF5o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>906880565549</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dobbywalla20221109.cust.ios</string>
+	<key>PROJECT_ID</key>
+	<string>dobby-ba6e8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dobby-ba6e8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:906880565549:ios:841026dcc0f3118a4393a4</string>
+	<key>DATABASE_URL</key>
+	<string>https://dobby-ba6e8-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
