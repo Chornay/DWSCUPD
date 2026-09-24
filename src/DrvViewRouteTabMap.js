@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Button } from 'react-native'
-import { Container, Fab } from 'native-base'
+import { Container } from 'native-base'
 import { withNavigation } from 'react-navigation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
@@ -10,10 +10,11 @@ import GLOBALS from 'DWcmn/Global';
 //GCimport Boundary, { Events } from 'react-native-boundary';
 import DsOrderTile from './DsOrderTile'
 import { PrjIcon } from 'DWcmn/PrjIconComponents'
-import { PrjMapIcon, PrjFabMapShowAll } from 'DWcmn/Prj'
+import { PrjMapIcon } from 'DWcmn/Prj'
 import { prjcmnCalculateEnclosingMapRegion } from 'DWcmn/prjcmnLocationFunctions'
 import { prjCheckLocationPermission } from 'DWcmn/prjcmnLocationFunctions'
 import { cmnOrderActiveLocation } from 'DWcmn/CmnFunctions'
+import { PrjFabMapShowAll, PrjFabExpandable } from 'DWcmn/Prj'
 
 // { latitude:43.803586, longitude:-79.401574} //Canada 4 elspeth
 // { latitude:2.9222, longitude:101.6511} //Cyberjaya D'Pulze
@@ -258,55 +259,57 @@ class DrvViewRouteTabMap extends Component {
         return -1;
     } //end indexInPath
 
-    displayDirectionsFab = () => {
-        //NOTE used to be bottomright and up .. but got in the way of the tile
-        return (
-            <Fab
-                active={this.state.fabActive}
-                direction="down"
-                containerStyle={{}}
-                style={[styles.fabButton, { backgroundColor: GLOBALS.DRIVER.FAB_COLOR_BUTTON }]}
-                position="topLeft"
-                onPress={() => {
-                    if (this.state.currPosition == null) {
-                        prjToast({ type: 'danger', i18n: "toast.drv.noLocNoPath" })
-                    }
-                    else {
-                        this.state.fabActive && this.setState({ directionsMode: 'off' }) //if turning off the FAB, directions go off
-                        this.setState({ fabActive: !this.state.fabActive })
-                    }
-                }}>
-                <PrjIcon id="MAP_MARKER_PATH" />
-                <Button style={[styles.fabChildButton, { backgroundColor: GLOBALS.DRIVER.FAB_COLOR_STOP }]}
-                    onPress={() => {
+displayDirectionsFab = () => {
+    //NOTE used to be bottomright and up .. but got in the way of the tile
+    return (
+        <PrjFabExpandable
+            position="topLeft"
+            mainIcon="MAP_MARKER_PATH"
+            mainColor={GLOBALS.DRIVER.FAB_COLOR_BUTTON}
+            active={this.state.fabActive}
+            onToggleMain={() => {
+                if (this.state.currPosition == null) {
+                    prjToast({ type: 'danger', i18n: "toast.drv.noLocNoPath" })
+                }
+                else {
+                    this.state.fabActive && this.setState({ directionsMode: 'off' })
+                    this.setState({ fabActive: !this.state.fabActive })
+                }
+            }}
+            actions={[
+                {
+                    icon: "MAP_STOP",
+                    color: GLOBALS.DRIVER.FAB_COLOR_STOP,
+                    onPress: () => {
                         this.setState({ directionsMode: 'off' })
                         this.setState({ fabActive: !this.state.fabActive })
-                    }}>
-                    <PrjIcon id="MAP_STOP" />
-                </Button>
-                <Button style={[styles.fabChildButton, { backgroundColor: GLOBALS.DRIVER.FAB_COLOR_PICK }]}
-                    onPress={() => {
+                    }
+                },
+                {
+                    icon: "MAP_MARKER_PLUS",
+                    color: GLOBALS.DRIVER.FAB_COLOR_PICK,
+                    onPress: () => {
                         if (this.state.directionsMode == 'pick') {
                             this.setState({ pathIds: [] })
                         }
                         else {
                             this.setState({ directionsMode: 'pick' })
                         }
-                    }}>
-                    <PrjIcon id="MAP_MARKER_PLUS" />
-                </Button>
-                <Button style={[styles.fabChildButton, { backgroundColor: GLOBALS.DRIVER.FAB_COLOR_START }]}
-                    onPress={() => {
+                    }
+                },
+                {
+                    icon: "MAP_START",
+                    color: GLOBALS.DRIVER.FAB_COLOR_START,
+                    onPress: () => {
                         this.setState({ directionsMode: 'on' })
                         this.setState({ pathOrigin: this.state.currPosition })
                         this.setState({ fabActive: !this.state.fabActive })
-                    }}>
-                    <PrjIcon id="MAP_START" />
-                </Button>
-            </Fab>
-        )
-    }//end displayDirectionsFab
-
+                    }
+                },
+            ]}
+        />
+    )
+}//end displayDirectionsFab
 } //end DrvViewRouteTabMap
 
 
