@@ -2,7 +2,8 @@ import React from 'react'
 import { View, StyleSheet, TouchableOpacity, Switch, Platform } from 'react-native'
 import InputSpinner from 'react-native-input-spinner'
 
-import { ListItem } from 'native-base';
+
+import { ListItemGBC } from 'DWcmn/PrjNativeBase'
 import ModalSelector from 'react-native-modal-selector'
 
 import GLOBALS from 'DWcmn/Global';
@@ -14,6 +15,7 @@ import { cmnFormatAPrice } from 'DWcmn/cmnFormatFunctions'
 import { prjPriceListItemName } from 'DWcmn/PrjCmnFunctions'
 import { CmnTouchableEdit } from 'DWcmn/CmnTouchableEdit'
 import { PrjIconButton } from 'DWcmn/Prj'
+import { PrjSliderSwitch } from 'DWcmn/PrjSliderSwitch'
 import { GCText, GCI18n } from 'DWcmn/Gc'
 import { CstMenuPriceList, getCustomPricingString } from './CstMenuPriceList'
 import { CdsMenuInfoIcon } from './CdsMenuInfoIcon'
@@ -194,13 +196,13 @@ export function CdsMenuLineDisplay({ line, useLongName, changedSomething, onLeft
                      {renderName(line)}
                   </View>
                   {hasAPrice && <View style={{ flex: .25 }}>
-                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  ~   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         {renderUnitPrice(line)}
                      </View>
                   </View>}
                   <View style={{ flex: .35 }}>
                      <View style={{ alignSelf: 'center' }}>
-                        <NewCheckBox
+                        <PrjSliderSwitch
                            checked={line.included}
                            onPress={() => {
                               line.included = !line.included;
@@ -226,7 +228,7 @@ export function CdsMenuLineDisplay({ line, useLongName, changedSomething, onLeft
                   </View>
                   <View style={{ flex: .35 }}>
                      <View style={{ alignSelf: 'center' }}>
-                        <NewCheckBox
+                        <PrjSliderSwitch
                            checked={line.included}
                            onPress={() => {
                               line.included = !line.included;
@@ -253,7 +255,7 @@ export function CdsMenuLineDisplay({ line, useLongName, changedSomething, onLeft
                   </View>
                   <View style={{ flex: .35 }}>
                      <View style={{ justifyContent: 'flex-end', alignSelf: 'center' }}>
-                        <NewCheckBox
+                        <PrjSliderSwitch
                            checked={line.included}
                            onPress={() => {
                               line.unitPrice = 0.0
@@ -425,7 +427,7 @@ export function CdsMenuLineDisplay({ line, useLongName, changedSomething, onLeft
       // NOTE There was special handling required because we ended up trying to change
       // NOTE an unmounted component
       // <ListItem style={styles.listItemStyle}>
-      <ListItem style={[styles.item, { backgroundColor: line.included ? COLORS.GC_SHADE_SELECTED : 'transparent' }]}>
+      <ListItemGBC style={[styles.item, { backgroundColor: line.included ? COLORS.GC_SHADE_SELECTED : 'transparent' }]}>
          {/* <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 12, paddingBottom: 12, backgroundColor:'green' }}> */}
          <View style={{
             flex: 1,
@@ -437,7 +439,7 @@ export function CdsMenuLineDisplay({ line, useLongName, changedSomething, onLeft
          </View>
          {/* if the line is in the order then display some additional information  */}
          {renderInstructions(line)}
-      </ListItem>
+      </ListItemGBC>
 
    )
 
@@ -534,70 +536,6 @@ function updateNetPrice(line) {
    }
 
 } //end updateNetPrice
-
-
-//prop checked
-//prop onPress
-//prop checkedStyle
-//prop uncheckedStyle
-//prop disabled
-function NewCheckBox({ checked, onPress, disabled }) {
-   // Move the switch aligh with Count button...orignal switch on and off position differently 
-   // Align switch with plus and minus button
-   // let flexEndAndroid = checked ? 15 : 30
-   // let flexEndIOS = checked ? 10 : 10
-   let flexEndAndroid = checked ? 15 : 0
-   let flexEndIOS = checked ? 8 : 8
-   return (
-      // use left to move to the right because alignItem:'flex-end' doesn't do it
-      // <View style={{ left: flexEnd }}>
-      <View style={{ right: Platform.OS === 'ios' ? flexEndIOS : flexEndAndroid }}>
-         <Switch
-            // We can't apply any style to trackColor eg.shadow style 
-            trackColor={{ false: COLORS.GC_SWITCH_DISABLE, true: COLORS.GC_ABS_WHITE }} //lighter 
-            thumbColor={checked ? COLORS.GC_THEME_DARK : COLORS.GC_ABS_WHITE}
-            onValueChange={(val) => {
-               onPress(val)
-            }}
-            value={checked}
-            style={{ transform: Platform.OS === 'ios' ? [{ scaleX: 1.25 }, { scaleY: 1.25 }] : [{ scaleX: 2.00 }, { scaleY: 1.75 }] }}
-            disabled={disabled}
-         />
-      </View>
-
-   )
-} //end NewCheckBox
-
-
-//gave up fiddling with react native, native base and other check boxes. Just did this
-
-//prop checked
-//prop onPress
-//prop checkedStyle
-//prop uncheckedStyle
-//prop disabled
-function OurCheckBox({ checked, onPress, checkedStyle, uncheckedStyle, disabled }) {
-   if (checked) {
-      return (
-         <TouchableOpacity style={[checkboxStyles.checked, checkedStyle]}
-            onPress={disabled ? null : onPress}
-         >
-            <PrjIcon color={COLORS.GC_CHECKBOX_OFF} id='CHECK' style={{ fontSize: 20 }} />
-         </TouchableOpacity>
-      )
-
-   }
-   else {
-      return (
-         <TouchableOpacity style={[checkboxStyles.unchecked, uncheckedStyle]}
-            onPress={disabled ? null : onPress}
-         >
-         </TouchableOpacity>
-      )
-
-   }
-} //end OurCheckBox
-
 
 //prop value
 //prop onChange(newValue)

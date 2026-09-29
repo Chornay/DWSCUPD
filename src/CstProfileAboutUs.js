@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Platform, TouchableOpacity } from 'react-native'
 import { Linking } from 'react-native'
-import { SpinnerXYZ, ListItemXYZ, LeftXYZ, RightXYZ } from 'DWcmn/GCNB'
+// import { SpinnerXYZ, ListItemXYZ, LeftXYZ, RightXYZ } from 'DWcmn/GCNB'
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 import { PrjIcon } from 'DWcmn/PrjIconComponents';
 import { GCText, GCI18n } from 'DWcmn/Gc'
 import { PrjWebView } from 'DWcmn/PrjWebView'
@@ -84,14 +85,14 @@ export function CstProfileAboutUs({ onOkay }) {
                      />
                   </View>
                   <View style={{ flex: .1, justifyContent: 'flex-end' }}>
-                     <ListItemXYZ>
-                        <LeftXYZ><GCText>Version</GCText></LeftXYZ>
-                        <RightXYZ><GCText fit>{getAppVersion()}</GCText></RightXYZ>
-                     </ListItemXYZ>
-                     <ListItemXYZ>
-                        <LeftXYZ><GCText>Build</GCText></LeftXYZ>
-                        <RightXYZ><GCText fit>{getAppBuild()}</GCText></RightXYZ>
-                     </ListItemXYZ>
+                     <ListItemGBC>
+                        <ListItemLeft><GCText>Version</GCText></ListItemLeft>
+                        <ListItemRight><GCText fit>{getAppVersion()}</GCText></ListItemRight>
+                     </ListItemGBC>
+                     <ListItemGBC>
+                        <ListItemLeft><GCText>Build</GCText></ListItemLeft>
+                        <ListItemRight><GCText fit>{getAppBuild()}</GCText></ListItemRight>
+                     </ListItemGBC>
 
                   </View>
                </View>
@@ -175,16 +176,13 @@ async function smsToDW() {
 function AboutUsField({ onPress, id, i18n }) {
 
    return (
-      <ListItemXYZ>
-         <TouchableOpacity
-            onPress={onPress}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-               <PrjIcon style={{}} id={id} />
-               <GCText>  </GCText>
-               <GCI18n code={i18n} />
-            </View>
-         </TouchableOpacity>
-      </ListItemXYZ>
+      <ListItemGBC button onPress={onPress}>
+         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+            <PrjIcon style={{}} id={id} />
+            <GCText>  </GCText>
+            <GCI18n code={i18n} />
+         </View>
+      </ListItemGBC>
 
    )
 }//end AboutUsField

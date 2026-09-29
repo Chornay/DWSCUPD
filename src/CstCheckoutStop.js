@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import cloneDeep from 'lodash/cloneDeep'
 
-import { ListItem } from 'native-base';
+import { ListItemGBC } from 'DWcmn/PrjNativeBase'
 import GLOBALS from 'DWcmn/Global';
 import { COLORS } from 'DWcmn/Global'
 import Modal from "react-native-modal";
@@ -193,7 +193,7 @@ class SelectionModal extends Component {
    // because we can change a custom address to a different custom address
    renderChoiceNEW = (lineCode, iconId, i18n, onPress) => {
       return (
-         <ListItem style={styles.choice}
+         <ListItemGBC button style={styles.choice}
             onPress={onPress}
          >
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
@@ -201,7 +201,7 @@ class SelectionModal extends Component {
                <GCText>    </GCText>
                <GCI18n detail style={{ color: 'grey' }} code={i18n} />
             </View>
-         </ListItem>
+         </ListItemGBC>
       )
    }//end renderChoiceNEW
 

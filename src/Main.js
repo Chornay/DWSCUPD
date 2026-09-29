@@ -41,16 +41,6 @@ class Main extends Component {
                   onPress={() => { this.props.navigation.navigate('UtilTop') }}
                   title="UTIL"
                />
-               {/* <View style={{ height: 20 }} />
-        <Button
-          onPress={() => { this.props.navigation.navigate('Test') }}
-          title="Test"
-        />
-        <View style={{ height: 20 }} />
-        <Button
-          onPress={() => { this.props.navigation.navigate('TestSC') }}
-          title="TestSC"
-        /> */}
             </View>
          </CdsScreen>
       )

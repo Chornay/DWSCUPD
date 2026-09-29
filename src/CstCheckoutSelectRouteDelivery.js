@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
 import { AppState } from 'react-native' 
-import { ListItemXYZ } from 'DWcmn/GCNB';
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 import { dwdbfsShopGetRoutesAsArray } from 'DWcmn/dwdbfsShop'
 import { prjRouteName } from 'DWcmn/PrjCmnFunctions'
 import { CstScreen } from './CdsScreen';
@@ -156,18 +156,16 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
       const maybeHighlightStyle = ((index == selIndex) ? PRJ_STYLES.highlightSelected : null)
 
       return (
-         <ListItemXYZ style={[{ justifyContent: 'center' }, maybeHighlightStyle]}>
+         <ListItemGBC button style={[{ justifyContent: 'center' }, maybeHighlightStyle]}
 
-            <TouchableOpacity
                onPress={() => {
                   //select this button, or deselect it if it is already the selected one
                   setSelIndex(selIndex == index ? -1 : index)
                }}
-               keyExtractor={(item, index) => index.toString()}
             >
                <GCText style={{ paddingVertical: 10 }}>{prjRouteName(item.schedDate, item.descrip)}</GCText>
-            </TouchableOpacity>
-         </ListItemXYZ>
+
+         </ListItemGBC>
       )
    }// end renderRouteButton
 

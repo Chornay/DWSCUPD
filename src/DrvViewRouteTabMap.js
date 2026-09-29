@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, Text, Button } from 'react-native'
-import { Container } from 'native-base'
 import { withNavigation } from 'react-navigation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
@@ -146,7 +145,6 @@ class DrvViewRouteTabMap extends Component {
         //  toolbarEnabled=false gets ride of some annoying Google buttons in bottom right corner
         //  moveOnMarkerPress don't move to marker when we are creating a direction path
         return (
-            <Container>
                 <View style={styles.mapContainer}>
                     <MapView
                         provider={PROVIDER_GOOGLE} //for ios
@@ -217,7 +215,6 @@ class DrvViewRouteTabMap extends Component {
                     {this.renderDirectionsFab()}
                 </View >
 
-            </Container>
         )
     } //end render
 

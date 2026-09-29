@@ -26,7 +26,6 @@ import { dwdbfsUserGetByAuthAndAppType } from 'DWcmn/DWDBfs'
 import CdsSigninCheckIfInArea from './CdsSigninCheckIfInArea'
 import { CdsSigninButton, CdsSigninNotation } from './CdsSigninComponents'
 import { GcdCIconWithText } from 'DWcmn/Gc'
-import { GCCheckBox } from 'DWcmn/Gc'
 import { prjNetworkStatus } from 'DWcmn/prjNetworkFunctions'
 import SplashScreen from 'react-native-splash-screen' //think that we need this somewhere?
 import i18n from 'i18n-js';

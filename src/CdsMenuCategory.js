@@ -2,7 +2,8 @@ import React from 'react'
 import { View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
 import { withNavigation } from 'react-navigation';
 
-import { ListItem, Left, Body, Right } from 'native-base';
+
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
 import { COLORS } from 'DWcmn/Global';
 import GLOBALS from 'DWcmn/Global';
@@ -79,7 +80,7 @@ export function CdsMenuCategory({ category, countChanged, navigation, priceList,
    return (
       <View style={{}}>
          {/* Category Header Line */}
-         {isTop || <ListItem button thumbnail style={stylingIfIncluded}
+         {isTop || <ListItemGBC button style={stylingIfIncluded}
             onPress={() => {
                if (category.isNewScreen) {
                   navigation.push("CdsMenuCategoryScreen", { 'category': category, 'priceList': priceList })
@@ -92,24 +93,24 @@ export function CdsMenuCategory({ category, countChanged, navigation, priceList,
 
             {/* only 'real' categories will have associated thumbnails */}
             {(!category.isPseudoItem) &&
-               <Left>
+               <ListItemLeft>
                   <Image source={cdsMenuGetThumbnail(category.thumbnail)} style={styles.thumbnailImage} />
-               </Left>
+               </ListItemLeft>
             }
 
-            <Body>
+            <ListItemBody>
                <View style={{ height: 30, justifyContent: 'center' }}>
                   {cstPriceListCatNameInLine(category)}
                </View>
-            </Body>
+            </ListItemBody>
 
-            <Right>
+            <ListItemRight>
                <View style={{ marginRight: GC_MIN_MARGIN }}>
                   {renderIcon(category)}
                </View>
                {/* <PrjIcon id={icon} /> */}
-            </Right>
-         </ListItem>
+            </ListItemRight>
+         </ListItemGBC>
          }
 
          {/* Line Items for the category if it is expanded (or isTop .. 'owns' this screen) */}

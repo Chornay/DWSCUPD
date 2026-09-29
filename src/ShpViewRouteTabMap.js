@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, FlatList, Alert, Dimensions, StyleSheet } from 'react-native'
-import { Fab } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import { ListItem, CheckBox, Body } from 'native-base';
+import { ListItemGBC, ListItemBody } from 'DWcmn/PrjNativeBase'
+import { PrjRadioButton } from 'DWcmn/PrjRadioButton'
 
 import { COLORS } from 'DWcmn/Global';
 import { strX } from 'DWcmn/I18n'
@@ -64,40 +65,32 @@ export default class ShpRouteSettingsModal extends Component {
 
    filterChoice(tag) {
       return (
-         <ListItem style={{ borderBottomWidth: 0 }}>
-            <CheckBox
-               style={{ borderColor: COLORS.GC_CHECKBOX_BORDER }}
-               marginLeft={0}
+         <ListItemGBC noBorder>
+            <PrjRadioButton
                checked={this.state.filterMode == tag}
                onPress={() => {
                   this.setState({ filterMode: tag })
                   this.props.onSet({ filterOrdersSetting: tag })
                }}
-               iconRight={true}
-               size={40}
             />
-            <Body style={{ paddingLeft: 20 }}>
+            <ListItemBody style={{ paddingLeft: 20 }}>
                <Text>{strX("cmn.filterModeSelection." + tag)}</Text>
-            </Body>
-         </ListItem>
+            </ListItemBody>
+         </ListItemGBC>
       )
    } //end filterChoice
 
    sortChoice(tag) {
       return (
-         <ListItem style={{ borderBottomWidth: 0 }}>
-            <CheckBox
-               style={{ borderColor: COLORS.GC_CHECKBOX_BORDER }}
-               marginLeft={0}
+         <ListItemGBC noBorder>
+            <PrjRadioButton
                checked={this.state.sortMode == tag}
                onPress={() => { this.setState({ sortMode: tag }) }}
-               iconRight={true}
-               size={40}
             />
-            <Body style={{ paddingLeft: 20 }}>
+            <ListItemBody style={{ paddingLeft: 20 }}>
                <Text>{strX("cmn.sortModeSelection." + tag)}</Text>
-            </Body>
-         </ListItem>
+            </ListItemBody>
+         </ListItemGBC>
       )
    } //end sortChoice
 

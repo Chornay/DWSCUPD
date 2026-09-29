@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { ListItemXYZ } from 'DWcmn/GCNB'
+import { ListItemGBC } from 'DWcmn/PrjNativeBase'
 
 import GLOBALS from 'DWcmn/Global';
 import { CstScreen } from './CdsScreen';
@@ -200,16 +200,14 @@ export default function CstProfile() {
 function ProfileField({ onPress, id, i18n }) {
 
    return (
-      <ListItemXYZ>
-         <TouchableOpacity
-            onPress={onPress}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-               <PrjIcon style={{}} id={id} />
-               <GCText>  </GCText>
-               <GCI18n code={i18n} />
-            </View>
-         </TouchableOpacity>
-      </ListItemXYZ>
+      <ListItemGBC button onPress={onPress}>
+         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+            <PrjIcon style={{}} id={id} />
+            <GCText>  </GCText>
+            <GCI18n code={i18n} />
+         </View>
+
+      </ListItemGBC>
 
    )
 }//end ProfileField

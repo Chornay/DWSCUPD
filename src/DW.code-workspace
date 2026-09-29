@@ -10,7 +10,8 @@
 	"settings": {
 		"search.exclude": {
 			"**/node_modules": false,
-			"**/node_modulesXX": true
+			"**/node_modulesXX": true,
+			"**OBSOLETE_SOURCE": true
 		}
 	}
 }

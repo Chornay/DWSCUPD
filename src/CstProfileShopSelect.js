@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import { View, FlatList } from 'react-native'
-import { ListItem } from 'native-base'
 import { CdsScreen } from './CdsScreen';
 import GCHeader from 'DWcmn/GCHeader'
 import { GCFooterWithTwoIcons } from 'DWcmn/GCFooterForIcons'
@@ -68,7 +67,6 @@ export class CstProfileShopSelect extends Component {
                <View style={{ flex: .5 }}>
                </View>
                <View style={{ flex: .5 }}>
-                  <ListItem>
                      <FlatList
                         data={this.nearbyShops}
                         keyExtractor={(item, index) => index.toString()}
@@ -91,7 +89,6 @@ export class CstProfileShopSelect extends Component {
                            )
                         }}
                      ></FlatList>
-                  </ListItem>
                </View>
             </View>
             {(this.state.shopHasChanged) &&

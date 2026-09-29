@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity } from 'react-native'
-import { ListItemXYZ } from 'DWcmn/GCNB';
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
 import { DrvScreen } from './CdsScreen';
 import { PrjIcon } from 'DWcmn/PrjIconComponents';
@@ -37,7 +37,7 @@ export default class DrvProfile extends Component {
             return (
 
                <DrvScreen>
-                  <GCHeader back titleI18n='cmnNEW.Profile'/>
+                  <GCHeader back titleI18n='cmnNEW.Profile' />
                   <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
                      <ProfileField
                         onPress={async () => { await cmnSignout() }}
@@ -77,16 +77,14 @@ class ProfileField extends Component {
    render() {
 
       return (
-         <ListItemXYZ>
-            <TouchableOpacity
-               onPress={this.props.onPress}>
-               <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-                  <PrjIcon style={{}} id={this.props.id} />
-                  <GCText>  </GCText>
-                  <GCI18n code={this.props.i18n} />
-               </View>
-            </TouchableOpacity>
-         </ListItemXYZ>
+         <ListItemGBC button
+            onPress={this.props.onPress}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+               <PrjIcon style={{}} id={this.props.id} />
+               <GCText>  </GCText>
+               <GCI18n code={this.props.i18n} />
+            </View>
+         </ListItemGBC>
 
       )
    }//end render

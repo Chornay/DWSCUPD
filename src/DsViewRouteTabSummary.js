@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { ListItemXYZ, LeftXYZ, BodyXYZ, RightXYZ } from 'DWcmn/GCNB'
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
+import { COLORS } from 'DWcmn/Global';
 
 import { GCText } from 'DWcmn/Gc'
 
@@ -87,10 +88,10 @@ export default class DsViewRouteTabSummary extends Component {
 class SummaryLineItem extends Component {
   render() {
     return (
-      <ListItemXYZ selected >
-        <BodyXYZ><GCText list>{this.props.title}</GCText></BodyXYZ>
-        <RightXYZ><GCText list>{this.props.amount}</GCText></RightXYZ>
-      </ListItemXYZ>
+      <ListItemGBC >
+        <ListItemBody><GCText list>{this.props.title}</GCText></ListItemBody>
+        <ListItemRight><GCText list>{this.props.amount}</GCText></ListItemRight>
+      </ListItemGBC>
     )
   } //end render
 } //end SummaryLineItem
@@ -99,7 +100,7 @@ class SummaryTitle extends Component {
   render() {
     return (
       <>
-        <ListItemXYZ itemDivider><GCText list bold>{this.props.title}</GCText></ListItemXYZ>
+        <ListItemGBC style={{ backgroundColor: COLORS.GC_LIST_HDR_BKG }}><GCText list bold>{this.props.title}</GCText></ListItemGBC>
       </>
     )
   } //end render

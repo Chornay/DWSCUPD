@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import { withNavigation } from 'react-navigation';
 
-import { Left, Right, ListItem } from 'native-base';
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
 import { GCText } from 'DWcmn/Gc'
 import { PrjSpacer } from 'DWcmn/Prj';
@@ -65,8 +65,8 @@ class DsRouteTile extends Component {
             {/* we would usually put in a flex:1 here BUT that seems to break our use at the bottom of maps. Sigh */}
             <View style={PRJ_STYLES.tile}>
                {/* Left hand box */}
-               <ListItem noBorder>
-                  <Left style={{ flex: .7 }}>
+               <ListItemGBC noBorder>
+                  <ListItemLeft style={{ flex: .7 }}>
                      <View style={{ flex: 1, flexDirection: 'row' }}>
                         <TouchableOpacity
                            style={{ flex: 1 }}
@@ -97,10 +97,10 @@ class DsRouteTile extends Component {
                            </View>
                         </TouchableOpacity>
                      </View>
-                  </Left>
+                  </ListItemLeft>
 
                   {/* Right hand box */}
-                  <Right style={{ flex: .3, paddingRight: 10 }}>
+                  <ListItemRight style={{ flex: .3, paddingRight: 10 }}>
                      {this.props.readonly ? null :
                         <View style={{ flexDirection: 'column', justifyContent: 'space-evenly' }}>
                            {actions.map((action, index) =>
@@ -114,8 +114,8 @@ class DsRouteTile extends Component {
                            )}
                         </View>
                      }
-                  </Right>
-               </ListItem>
+                  </ListItemRight>
+               </ListItemGBC>
             </View>
          </View>
       )

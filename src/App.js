@@ -79,7 +79,6 @@ import DrvApp from './DrvApp'
 import UtilTop from './UtilTop'
 import ShpApp from './ShpApp'
 import Main from './Main';
-import Test from './Test';
 
 const TopStackNavigator = createStackNavigator({
   Main: {
@@ -94,15 +93,9 @@ const TopStackNavigator = createStackNavigator({
   ShpApp: {
     screen: ShpApp,
   },
-  Test: {
-    screen: Test,
-  },
   UtilTop: {
     screen: UtilTop,
   }
-  // TestSC: {
-  //   screen: TestSC,
-  // },
 }, {
   initialRouteName: "Main",
   defaultNavigationOptions: {

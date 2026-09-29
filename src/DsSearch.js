@@ -16,7 +16,7 @@ import { isBlank } from 'DWcmn/PrjCmnFunctions'
 import RadioButton from 'react-native-simple-radio-button-input';
 import { strX } from 'DWcmn/I18n';
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
-import { ListItemXYZ } from 'DWcmn/GCNB'
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
 //20250712 changed the customer display to give more detail
 
@@ -258,11 +258,11 @@ export default class DsSearch extends Component {
     const COL2 = .7
     return (
       <View>
-        <ListItemXYZ style={{ marginLeft: 0 }}>
+        <ListItemGBC style={{ marginLeft: 0 }}>
           <View style={{ flex: COL1 }}><GCI18n code={left} /></View>
           {(styled) ? <View style={{ flex: COL2 }}>{right}</View> :
             <View style={{ flex: COL2 }}><GCText>{right}</GCText></View>}
-        </ListItemXYZ>
+        </ListItemGBC>
       </View>)
   }
 

@@ -816,7 +816,7 @@ PODS:
     - React-Core (= 0.63.3)
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
-  - RNAppleAuthentication (2.5.1):
+  - RNAppleAuthentication (2.4.1):
     - React-Core
   - RNCAsyncStorage (2.2.0):
     - React-Core
@@ -867,7 +867,7 @@ PODS:
     - React-Core
   - RNPermissions (3.10.1):
     - React-Core
-  - RNQrGenerator (1.4.6):
+  - RNQrGenerator (1.4.4):
     - React
     - ZXingObjC
   - RNReanimated (1.13.4):
@@ -1233,7 +1233,7 @@ SPEC CHECKSUMS:
   React-RCTText: 65a6de06a7389098ce24340d1d3556015c38f746
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
-  RNAppleAuthentication: d6fe579e5f43cf8db54bdc48518bccea61c592a4
+  RNAppleAuthentication: b2d8b5ccba86b5b1e55a1a2e858f7ac6d8a21816
   RNCAsyncStorage: 23e56519cc41d3bade3c8d4479f7760cb1c11996
   RNCCheckbox: 471ebdc33884c084f362615c1ef3507496cc07f1
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
@@ -1250,7 +1250,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNLocalize: d4b8af4e442d4bcca54e68fc687a2129b4d71a81
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
-  RNQrGenerator: 36f1af182d7673bc36e317aca0d293d19883d6e3
+  RNQrGenerator: 74236c6cfa29b97bf7de0ddb78e2c3212cf22bf7
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSha256: e1bc64e9e50b293d5282bb4caa1b2043931f1c9d

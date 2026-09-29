@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, Alert, Image } from 'react-native'
-import { Input, Item, Label } from 'native-base'
-import { ListItemXYZ } from 'DWcmn/GCNB'
+
+import { PrjLabelledInput } from 'DWcmn/PrjInput'
+import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 import { View, Button, TextInput } from 'react-native'
 import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
@@ -128,7 +129,7 @@ export default class UtilTop extends Component {
                      titleText='QR Utilities'
                   />
                   <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <UtilInput label='How many to generate' field={this.state.howManyToGenerate}
+                     <PrjLabelledInput label='How many to generate' field={this.state.howManyToGenerate}
                         onEndEditing={async (val) => {
                            if (await generateQRfile(val)) {
                               prjToast({
@@ -152,7 +153,7 @@ export default class UtilTop extends Component {
                      titleText='Shop Utilities'
                   />
                   <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <UtilInput label='Shop Id' field={this.state.selShop}
+                     <PrjLabelledInput label='Shop Id' field={this.state.selShop}
                         // onEndEditing={async (val) => {
                         //    try {
                         //       const { data } = await firebase.app().functions('asia-southeast2').httpsCallable('sendEmail')({
@@ -285,7 +286,7 @@ export default class UtilTop extends Component {
                      titleText='Driver Utilities'
                   />
                   <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <UtilInput label='Driver Id' field={this.state.selDriver}
+                     <PrjLabelledInput label='Driver Id' field={this.state.selDriver}
                         // onEndEditing={async (val) => {
                         //    try {
                         //       const { data } = await firebase.app().functions('asia-southeast2').httpsCallable('sendEmail')({
@@ -353,7 +354,7 @@ export default class UtilTop extends Component {
                   <GCText>{this.state.selCustId}</GCText>
                   <View style={{ height: 30 }} />
                   <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <UtilInput label='Customer Id' field={this.state.selCustId}
+                     <PrjLabelledInput label='Customer Id' field={this.state.selCustId}
                         onEndEditing={async (val) => {
                            this.setState({ applyMask: true }) //
                            this.setState({ selCustId: String(val) })
@@ -519,16 +520,16 @@ class UtilChoice extends Component {
    render() {
 
       return (
-         <ListItemXYZ>
-            <TouchableOpacity
-               onPress={this.props.onPress}
-               disabled={this.props.disabled}>
-               <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-                  <GCText>{this.props.text}</GCText>
-               </View>
+         <ListItemGBC button
 
-            </TouchableOpacity>
-         </ListItemXYZ>
+            onPress={this.props.onPress}
+            disabled={this.props.disabled}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+               <GCText>{this.props.text}</GCText>
+            </View>
+
+
+         </ListItemGBC>
 
       )
    }//end render
@@ -1021,37 +1022,6 @@ class UpdateDriver extends Component {
 
 
 
-//prop label
-//prop field
-class UtilInput extends Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-      };
-      ourValue: null
-   }
-   render() {
-      return (
-         <Item stackedLabel regular
-            style={{
-               backgroundColor: 'white',
-               paddingLeft: 10,
-               justifyContent: 'center',
-               borderRadius: 10,
-               elevation: 5
-            }}
-         >
-            <Label style={{}}>{this.props.label}</Label>
-            <Input
-               defaultValue={this.props.field}
-               style={{ justifyContent: 'center', alignItems: 'center', padding: 0, color: 'black' }}
-               onChangeText={(val) => this.ourValue = val}
-               onEndEditing={async () => await this.props.onEndEditing(this.ourValue)}
-            />
-         </Item>
-      )
-   }
-}
 
 // 20251111 change QR size to fit with A3+ paper size
 //returns true iff successful
