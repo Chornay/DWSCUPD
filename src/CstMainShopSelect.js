@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { CstProfileShopSelect } from './CstProfileShopSelect'
 import { CST } from './CST'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20241112 fixed bug when no shop has been selected
 
@@ -14,13 +15,9 @@ import { CST } from './CST'
 //nav parameter
 
 
-export default function CstMainShopSelect(props) {
+export function CstMainShopSelect() {
 
-   const [isComponentInitialized, setIsComponentInitialized] = useState(false) //NOTE unused elsewhere - carried over as-is
-
-   useEffect(() => {
-      setIsComponentInitialized(true)
-   }, [])
+   const navigation = useNavigation()
 
    return (
       <CstProfileShopSelect
@@ -33,10 +30,10 @@ export default function CstMainShopSelect(props) {
             // CST.setCust(await dwdbfsCustGet(CST.getCustId()))
             // const newShopId = CST.getCust().shopId
             // CST.setShop( newShopId?await dwdbfsShopGet(newShopId):null)
-            props.navigation.goBack()
+            navigation.goBack()
          }}
          onCancel={() => {
-            props.navigation.goBack()
+            navigation.goBack()
          }}
       />
 

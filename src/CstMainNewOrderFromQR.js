@@ -5,7 +5,10 @@ import GCHeader from 'DWcmn/GCHeader'
 import CstSpinnerScreen from './CstSpinnerScreen'
 import { CmnQrScan } from 'DWcmn/CmnQrScan'
 import { prjToast } from 'DWcmn/PrjToast'
-import { dwdbfsOrderGetByQrCode } from 'DWcmn/dwdbfsOrder'
+import { dwdbfsOrderGetByQrCodeThrows } from 'DWcmn/dwdbfsOrder'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20250208 new
 
@@ -13,7 +16,10 @@ import { dwdbfsOrderGetByQrCode } from 'DWcmn/dwdbfsOrder'
 //This QR code may have come from their previous order or they may have obtained it in a building lobby
 //or a promotion
 
-export default function CstMainNewOrderFromQR(props) {
+export function CstMainNewOrderFromQR() {
+
+   const navigation = useNavigation()
+   const isMountedRef = useIsMounted()
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [qrData, setQrData] = useState(null) //NOTE unused elsewhere - carried over as-is
@@ -31,15 +37,20 @@ export default function CstMainNewOrderFromQR(props) {
       else {
          //TODO check if the order is 'ours' before display .. may be a db exception
          //if order doesn't exist then we will use it
-         //CLAUDE no isMounted guard around this await - if the user backs out while this
-         //lookup is in flight, the navigation.replace below still fires on an unmounted screen
-         if (tempOrder = await dwdbfsOrderGetByQrCode(params.code)) {
+         try {
+            tempOrder = await dwdbfsOrderGetByQrCodeThrows(params.code)
+         } catch (error) {
+            prjCloudLogError('CstMainNewOrderFromQR', error)
+            return
+         }
+         if (!isMountedRef.current) return //user backed out while the lookup was in flight
+         if (tempOrder) {
             prjToast({ i18n: 'cmnNEW.MsgQROrderAlreadyExists' }, { code: params.code, id: tempOrder.id })
-            props.navigation.replace('OrderDetail', { 'id': tempOrder.id });
+            navigation.replace('OrderDetail', { 'id': tempOrder.id });
          }
          else {
             //TODO readonly flag for order?
-            props.navigation.replace('CstMenuMain', { 'codeFromQr': params.code })
+            navigation.replace('CstMenuMain', { 'codeFromQr': params.code })
             return
          }
       }

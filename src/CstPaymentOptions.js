@@ -15,6 +15,7 @@ import { COLORS } from 'DWcmn/Global'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20241017 removed the NO CHANGE command at bottom
 //  if this is an existing order they can use BACK at header
@@ -31,20 +32,13 @@ import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 //param order
 //param isNewOrder
-export default function CstPaymentOptions({ navigation }) {
+export function CstPaymentOptions() {
 
-   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const navigation = useNavigation()
+   const { order = null, isNewOrder = false } = useRoute().params ?? {}
+   const [isComponentInitialized, setIsComponentInitialized] = useState(true)
    const [applyMask, setApplyMask] = useState(false)
-   const orderRef = useRef(null)
-   const isNewOrderRef = useRef(false)
    const isMountedRef = useIsMounted()
-
-   //pull nav params and mark initialized
-   useEffect(() => {
-      orderRef.current = navigation.getParam('order', null)
-      isNewOrderRef.current = navigation.getParam('isNewOrder', false)
-      setIsComponentInitialized(true)
-   }, [])
 
    //android hardware back handler subscription
    useEffect(() => {
@@ -64,7 +58,7 @@ export default function CstPaymentOptions({ navigation }) {
    const handleClick = async (orderId, method) => {
       setApplyMask(true)
       try {
-         await dwdbfsOrderUpdateFieldsThrows(orderRef.current.id, { paymentMethod: method.enumKey })
+         await dwdbfsOrderUpdateFieldsThrows(order.id, { paymentMethod: method.enumKey })
          navigation.popToTop()
       }
       catch (error) {
@@ -82,19 +76,19 @@ export default function CstPaymentOptions({ navigation }) {
    }
 
    //NOTE order is approved only for a shop that approves all fully priced orders by cust
-   let cashOnPickupOkay = (orderRef.current.isApproved && orderRef.current.allowCashOnPickup && !hasBeenPickedUp(orderRef.current.status))
+   let cashOnPickupOkay = (order.isApproved && order.allowCashOnPickup && !hasBeenPickedUp(order.status))
    //TODO add special case where unpriced, driver can weigh and no specials //TODO
 
    return (
       <CstScreen>
          {applyMask && <PrjBusyMask />}
          <GCHeader titleI18n='cstNEW.PaymentOptions'
-            back={!isNewOrderRef.current} />
+            back={!isNewOrder} />
          <View style={styles.spacyBox}>
             <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
-               {isNewOrderRef.current && titleText('cstNEW.PaymentOptionsNewOrder')}
+               {isNewOrder && titleText('cstNEW.PaymentOptionsNewOrder')}
 
-               {(orderRef.current.isApproved) ? <View>
+               {(order.isApproved) ? <View>
                   {titleText('cstNEW.PaymentOptionsApproved')}
                </View>
                   : <View>
@@ -106,12 +100,12 @@ export default function CstPaymentOptions({ navigation }) {
             {/* REALISTICALLY pay online will always be available                */}
             <View style={{ flex: .3 }}>
                <View style={styles.paymentOption}>
-                  {(orderRef.current.allowOnline && orderRef.current.isApproved) &&
+                  {(order.allowOnline && order.isApproved) &&
                      <PaymentOption
                         id="KEYBOARD"
                         i18n="cstNEW.PayNow"
                         onPress={() => {
-                           navigation.navigate('CstPayment', { 'order': orderRef.current })
+                           navigation.navigate('CstPayment', { 'order': order })
                         }
                         } />}
 
@@ -121,26 +115,26 @@ export default function CstPaymentOptions({ navigation }) {
                         id="ARROW_UP_OUTLINE"
                         i18n="cstNEW.PayCashOnPickup"
                         onPress={async () => {
-                           await handleClick(orderRef.current.id, PaymentMethodEnum.payPickup)
+                           await handleClick(order.id, PaymentMethodEnum.payPickup)
                         }} />
                   }
 
                   {/* give cash on delivery option if available */}
-                  {orderRef.current.allowCashOnDelivery &&
+                  {order.allowCashOnDelivery &&
                      <PaymentOption
                         id="ARROW_DOWN_OUTLINE"
                         i18n="cstNEW.PayCashOnDelivery"
                         onPress={async () => {
-                           await handleClick(orderRef.current.id, PaymentMethodEnum.payDelivery)
+                           await handleClick(order.id, PaymentMethodEnum.payDelivery)
                         }} />
                   }
                   {/* if no online payment then pay later makes no sense — they will choose pay on P or D */}
-                  {(orderRef.current.allowOnline) &&
+                  {(order.allowOnline) &&
                      <PaymentOption
                         id="CLOCK"
-                        i18n={!orderRef.current.isApproved ? "cmn.OKAY" : "cstNEW.PayOnlineLater"}
+                        i18n={!order.isApproved ? "cmn.OKAY" : "cstNEW.PayOnlineLater"}
                         onPress={async () => {
-                           await handleClick(orderRef.current.id, PaymentMethodEnum.payLater)
+                           await handleClick(order.id, PaymentMethodEnum.payLater)
                         }} />
                   }
                </View>

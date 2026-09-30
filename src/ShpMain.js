@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { Platform, StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Enumify } from 'enumify'
 import DropDownPicker from 'react-native-dropdown-picker';
-import { withNavigation } from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
 import { OrderStatusEnum } from 'DWcmn/Global';
 import { strX } from 'DWcmn/I18n.js'
@@ -14,7 +13,7 @@ import { COLORS } from 'DWcmn/Global'
 
 import { prjTabStyles, prjTabBarStyles } from 'DWcmn/Prj';
 import { PrjIcon } from 'DWcmn/PrjIconComponents'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import ShpMainTabViewRouteList from './ShpMainTabViewRouteList';
 import ShpMainTabViewGeneric from './ShpMainTabViewGeneric';
 import ShpSpinnerScreen from './ShpSpinnerScreen';
@@ -42,7 +41,7 @@ class OrderType extends Enumify {
 }
 
 
-class ShpMain extends Component {
+export default class ShpMain extends Component {
 
    constructor() {
       super();
@@ -294,9 +293,6 @@ class ShpMain extends Component {
 
 
 } //end ShpMain
-
-
-export default withNavigation(ShpMain);
 
 const styles = StyleSheet.create({
    picker: {

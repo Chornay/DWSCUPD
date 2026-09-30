@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, Text, Button } from 'react-native'
-import { withNavigation } from 'react-navigation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -14,7 +13,7 @@ import { PrjMapIcon } from 'DWcmn/Prj'
 import { prjcmnCalculateEnclosingMapRegion } from 'DWcmn/prjcmnLocationFunctions'
 import { prjCheckLocationPermission } from 'DWcmn/prjcmnLocationFunctions'
 import { cmnOrderActiveLocation } from 'DWcmn/CmnFunctions'
-import { PrjFab, PrjFabExpandable } from 'DWcmn/PrjFab'
+import { PrjFab, PrjFabExpandable, PrjFabMapShowAll } from 'DWcmn/PrjFab'
 
 // { latitude:43.803586, longitude:-79.401574} //Canada 4 elspeth
 // { latitude:2.9222, longitude:101.6511} //Cyberjaya D'Pulze
@@ -25,7 +24,7 @@ const GOOGLE_DIRECTIONS_APIKEY = 'AIzaSyCWJHXmu4XklJBidVN_zR-hFHzQp7q1hmA'; //ne
 //TODO set react-native-map-boundary for ios
 
 //props orders  
-class DrvViewRouteTabMap extends Component {
+export default class DrvViewRouteTabMap extends Component {
 
     constructor() {
         super();
@@ -310,15 +309,6 @@ renderDirectionsFab = () => {
 }//end renderDirectionsFab
 } //end DrvViewRouteTabMap
 
-//prop onPress()
-export const PrjFabMapShowAll = ({ onPress }) => (
-  <PrjFab
-    icon="MAP_SHOW_ALL"
-    color={COLORS.GC_MAP_FAB_SHOWALL}
-    position="topRight"
-    onPress={onPress}
-  />
-);
 
 
 
@@ -361,4 +351,3 @@ const styles = {
     }
 
 }
-export default withNavigation(DrvViewRouteTabMap);

@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 
 import GCHeader from 'DWcmn/GCHeader'
 import { PrjTabBar } from 'DWcmn/PrjTabBar'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 
 import CmnIdList from 'DWcmn/CmnIdList'
 import CmnItemsList from 'DWcmn/CmnItemsList'

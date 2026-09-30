@@ -8,9 +8,13 @@ import { CdsMenuLineDisplay } from './CdsMenuLineDisplay'
 import { cdsMenuPricelistUpdateTotals } from './cdsMenuPricelistUpdateTotals'
 import { prjPriceListItemStr } from 'DWcmn/PrjCmnFunctions'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //param priceList
-export default function CdsMenuSearchScreen({ navigation }) {
+export function CdsMenuSearchScreen() {
+
+   const navigation = useNavigation()
+   const { priceList = null, category = null } = useRoute().params ?? {}
 
    const [isInitialized, setIsInitialized] = useState(false)
    const [filteredTags, setFilteredTags] = useState([])
@@ -18,21 +22,20 @@ export default function CdsMenuSearchScreen({ navigation }) {
    const refresh = useRefresh()
 
    const tagsRef = useRef([]) //whole priceList
-   const priceListRef = useRef(null)
 
 
-   //one-time setup: pull the priceList from nav params and load every item under the starting category
+   //one-time setup: load every item under the starting category (nav params)
    useEffect(() => {
 
       //recursively add every non-category entry under category to the tags
-      function loadCategory(category) {
+      function loadCategory(cat) {
          //CLAUDE: a category with null entries will throw here - needs protection/logging
-         for (const entry of category.entries) {
+         for (const entry of cat.entries) {
             if (entry.isCategory) { loadCategory(entry) }
             else {
                tagsRef.current.push({
                   key: entry.code,
-                  category: category.name,
+                  category: cat.name,
                   name: prjPriceListItemStr(entry.name),
                   entry: entry
                })
@@ -41,10 +44,9 @@ export default function CdsMenuSearchScreen({ navigation }) {
       }
 
       tagsRef.current = []
-      priceListRef.current = navigation.getParam('priceList', null);
       //CLAUDE: a null priceList throws on priceList.top - needs protection/logging
       //we start at the specified category or at the top
-      const startingCategory = navigation.getParam('category', priceListRef.current.top);
+      const startingCategory = category ?? priceList.top
       loadCategory(startingCategory)
       setIsInitialized(true)
       // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only setup, as the class did in componentDidMount
@@ -96,7 +98,7 @@ export default function CdsMenuSearchScreen({ navigation }) {
                         }}
                         changedSomething={() => {
                            console.log('Right touch!')
-                           cdsMenuPricelistUpdateTotals(priceListRef.current);
+                           cdsMenuPricelistUpdateTotals(priceList);
                            refresh()
                         }}
                         line={item.entry} key={index}
@@ -108,55 +110,3 @@ export default function CdsMenuSearchScreen({ navigation }) {
    ); //end return
 
 } //end CdsMenuSearchScreen
-
-
-const styles = StyleSheet.create({
-})
-// import React, { useState } from 'react';
-// import { View, TextInput, FlatList, Text } from 'react-native';
-
-// const data = [
-//   'Apple',
-//   'Banana',
-//   'Blueberry',
-//   'Grapes',
-//   'Orange',
-//   'Pineapple',
-//   'Strawberry',
-// ];
-
-// export default function SearchExample() {
-//   const [query, setQuery] = useState('');
-//   const [filteredData, setFilteredData] = useState(data);
-
-//   const handleSearch = (text) => {
-//     setQuery(text);
-//     const result = data.filter(item =>
-//       item.toLowerCase().startsWith(text.toLowerCase())
-//     );
-//     setFilteredData(result);
-//   };
-
-//   return (
-//     <View style={{ padding: 20 }}>
-//       <TextInput
-//         placeholder="Search..."
-//         value={query}
-//         onChangeText={handleSearch}
-//         style={{
-//           height: 40,
-//           borderColor: 'gray',
-//           borderWidth: 1,
-//           paddingLeft: 8,
-//           marginBottom: 10,
-//         }}
-//       />
-
-//       <FlatList
-//         data={filteredData}
-//         keyExtractor={(item, index) => item + index}
-//         renderItem={({ item }) => <Text style={{ padding: 5 }}>{item}</Text>}
-//       />
-//     </View>
-//   );
-// }

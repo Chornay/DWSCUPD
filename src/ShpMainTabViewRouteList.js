@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { FlatList, View } from 'react-native'
-import { withNavigation } from 'react-navigation';
 
 import DsRouteTile from './DsRouteTile'
 import ShpSpinnerScreen from './ShpSpinnerScreen'
@@ -9,7 +8,7 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 //20250220 use DsRouteTile
 
 //prop routes (array)
-class ShpMainTabViewRouteList extends Component {
+export default class ShpMainTabViewRouteList extends Component {
 
 
    constructor() {
@@ -46,5 +45,3 @@ class ShpMainTabViewRouteList extends Component {
    } //end render
 
 } //end ShpMainTabViewRouteList
-
-export default withNavigation(ShpMainTabViewRouteList);

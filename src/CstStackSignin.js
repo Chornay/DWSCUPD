@@ -3,7 +3,7 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
 import CstSignupInitializeAccount from './CstSignupInitializeAccount';
-import CstProfile from './CstProfile';
+import { CstProfile } from './CstProfile';
 import CdsSigninLogo from './CdsSigninLogo'
 import CdsSigninEmail from './CdsSigninEmail'
 import CdsSigninEmailNotVerified from './CdsSigninEmailNotVerified'
@@ -18,13 +18,13 @@ const RootStack = createStackNavigator(
   {
     CdsSigninLogo: {
       screen: CdsSigninLogo,
-      params:{signinAppType:'cst'}
+      params: { signinAppType: 'cst' }
     },
     CdsSigninEmail: {
       screen: CdsSigninEmail,
     },
     CstSigninEmailSignup: {
-      screen:CstSigninEmailSignup,
+      screen: CstSigninEmailSignup,
     },
     CdsSigninEmailNotVerified: {
       screen: CdsSigninEmailNotVerified,
@@ -33,10 +33,10 @@ const RootStack = createStackNavigator(
       screen: CdsSigninEmailVerifySent,
     },
     CdsSigninEmailForgot: {
-      screen:CdsSigninEmailForgot,
+      screen: CdsSigninEmailForgot,
     },
     CdsSigninEmailForgotSent: {
-      screen:CdsSigninEmailForgotSent,
+      screen: CdsSigninEmailForgotSent,
     },
     CdsSigninPhone: {
       screen: CdsSigninPhone,
@@ -48,8 +48,8 @@ const RootStack = createStackNavigator(
       screen: CstProfile,
     },
     // ForTesting slide intro
-    CstSignupSlideIntro:{
-      screen:CstSignupSlideIntro,
+    CstSignupSlideIntro: {
+      screen: CstSignupSlideIntro,
     }
   }, //end of routes
 

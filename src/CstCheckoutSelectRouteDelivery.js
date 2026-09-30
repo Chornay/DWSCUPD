@@ -23,6 +23,7 @@ import { prjStopCopy } from 'DWcmn/prjStopFunctions'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20221003 changed route select to be full wide touchable
 //20221111 changed to use spread in DidMount to set initial value
@@ -45,15 +46,15 @@ import { useRefresh } from 'DWcmn/prjUseRefresh'
 //  delivery route
 //  delivery address & location
 
-const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
+export function CstCheckoutSelectRouteDelivery() {
 
+   const navigation = useNavigation()
+   const { order = null, reschedule = false } = useRoute().params ?? {}
    const refresh = useRefresh()
    const isMountedRef = useIsMounted()
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [selIndex, setSelIndex] = useState(-1)
    const [routes, setRoutes] = useState([])
-   const orderRef = useRef(null)
-   const rescheduleRef = useRef(false)
    const staticMapPointerRef = useRef(null)
 
    //load routes array with two days worth of routes that are available after the processing time
@@ -63,7 +64,6 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
       //by design a failure leaves this empty .. an empty but functional screen plus a toast, never a stuck spinner
       let newRoutes = []
       try {
-         const order = orderRef.current
          const hoursToDisplay = CST.getShop().hoursOfDeliveryRoutes
          const shopId = order.shopId
 
@@ -114,16 +114,14 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
 
    useEffect(() => {
 
-      orderRef.current = navigation.getParam('order', null)
-      rescheduleRef.current = navigation.getParam('reschedule', false)
-
       //if the delivery address is not set then use the pickup
-      if ((!Boolean(orderRef.current.deliveryStop))) {
-         orderRef.current.deliveryStop = prjStopCopy(orderRef.current.pickupStop)
+      //NOTE this happens before isComponentInitialized goes true so the render below can rely on deliveryStop
+      if ((!Boolean(order.deliveryStop))) {
+         order.deliveryStop = prjStopCopy(order.pickupStop)
       }
 
       loadRoutes() //NOTE we do NOT set isComponentInitialized here .. loadRoutes does that when the first load completes
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, nav params are read once, loadRoutes only uses refs and setters
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, nav params are read once, loadRoutes only uses order and setters
    }, [])
 
 
@@ -148,7 +146,7 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
          if (appStateSubscription && appStateSubscription.remove) { appStateSubscription.remove() }
          else { AppState.removeEventListener('change', handleAppStateChange) }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, loadRoutes only uses refs and setters
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, loadRoutes only uses order and setters
    }, [])
 
    const renderRouteButton = ({ item, index }) => {
@@ -175,10 +173,6 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
          <CstSpinnerScreen />
       );
    }
-
-   //aliases .. safe to take here because the order is set before isComponentInitialized goes true
-   const order = orderRef.current
-   const reschedule = rescheduleRef.current
 
    return (
 
@@ -265,5 +259,3 @@ const CstCheckoutSelectRouteDelivery = ({ navigation }) => {
    );
 
 }// end CstCheckoutSelectRouteDelivery
-
-export default CstCheckoutSelectRouteDelivery

@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity, StyleSheet } from 'react-native'
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper';
 import { OrderActionEnum } from 'DWcmn/Global'
 import { cmnOrderStatusStr, cmnOrderStatusColor } from 'DWcmn/TypeCmnFunctions.js'
 import { cmnPaymentSummary } from 'DWcmn/CmnFunctions'
@@ -26,95 +26,21 @@ import { dsGenerateOrderTileActions, dsProcessOrderAction, dsProcessOrderActionO
 //     onDismiss method when it is done. 
 //prop order
 
-class DsOrderTile extends Component {
+export default function DsOrderTile({ order }) {
 
-   constructor() {
-      super();
-      this.state = {
-         displayNotesCount: 0,
-         displayItemNoteCount: 0, //TODO not used?
-         isItemsVisible: false,
-         action: OrderActionEnum.noop,
-         isComponentInitialized: false,
-      };
-   }
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true })
-   }
+   const navigation = useNavigation()
 
-   render() {
+   const [displayNotesCount, setDisplayNotesCount] = useState(0)
+   const [displayItemNoteCount, setDisplayItemNoteCount] = useState(0) //TODO not used?
+   const [isItemsVisible, setIsItemsVisible] = useState(false)
+   const [action, setAction] = useState(OrderActionEnum.noop)
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
 
+   useEffect(() => {
+      setIsComponentInitialized(true)
+   }, [])
 
-      if (!this.state.isComponentInitialized) {
-         return null
-      }
-      const order = this.props.order;
-      const appType = APP.getAppType();
-      //generate the available actions
-      const actions = dsGenerateOrderTileActions(order)
-
-      // this.setState({ noteDisplayCount: order.notes.length })
-
-      return (
-         <View>
-            {/* the method should handle any action .. then call the third parameter to finish */}
-            {(this.state.action != OrderActionEnum.noop) && dsProcessOrderAction(order, this.state.action, () => { this.setState({ action: OrderActionEnum.noop }) })}
-
-            {/* we would usually put in a flex:1 here BUT that seems to break our use at the bottom of maps. Sigh */}
-            <View style={PRJ_STYLES.tile}>
-               <View style={{ flex: .7 }}>
-                  <View style={{ flex: 1, flexDirection: 'row' }}>
-                     <View>
-                        <TouchableOpacity
-                           onPress={() => {
-                              //NOTE we go to the right app based on stack.
-                              this.props.navigation.navigate('OrderDetail', { 'id': order.id });
-                           }}>
-                           <View style={{ alignItems: 'flex-start' }}>
-                              <GCText details>{order.id}</GCText>
-                              <GCText details bold color={cmnOrderStatusColor(appType, order.status)} >
-                                 {cmnOrderStatusStr(appType, order.status)}</GCText>
-                              <GCText details >{order.name}</GCText>
-                              <GCText details >{order.phoneNumber}</GCText>
-                              {cmnPaymentSummary(order)}
-                              {this.renderAddressAndDate(order)}
-                           </View>
-                        </TouchableOpacity>
-                     </View>
-                  </View>
-               </View>
-
-               <View style={{ flex: .3 }}>
-
-                  <View style={styles.buttonsView}>
-                     {
-                        actions.map((action, index) =>
-                           <PrjIconForTileAction
-                              key={index}
-                              action={action}
-                              onPress={async () => {//if we don't handle now, we will handle during render
-                                 if (!await dsProcessOrderActionOnEvent(this.props.navigation, order, action)) {
-                                    this.setState({ action: action })
-                                 }
-                              }}
-
-                           />
-                        )}
-                  </View>
-
-               </View>
-            </View>
-            < CmnNotesList
-               notes={order.notes}
-               count={this.state.displayNotesCount}
-            />
-            {this.state.isItemsVisible &&
-               <CmnItemsList order={order} />}
-         </View>
-      ) //end else 
-   } //end render
-
-   renderAddressAndDate(order) {
+   const renderAddressAndDate = (order) => {
       let output = []
       switch (order.status) {
 
@@ -161,8 +87,74 @@ class DsOrderTile extends Component {
       return output
 
    }
+
+   if (!isComponentInitialized) {
+      return null
+   }
+   const appType = APP.getAppType();
+   //generate the available actions
+   const actions = dsGenerateOrderTileActions(order)
+
+   // this.setState({ noteDisplayCount: order.notes.length })
+
+   return (
+      <View>
+         {/* the method should handle any action .. then call the third parameter to finish */}
+         {(action != OrderActionEnum.noop) && dsProcessOrderAction(order, action, () => { setAction(OrderActionEnum.noop) })}
+
+         {/* we would usually put in a flex:1 here BUT that seems to break our use at the bottom of maps. Sigh */}
+         <View style={PRJ_STYLES.tile}>
+            <View style={{ flex: .7 }}>
+               <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View>
+                     <TouchableOpacity
+                        onPress={() => {
+                           //NOTE we go to the right app based on stack.
+                           navigation.navigate('OrderDetail', { 'id': order.id });
+                        }}>
+                        <View style={{ alignItems: 'flex-start' }}>
+                           <GCText details>{order.id}</GCText>
+                           <GCText details bold color={cmnOrderStatusColor(appType, order.status)} >
+                              {cmnOrderStatusStr(appType, order.status)}</GCText>
+                           <GCText details >{order.name}</GCText>
+                           <GCText details >{order.phoneNumber}</GCText>
+                           {cmnPaymentSummary(order)}
+                           {renderAddressAndDate(order)}
+                        </View>
+                     </TouchableOpacity>
+                  </View>
+               </View>
+            </View>
+
+            <View style={{ flex: .3 }}>
+
+               <View style={styles.buttonsView}>
+                  {
+                     actions.map((actionItem, index) =>
+                        <PrjIconForTileAction
+                           key={index}
+                           action={actionItem}
+                           onPress={async () => {//if we don't handle now, we will handle during render
+                              if (!await dsProcessOrderActionOnEvent(navigation, order, actionItem)) {
+                                 setAction(actionItem)
+                              }
+                           }}
+
+                        />
+                     )}
+               </View>
+
+            </View>
+         </View>
+         < CmnNotesList
+            notes={order.notes}
+            count={displayNotesCount}
+         />
+         {isItemsVisible &&
+            <CmnItemsList order={order} />}
+      </View>
+   ) //end else 
 }// end DsOrderTile
-export default withNavigation(DsOrderTile)
 
 const styles = StyleSheet.create({
    buttonsView: {

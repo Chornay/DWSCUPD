@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { withNavigation } from 'react-navigation';
 import { View } from 'react-native'
 
 
 import { ShpScreen } from './CdsScreen';
 import { PrjTabBar } from 'DWcmn/PrjTabBar'
 import GCHeader from 'DWcmn/GCHeader'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import { dwdbfsOrderLoadSnapshots } from 'DWcmn/DWDBfs'
 import { dwdbfsRouteLoadSingleSnapshot } from 'DWcmn/dwdbfsRoute'
 
@@ -26,7 +25,6 @@ import ShpRouteSettingsModal from './ShpRouteSettingsModal'
 
 //20250207 moved back key up
 //20250207 removed masses of commented code and compared to Drv
-//20250207 removed 'withNavigation' .. Drv doesn't have it
 //20250308 change to use the routes collectionGroup on docId
 
 //navigation param - routeDocId

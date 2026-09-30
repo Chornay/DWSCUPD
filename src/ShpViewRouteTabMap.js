@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, FlatList, Alert, Dimensions, StyleSheet } from 'react-native'
-import { withNavigation } from 'react-navigation';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import GLOBALS from 'DWcmn/Global';
 //GCimport Boundary, { Events } from 'react-native-boundary';
 import DsOrderTile from './DsOrderTile'
 import { PrjIcon } from 'DWcmn/PrjIconComponents'
-import { PrjMapIcon, PrjIconButton, PrjFabMapShowAll } from 'DWcmn/Prj'
+import { PrjMapIcon, PrjIconButton } from 'DWcmn/Prj'
+import { PrjFabMapShowAll } from 'DWcmn/PrjFab'
 import { prjcmnCalculateEnclosingMapRegion } from 'DWcmn/prjcmnLocationFunctions'
 import { ShpScreen } from './CdsScreen';
 
@@ -17,7 +17,7 @@ import { ShpScreen } from './CdsScreen';
 //TODO set react-native-map-boundary for ios
 
 //prop orders
-class ShpViewRouteTabMap extends Component {
+export default class ShpViewRouteTabMap extends Component {
 
    constructor() {
       super();
@@ -127,4 +127,3 @@ const styles = {
    },
 
 }
-export default withNavigation(ShpViewRouteTabMap);

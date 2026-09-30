@@ -17,13 +17,21 @@ import { cstPriceListCatNameInTitle } from './CstMenuPriceList'
 import { CdsMenuInfoIcon } from './CdsMenuInfoIcon'
 import { PrjIconButton } from 'DWcmn/Prj';
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //nav param category
 //nav param priceList
 //NOTE this component need priceList ONLY to be able to display the summary screen ... it's a bit gross
 //NOTE we have a focus listener .. we refresh when we regain focus .. because changes may have happened
 //     several levels down
-export default function CdsMenuCategoryScreen({ navigation }) {
+export function CdsMenuCategoryScreen() {
+
+   const navigation = useNavigation()
+   //CLAUDE: null nav params for category/priceList will throw below - needs protection/logging
+   const {
+      category = null,
+      priceList = null
+   } = useRoute().params ?? {};
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const refresh = useRefresh()
@@ -43,11 +51,6 @@ export default function CdsMenuCategoryScreen({ navigation }) {
          <CstSpinnerScreen />
       );
    }
-
-   //CLAUDE: null nav params for category/priceList will throw below - needs protection/logging
-   const category = navigation.getParam("category", null)
-   const priceList = navigation.getParam("priceList", null)
-
 
    //recalc totals and cause a render
    function toggle() {

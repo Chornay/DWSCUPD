@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Platform, StyleSheet, View, ScrollView } from 'react-native'
 import { COLORS } from 'DWcmn/Global'
 import { CstScreen } from './CdsScreen';
@@ -22,6 +22,7 @@ import { prjFormatOrderForEmail } from 'DWcmn/prjFormatOrderForEmail'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 //20250210 added reschedule functionality
@@ -33,22 +34,24 @@ import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 //param order
 //param reschedule flag true iff this is an existing order begin rescheduled
-export default function CstCheckoutSummary({ navigation }) {
+export function CstCheckoutSummary() {
+
+   const navigation = useNavigation()
+   const {
+      order = null,
+      reschedule = false
+   } = useRoute().params ?? {};
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [applyMask, setApplyMask] = useState(false)
-   const orderRef = useRef(null)
-   const rescheduleRef = useRef(false)
    const refresh = useRefresh()
    const isMountedRef = useIsMounted()
 
    //set delivery address as pickup address by default
    useEffect(() => {
-      orderRef.current = navigation.getParam('order', null)
-      rescheduleRef.current = navigation.getParam('reschedule', false)
-      if (!rescheduleRef.current) { prjUpdateOrderPricing(orderRef.current) } //don't mess with order if this is a reschedule
+      if (!reschedule) { prjUpdateOrderPricing(order) } //don't mess with order if this is a reschedule
       setIsComponentInitialized(true)
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only; navigation param read is a one-time init, not a reactive dependency
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only; order/reschedule are stable route params, not reactive deps
    }, [])
 
    if (!isComponentInitialized) {
@@ -56,9 +59,6 @@ export default function CstCheckoutSummary({ navigation }) {
          <CstSpinnerScreen />
       );
    }
-
-   const order = orderRef.current
-   const reschedule = rescheduleRef.current
 
    const titleI18n = reschedule ? 'cmnNEW.ReviewYourSchedule' : 'cst.Checkout_Summary'
    const cancelConfirmI18n = reschedule ? "cmnNEW.DiscardTheseChanges_" : null

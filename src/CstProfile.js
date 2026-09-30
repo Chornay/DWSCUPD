@@ -24,6 +24,8 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { CST } from './CST'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 
 const MODES = {
    MAIN: 0,
@@ -39,10 +41,11 @@ const MODES = {
 }
 
 //Screen displays details from CST
-export default function CstProfile() {
+export function CstProfile() {
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [mode, setMode] = useState(MODES.MAIN)
+   const [applyMask, setApplyMask] = useState(false)
    const refresh = useRefresh()
    const isMountedRef = useIsMounted()
 
@@ -60,6 +63,7 @@ export default function CstProfile() {
          return (
 
             <CstScreen>
+               {applyMask && <PrjBusyMask />}
                <GCHeader back titleI18n='cmnNEW.Profile' />
                <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
                   <View style={{ width: 'auto', alignSelf: 'flex-end' }}>
@@ -101,8 +105,18 @@ export default function CstProfile() {
                      i18n='cmnNEW.AboutUs'
                   />
                   <ProfileField
-                     //CLAUDE: cmnSignout can reject - unhandled here, needs try/catch + logging
-                     onPress={async () => { await cmnSignout() }}
+                     onPress={async () => {
+                        setApplyMask(true)
+                        try {
+                           await cmnSignout()
+                        }
+                        catch (error) {
+                           prjCloudLogError('CstProfile', error, { toast: 'Error signing out' }) //OKAY
+                        }
+                        finally {
+                           if (isMountedRef.current) { setApplyMask(false) }
+                        }
+                     }}
                      id={"LOGOUT"}
                      i18n='cmnNEW.Logout'
                   />
@@ -123,8 +137,8 @@ export default function CstProfile() {
             <CstProfilePersonal
                onCancel={() => { setMode(MODES.MAIN) }}
                onOkay={async () => {
+                  //TODO we don't want this out here I think. not consistent
                   //if there were changes we have to update our cust rec and the global one
-                  //CLAUDE: dwdbfsCustGet can reject - unhandled here, needs try/catch + logging
                   CST.setCust(await dwdbfsCustGet(CST.getCustId()))//TODO check this okay?
                   if (isMountedRef.current) { setMode(MODES.MAIN) }
                }}

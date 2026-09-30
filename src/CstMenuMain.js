@@ -9,7 +9,6 @@ import { CstScreen } from './CdsScreen'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { cdsMenuRenderSummaryBox } from './cdsMenuRenderSummaryBox'
 import { cdsMenuRenderNoteAboutItemInfo } from './cdsMenuRenderNoteAboutItemInfo'
-import { withNavigation } from 'react-navigation'
 import CdsMenuCategoryTiled from './CdsMenuCategoryTiled'
 import { CstMenuPriceList } from './CstMenuPriceList'
 import { cdsMenuPricelistInit } from './cdsMenuPricelistInit'
@@ -26,6 +25,7 @@ import { prjToast } from 'DWcmn/PrjToast'
 import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions';
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window') || {};
 const { height: SCREEN_HEIGHT } = Dimensions.get('window') || {};
@@ -64,7 +64,10 @@ const MODES = {
    DETAIL: 50
 }
 
-function CstMenuMain({ navigation }) {
+export function CstMenuMain() {
+
+   const navigation = useNavigation()
+   const { codeFromQr = null } = useRoute().params ?? {};
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [mode, setMode] = useState(MODES.INIT)
@@ -84,7 +87,6 @@ function CstMenuMain({ navigation }) {
    //this would pop on an unmounted screen.
    useEffect(() => {
       (async () => {
-         const codeFromQr = navigation.getParam('codeFromQr', null)
          let priceList = await dwdbfsShopGetPriceList(CST.getShopId())
          if (!priceList) {
             priceList = { isCategory: true, isTiled: true, top: { entries: [] } }
@@ -198,14 +200,14 @@ function CstMenuMain({ navigation }) {
          </View>
       )
    }
-   
+
    const renderEZ = () => {
       return (
          <View style={styles.ez}>
             <View style={styles.cardHeaderRow}>
                <View style={styles.iconCircle}>
                   <Image
-                     style={styles.image}
+                     style={styles.iconImage}
                      source={require('../images/pricelist/ezBag.png')}
                   />
                </View>
@@ -241,7 +243,7 @@ function CstMenuMain({ navigation }) {
                <View style={styles.iconCircle}>
                   <Image
                      source={require('../images/pricelist/Detail.png')}
-                     style={styles.image}
+                     style={styles.iconImage}
                   />
                </View>
                <View style={{ flex: 1 }}>
@@ -283,8 +285,15 @@ function CstMenuMain({ navigation }) {
    }
 
 }//end CstMenuMain
-export default withNavigation(CstMenuMain)
 
+//CHORNAY
+//The bug: styles has two keys both named image — the 26×26 icon-circle version defined up top
+// , and an unrelated { flex: 1, resizeMode: 'contain', width: '100%' } version defined further
+//  down in the same StyleSheet.create object. The second silently clobbers the first, so both
+//  <Image>s in renderEZ/renderDetailChoice are actually rendering with the second definition,
+//  not the 26×26 one that visually seems intended. I renamed the icon one to iconImage and
+//  updated its two usages; left the other image key alone since nothing else was touching it.
+//
 
 const styles = StyleSheet.create({
    selection: {
@@ -306,7 +315,7 @@ const styles = StyleSheet.create({
       marginRight: 14,
       overflow: 'hidden',
    },
-   image: {
+   iconImage: {
       width: 26,
       height: 26,
       resizeMode: 'contain',
@@ -351,9 +360,9 @@ const styles = StyleSheet.create({
    },
 
    detailChoice: {
-      justifyContent:'space-between',
+      justifyContent: 'space-between',
       width: '100%',
-      height:200,
+      height: 200,
       padding: 20,
       borderRadius: 10,
       backgroundColor: COLORS.GC_ABS_WHITE,
@@ -365,9 +374,9 @@ const styles = StyleSheet.create({
 
    },
    ez: {
-      justifyContent:'space-between',
+      justifyContent: 'space-between',
       width: '100%',
-      height:200,
+      height: 200,
       padding: 20,
       borderRadius: 10,
       backgroundColor: COLORS.GC_THEME_DARK,

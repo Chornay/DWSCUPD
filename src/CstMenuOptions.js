@@ -16,30 +16,30 @@ import { cstPriceListCatNameInTitle } from './CstMenuPriceList'
 import { CdsMenuInfoIcon } from './CdsMenuInfoIcon'
 import { cdsExtractCategories } from './cdsMenuFunctions'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 //nav param priceList
-export default function CdsMenuOptions({ navigation }) {
+export function CstMenuOptions() {
 
+   const navigation = useNavigation()
+   const { priceList = null } = useRoute().params ?? {}
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const refresh = useRefresh()
 
-   const priceListRef = useRef(null)
    const optionsCategoryRef = useRef(null)
 
 
-   //one-time setup: pull the priceList from nav params and find the options category
+   //one-time setup: find the options category in the priceList (nav param)
    useEffect(() => {
-
-      priceListRef.current = navigation.getParam("priceList", null)
 
       //CLAUDE: a null priceList (or one without .top.entries) will throw here - needs protection/logging
       //CLAUDE: cdsExtractCategories could also throw - consider try/catch + prjCloudLogError
       //check for an options category
-      const sel = cdsExtractCategories(priceListRef.current.top.entries, { options: true, normal: false })
+      const sel = cdsExtractCategories(priceList.top.entries, { options: true, normal: false })
       //check this is what we want
       if (!sel || sel.entries.length == 0) {
-         navigation.replace('CstMenuShoppingCart', { 'priceList': priceListRef.current })
+         navigation.replace('CstMenuShoppingCart', { 'priceList': priceList })
       }
       else {
          optionsCategoryRef.current = sel.entries[0]
@@ -50,23 +50,22 @@ export default function CdsMenuOptions({ navigation }) {
 
 
    //redraw whenever we regain focus (e.g. coming back from the shopping cart)
+   //CLAUDE still v4 here: 'didFocus' and subscription.remove(). v5 wants 'focus' and the unsubscribe function returned directly, so this needs changing when the wrapper handles listeners
    useEffect(() => {
       const focusSubscription = navigation.addListener('didFocus', refresh)
       return () => focusSubscription.remove()
       // eslint-disable-next-line react-hooks/exhaustive-deps -- navigation is stable for the life of this screen
    }, [refresh])
 
-
    //recalc totals and cause a render
    function recalculateScreen() {
-      cdsMenuPricelistUpdateTotals(priceListRef.current)
+      cdsMenuPricelistUpdateTotals(priceList)
       refresh()
    } //recalculateScreen
 
 
    if (!isComponentInitialized) { return null }
 
-   const priceList = priceListRef.current
    const category = optionsCategoryRef.current
    category.isTop = true //we don't want a header for the options display
    return (
@@ -101,4 +100,4 @@ export default function CdsMenuOptions({ navigation }) {
       </CstScreen>
 
    );
-} //end CdsMenuOptions
+} //end CstMenuOptions

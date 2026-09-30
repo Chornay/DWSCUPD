@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import { CstScreen } from './CdsScreen';
@@ -10,6 +10,7 @@ import { strX } from 'DWcmn/I18n';
 import { COLORS } from 'DWcmn/Global'
 import { prjUpdateOrderPricing } from 'DWcmn/prjUpdateOrderPricing'
 import { CST } from './CST'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 
@@ -21,22 +22,21 @@ import { CST } from './CST'
 //  serviceSurcharge %
 
 //param order
-const CstCheckoutServiceLevel = ({ navigation }) => {
+export function CstCheckoutServiceLevel() {
+
+    const navigation = useNavigation()
+    //CLAUDE no null check on order .. destructuring below throws if the param is missing
+    const { order = null } = useRoute().params ?? {};
 
     const [serviceLevel, setServiceLevel] = useState('regular')
     const [surchargePercent, setSurchargePercent] = useState(0)
     const [isComponentInitialized, setIsComponentInitialized] = useState(false)
-    const orderRef = useRef(null)
 
     useEffect(() => {
-
-        //CLAUDE no null check on order .. the lines below throw if the param is missing
-        orderRef.current = navigation.getParam('order', null)
-
-        setServiceLevel(orderRef.current.serviceLevel)
-        setSurchargePercent(orderRef.current.serviceSurchargePercent)
+        setServiceLevel(order.serviceLevel)
+        setSurchargePercent(order.serviceSurchargePercent)
         setIsComponentInitialized(true)
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, order nav param is read once
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, order is a stable route param
     }, [])
 
     const setLevel = (selected, surcharge) => {
@@ -62,18 +62,18 @@ const CstCheckoutServiceLevel = ({ navigation }) => {
             <View style={{ flex: 1 }}>
                 <Section selected={serviceLevel} onPress={setLevel} section='regular' surcharge={0} >
                     <GCI18n title code="cstNEW.RegularService" />
-                    <GCText>{strX("cstNEW.OrderRequiresTimeReg", { hrs: orderRef.current.procTimeReg })}</GCText>
+                    <GCText>{strX("cstNEW.OrderRequiresTimeReg", { hrs: order.procTimeReg })}</GCText>
                 </Section>
                 {shop.surchargeExpress != -1 &&
                     <Section selected={serviceLevel} onPress={setLevel} section='express' surcharge={shop.surchargeExpress}>
                         <GCI18n title code="cstNEW.ExpressService" />
-                        <GCText>{strX("cstNEW.OrderRequiresTimeExp", { hrs: orderRef.current.procTimeExp })}</GCText>
+                        <GCText>{strX("cstNEW.OrderRequiresTimeExp", { hrs: order.procTimeExp })}</GCText>
                         <GCText>{strX("cstNEW.SurchargeIsPercentExp", { percent: shop.surchargeExpress })}</GCText>
                     </Section>}
                 {shop.surchargeSameDay != -1 &&
                     <Section selected={serviceLevel} onPress={setLevel} section='sameDay' surcharge={shop.surchargeSameDay}>
                         <GCI18n title code="cstNEW.SameDayService" />
-                        <GCText>{strX("cstNEW.OrderRequiresTimeSameDay", { hrs: orderRef.current.procTimeSameDay })}</GCText>
+                        <GCText>{strX("cstNEW.OrderRequiresTimeSameDay", { hrs: order.procTimeSameDay })}</GCText>
                         <GCText>{strX("cstNEW.SurchargeIsPercentSameDay", { percent: shop.surchargeSameDay })}</GCText>
                     </Section>
                 }
@@ -82,18 +82,16 @@ const CstCheckoutServiceLevel = ({ navigation }) => {
             <GCFooterWithSingleIcon
                 code={"NEXT_IS_PICKUP"}
                 onPress={() => {
-                    orderRef.current.serviceLevel = serviceLevel
-                    orderRef.current.serviceSurchargePercent = surchargePercent
-                    prjUpdateOrderPricing(orderRef.current) //reprice including surcharge
-                    navigation.navigate('CstCheckoutSelectRoutePickup', { 'order': orderRef.current })
+                    order.serviceLevel = serviceLevel
+                    order.serviceSurchargePercent = surchargePercent
+                    prjUpdateOrderPricing(order) //reprice including surcharge
+                    navigation.navigate('CstCheckoutSelectRoutePickup', { 'order': order })
                 }} />
 
         </CstScreen >
     );
 
 }// end CstCheckoutServiceLevel
-
-export default CstCheckoutServiceLevel
 
 //prop selected
 //prop section

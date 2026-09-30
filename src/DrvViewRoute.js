@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import { DrvScreen } from './CdsScreen';
 import { PrjTabBar } from 'DWcmn/PrjTabBar'
 import GCHeader from 'DWcmn/GCHeader'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 
 
 import firestore from '@react-native-firebase/firestore';

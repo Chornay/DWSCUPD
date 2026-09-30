@@ -6,7 +6,7 @@ import { DsScreen } from './CdsScreen'
 import ShpSpinnerScreen from './ShpSpinnerScreen'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import GCHeader from 'DWcmn/GCHeader'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import DsRouteTile from './DsRouteTile'
 import firestore from '@react-native-firebase/firestore';
 import { dwdbfsRouteLoadSingleSnapshot } from 'DWcmn/dwdbfsRoute'

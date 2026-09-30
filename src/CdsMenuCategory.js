@@ -1,7 +1,5 @@
 import React from 'react'
 import { View, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
-import { withNavigation } from 'react-navigation';
-
 
 import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
@@ -16,23 +14,25 @@ import { cstPriceListCatNameInLine } from './CstMenuPriceList'
 import { PRJ_STYLES } from 'DWcmn/PrjStyles'
 import { GC_STD_MARGIN, GC_MIN_MARGIN } from 'DWcmn/Global'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20211001 new remarks components
 //2022122 removed lots of commented and unused code and unused styles
 //20230213 add resizeMode=contain
 //20230507 removed itemDivider property from category line (no shading)
 //20260919 converted to functional component
+//20260927 removed navigation prop, uses useNavigation() hook instead
 
 //This component displays a category name on a line AND
 //  all its included items (which may include other categories)
 //prop category
 //prop countChanged()
-//prop navigation
 //prop priceList .... just to pass to CdsMenuCategoryScreen if necessary
 //prop isTop true iff this screen is displaying on a new screen 'level'
-export function CdsMenuCategory({ category, countChanged, navigation, priceList, isTop }) {
+export function CdsMenuCategory({ category, countChanged, priceList, isTop }) {
 
    const refresh = useRefresh()
+   const navigation = useNavigation()
 
    //if any changes are made in PriceList you must call refresh() to redisplay
    const stylingIfIncluded = category.included ? styles.included : null
@@ -108,7 +108,6 @@ export function CdsMenuCategory({ category, countChanged, navigation, priceList,
                <View style={{ marginRight: GC_MIN_MARGIN }}>
                   {renderIcon(category)}
                </View>
-               {/* <PrjIcon id={icon} /> */}
             </ListItemRight>
          </ListItemGBC>
          }
@@ -128,7 +127,6 @@ export function CdsMenuCategory({ category, countChanged, navigation, priceList,
                         {
                            (item.isCategory) ?
                               <CdsMenuCategory countChanged={toggle}
-                                 navigation={navigation}
                                  priceList={priceList}
                                  category={item} /> :
                               <CdsMenuLineDisplay
@@ -153,8 +151,6 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.GC_HIGHLIGHT_SELECTED
    },
    thumbnailImage: {
-      // width: 28,
-      // height: 28,
       width: 36,
       height: 36,
       borderRadius: 0,

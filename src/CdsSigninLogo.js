@@ -15,8 +15,8 @@ import { PrjSpacer } from 'DWcmn/Prj';
 import { CdsScreen } from './CdsScreen'
 import CdsSpinnerScreen from './CdsSpinnerScreen'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { signinApple } from './cdsSigninApple'
 // import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk-next';
-// import { appleAuth, AppleButton } from '@invertase/react-native-apple-authentication';
 import { navigateForAuthorizedCust } from './CdsSigninFunctions'
 import { PRJ_STYLES } from 'DWcmn/PrjStyles'
 import { COLORS } from 'DWcmn/Global'
@@ -31,7 +31,8 @@ import SplashScreen from 'react-native-splash-screen' //think that we need this 
 import i18n from 'i18n-js';
 import { prjWhatsapp, prjCallOnPhone } from 'DWcmn/prjExternalApps'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
-import {prjCloudLogError} from 'DWcmn/prjCloudLog'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20221124 CCCSigninMain removed from project
 //20250524 added support contacts
@@ -67,7 +68,10 @@ GoogleSignin.configure({
   // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
-export default function CdsSigninLogo(props) {
+export default function CdsSigninLogo() {
+
+  const navigation = useNavigation()
+  const { signinAppType = null } = useRoute().params ?? {}
 
   const [mode, setMode] = useState(MODES.INIT)
   const [isLoginInProgress, setIsLoginInProgress] = useState(false)
@@ -77,11 +81,9 @@ export default function CdsSigninLogo(props) {
   const addressRef = useRef(null)
   const locationRef = useRef(null)
   const shopRef = useRef(null)
-  const signinAppTypeRef = useRef(null)
 
   useEffect(() => {
     (async () => {
-      signinAppTypeRef.current = props.navigation.getParam('signinAppType');
       const fbauthUser = firebase.auth().currentUser;
 
       SplashScreen.hide()
@@ -103,7 +105,7 @@ export default function CdsSigninLogo(props) {
       if (fbauthUser) {
         try {
 
-          let dbUser = await dwdbfsUserGetByAuthAndAppType(signinAppTypeRef.current, fbauthUser.uid)
+          let dbUser = await dwdbfsUserGetByAuthAndAppType(signinAppType, fbauthUser.uid)
 
           // console.log("user from database", dbUser)
           //TODO this next does not seem right ... can't navigate to other stack?
@@ -115,14 +117,14 @@ export default function CdsSigninLogo(props) {
           }
         }
         catch (error) {
-         prjCloudLogError('CdsSigninLogo fbauth', error)
+          prjCloudLogError('CdsSigninLogo fbauth', error)
           //TODO what else to do here??
         }
       }
       await prjNetworkStatus(true)
       setMode(MODES.MAIN)
     })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only effect, mirrors original componentDidMount; navigation is stable and not expected to change
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only effect, mirrors original componentDidMount; signinAppType is a nav param read once
   }, [])
 
   //NOTE that there is a GoogleSigninButton that gives stock icon or text button but
@@ -143,7 +145,7 @@ export default function CdsSigninLogo(props) {
             setIsLoginInProgress(true)
             const credential = auth.GoogleAuthProvider.credential(googleuserInfo.idToken)
             await auth().signInWithCredential(credential);
-            navigateForAuthorizedCust(props.navigation, signinAppTypeRef.current, { 'authType': 'google' },
+            navigateForAuthorizedCust(navigation, signinAppType, { 'authType': 'google' },
               () => setIsLoginInProgress(false))
 
           } catch (error) { //don't annunciate 'regular' codes
@@ -163,38 +165,6 @@ export default function CdsSigninLogo(props) {
       </TouchableOpacity>
     )
   }//end googleButton
-
-  function signinApple() {
-    return (
-      <TouchableOpacity
-        style={styles.button}
-        onPress={async () => {       // prjToast({ text: "IOS login not enabled in this version" })
-          // return (null) //TODO apple on
-          // Start the sign-in request
-          const appleAuthRequestResponse = await appleAuth.performRequest({
-            requestedOperation: appleAuth.Operation.LOGIN,
-            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-          });
-          // Ensure Apple returned a user identityToken
-          if (!appleAuthRequestResponse.identityToken) {
-            throw new Error('Apple Sign-In failed - no identify token returned');
-          }
-          // Create a Firebase credential from the response
-          const { identityToken, nonce } = appleAuthRequestResponse;
-          const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
-          // Sign the user in with the credential
-          await auth().signInWithCredential(appleCredential);
-          navigateForAuthorizedCust(props.navigation, signinAppTypeRef.current, { 'authType': 'apple' })
-
-        }
-        }
-      // disabled={isLoginInProgress}
-      >
-        <Image source={require('../images/login/apple.png')} style={styles.thumbNail} />
-
-      </TouchableOpacity>
-    )
-  }//end signinApple
 
   switch (mode) {
 
@@ -216,21 +186,21 @@ export default function CdsSigninLogo(props) {
                 source={require('../images/company/logoBlue.png')} />
             </View>
             <View style={{ flex: .1, justifyContent: 'space-evenly', alignItems: 'center' }}>
-              {(signinAppTypeRef.current == 'drv') && <GCI18n size={60} color='gray' bold code='cmnNEW.DRIVER' />}
-              {(signinAppTypeRef.current == 'shp') && <GCI18n size={60} color='gray' bold code='cmnNEW.SHOP' />}
-              {(signinAppTypeRef.current == 'cst') && <CdsSigninNotation i18n='cmnNEW.AreWeInYourArea'
+              {(signinAppType == 'drv') && <GCI18n size={60} color='gray' bold code='cmnNEW.DRIVER' />}
+              {(signinAppType == 'shp') && <GCI18n size={60} color='gray' bold code='cmnNEW.SHOP' />}
+              {(signinAppType == 'cst') && <CdsSigninNotation i18n='cmnNEW.AreWeInYourArea'
                 onPress={() => { setMode(MODES.CHECK_SERVICE) }} />}
             </View>
             <View style={{ flex: .2, justifyContent: 'space-evenly', alignItems: 'center' }}>
 
               <CdsSigninButton icon='EMAIL_OUTLINE' i18n='cmnNEW.SigninWithEmail'
                 onPress={() => {
-                  props.navigation.navigate('CdsSigninEmail', { 'appType': signinAppTypeRef.current })
+                  navigation.navigate('CdsSigninEmail', { 'appType': signinAppType })
                 }} />
               <View style={{ height: 20 }} />
               <CdsSigninButton icon='PHONE_OUTLINE' i18n='cmnNEW.SigninWithPhone'
                 onPress={async () => {
-                  if (await prjNetworkStatus(true)) { props.navigation.navigate('CdsSigninPhone', { 'appType': signinAppTypeRef.current }) }
+                  if (await prjNetworkStatus(true)) { navigation.navigate('CdsSigninPhone', { 'appType': signinAppType }) }
                 }} />
             </View>
             {/* <View style={{ flex: .1 }} /> */}
@@ -284,7 +254,7 @@ export default function CdsSigninLogo(props) {
     //invalid mode? hard to see how that would happen
     default:
       prjCloudLogError('CdsSigninLogo', 'invalid mode in switch')
-      props.navigation.goBack()
+      navigation.goBack()
       return null
   }
 }// end CdsSigninLogo

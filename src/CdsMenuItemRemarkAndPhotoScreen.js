@@ -16,27 +16,31 @@ import { CST } from './CST'
 import { prjToast } from 'DWcmn/PrjToast'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
+import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 
 
 //param line
-export default function CdsMenuItemRemarkAndPhotoScreen({ navigation }) {
+export function CdsMenuItemRemarkAndPhotoScreen() {
+
+   const navigation = useNavigation()
+   const { line = null } = useRoute().params ?? {}
 
    const [isInitialized, setIsInitialized] = useState(false)
    const [imageCloudUrl, setImageCloudUrl] = useState(null)
+   const [applyMask, setApplyMask] = useState(false)
    const refresh = useRefresh()
    const isMountedRef = useIsMounted()
 
-   const lineRef = useRef(null)
 
-
-   //one-time setup: pull the line from nav params and fetch its photo (if it has one)
+   //one-time setup: fetch the line's photo (if it has one)
    useEffect(() => {
 
       async function loadPhoto() {
          //CLAUDE: a null line rejects here (unhandled) and the screen would stay blank - needs protection/logging
-         if (lineRef.current.imagePath) {
+         if (line.imagePath) {
             try {
-               const imageRef = await storage().ref(lineRef.current.imagePath);
+               const imageRef = await storage().ref(line.imagePath);
                const downloadUrl = imageRef ? await imageRef.getDownloadURL() : null
                if (isMountedRef.current) { setImageCloudUrl(downloadUrl) }
             } catch (error) { prjToast({ text: error.message }) }
@@ -44,7 +48,6 @@ export default function CdsMenuItemRemarkAndPhotoScreen({ navigation }) {
          if (isMountedRef.current) { setIsInitialized(true) }
       }
 
-      lineRef.current = navigation.getParam("line", null)
       loadPhoto()
       // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only setup, as the class did in componentDidMount
    }, [])
@@ -99,6 +102,7 @@ export default function CdsMenuItemRemarkAndPhotoScreen({ navigation }) {
 
 
    async function savePhoto(line, imageOnDeviceUri) {
+      setApplyMask(true)
       try {
          //store the picture in the cloud
          const path = generateDatedFileName('custImages', CST.getCustId(), 'png')
@@ -115,6 +119,9 @@ export default function CdsMenuItemRemarkAndPhotoScreen({ navigation }) {
       catch (error) {
          prjToast({ type: 'danger', text: error.message }) //OK
       }
+      finally {
+         if (isMountedRef.current) { setApplyMask(false) }
+      }
    } //end savePhoto
 
 
@@ -122,13 +129,12 @@ export default function CdsMenuItemRemarkAndPhotoScreen({ navigation }) {
       return null
    }
 
-   const line = lineRef.current
-
    //unitType of 'EZnote'/'shopNote' do not need remarks ... already free form input
    const allowRemarks = !['EZnote', 'shopNote'].includes(line.unitType)
 
    return (
       <CdsScreen>
+         {applyMask && <PrjBusyMask />}
          {/* //TODO Chang title */}
          <GCHeader noBottomPadding back titleText={line.longName} />
          <View style={{ flex: 1, marginHorizontal: 10 }}>

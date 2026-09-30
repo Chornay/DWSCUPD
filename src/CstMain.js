@@ -7,7 +7,6 @@ import { functions, firebase } from '@react-native-firebase/functions';
 import { View, TouchableOpacity, FlatList, BackHandler, Image, ImageBackground, StyleSheet, Text, Dimensions, ScrollView } from 'react-native'
 import storage from '@react-native-firebase/storage';
 import { Platform, Linking } from 'react-native'
-import { withNavigation } from 'react-navigation';
 import { SpinnerXYZ } from 'DWcmn/GCNB'
 import { strX } from 'DWcmn/I18n'
 import DeviceInfo from 'react-native-device-info'
@@ -26,7 +25,7 @@ import { dwdbfsOrderLoadSnapshots } from 'DWcmn/DWDBfs'
 import SplashScreen from 'react-native-splash-screen'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { PrjSpacer } from 'DWcmn/Prj'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import { CST } from './CST'
 import { cmnSendEmailAsync } from 'DWcmn/cmnSendEmailAsync'
 import { prjToast } from 'DWcmn/PrjToast'
@@ -40,6 +39,7 @@ import { cmnSignout } from 'DWcmn/CmnFunctions'
 import { version } from 'react/cjs/react.production.min';
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 
 //TODO disable back handler?
@@ -67,7 +67,9 @@ const defaultImages = [
    require('../images/carousel/defaultSlider2.png'),
 ]
 
-function CstMain(props) {
+export function CstMain() {
+
+   const navigation = useNavigation()
 
    const [orders, setOrders] = useState([])
    const [country, setCountry] = useState('en') //NOTE unused elsewhere - carried over as-is
@@ -137,7 +139,7 @@ function CstMain(props) {
    useEffect(() => {
       (async () => {
          // the following may navigate to 'must update'/'can't continue' screens or do popup
-         await cstCheckSystem(props.navigation)
+         await cstCheckSystem(navigation)
 
          await refreshImageSlider()
 
@@ -159,7 +161,7 @@ function CstMain(props) {
 
    //focus listener ... we need to know when we get focus because user may have changed in profile
    useEffect(() => {
-      unsubscribeCustMainFocusListenerRef.current = props.navigation.addListener('didFocus', gotFocus)
+      unsubscribeCustMainFocusListenerRef.current = navigation.addListener('didFocus', gotFocus)
 
       // NOTE not we don't set init flag until first db read.
 
@@ -197,15 +199,15 @@ function CstMain(props) {
       if (CST.getShopId()) {
          return (
             <GCFooterForIcons>
-               <GCFooterCmdIcon code="PLACE_NEW_ORDER" onPress={() => props.navigation.navigate('CstMenuMain')} />
-               <GCFooterCmdIcon code="SCAN_NEW_QR" onPress={() => props.navigation.navigate('CstMainNewOrderFromQR')} />
+               <GCFooterCmdIcon code="PLACE_NEW_ORDER" onPress={() => navigation.navigate('CstMenuMain')} />
+               <GCFooterCmdIcon code="SCAN_NEW_QR" onPress={() => navigation.navigate('CstMainNewOrderFromQR')} />
             </GCFooterForIcons>
          )
       }
       else {
          return (
             <GCFooterForIcons>
-               <GCFooterCmdIcon code="SELECT_A_SHOP" onPress={() => props.navigation.navigate('CstMainShopSelect')} />
+               <GCFooterCmdIcon code="SELECT_A_SHOP" onPress={() => navigation.navigate('CstMainShopSelect')} />
             </GCFooterForIcons>
          )
       }
@@ -246,7 +248,7 @@ function CstMain(props) {
          <CstScreen background>
             {initDone ?
                <GCHeader style={{ backgroundColor: 'transparent' }}
-                  optionsBurger={() => { props.navigation.navigate('CstProfile') }}>
+                  optionsBurger={() => { navigation.navigate('CstProfile') }}>
                   <Image
                      style={{ flex: 1, width: '80%', resizeMode: 'contain' }}
                      source={require('../images/company/textNoShadowDepthDarkLight.png')} />
@@ -284,7 +286,7 @@ function CstMain(props) {
       <CstScreen background>
          <GCHeader style={{ backgroundColor: 'transparent' }}
             image={require('../images/company/textNoShadowDepthDarkLight.png')}
-            optionsBurger={() => { props.navigation.navigate('CstProfile') }} />
+            optionsBurger={() => { navigation.navigate('CstProfile') }} />
          <View style={{ flex: 1, paddingHorizontal: GC_STD_MARGIN }}>
             <View style={{ flex: .3, }}>
                {renderImageSlider()}
@@ -326,4 +328,3 @@ const styles = StyleSheet.create({
    },
 
 });
-export default withNavigation(CstMain); //FIX surely this is not necessary?

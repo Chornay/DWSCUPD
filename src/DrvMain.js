@@ -15,7 +15,7 @@ import GCHeader from 'DWcmn/GCHeader'
 import { DRV } from './DRV'
 import { DS } from './DS'
 import { GCI18n } from 'DWcmn/Gc'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 

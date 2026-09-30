@@ -11,6 +11,7 @@ import CmnItemsList from 'DWcmn/CmnItemsList';
 import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { cstCheckoutOrderInit } from './cstCheckoutOrderInit';
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20230514 moved init code to a separate function
 
@@ -27,7 +28,10 @@ import { cstCheckoutOrderInit } from './cstCheckoutOrderInit';
 //NOTE that in the pricelist an item remark may or not be there (and we use that fact)
 //     BUT in the order a 'missing' item remark is null
 
-const CstCheckout = ({ navigation }) => {
+export function CstCheckout() {
+
+   const navigation = useNavigation()
+   const { priceList = null } = useRoute().params ?? {};
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    //CLAUDE remarks is never set anywhere in this component so it is always null .. placeholder for a remarks input?
@@ -43,7 +47,6 @@ const CstCheckout = ({ navigation }) => {
 
          //extract all the pricelist categories that have selected entries
          //fill an array 'tasks' in every bundle which has the 'lineItem' from the pricelist
-         const priceList = navigation.getParam('priceList', null);
          //VERIFY priceList
 
          const order = await cstCheckoutOrderInit(priceList) //never throws
@@ -105,5 +108,3 @@ const CstCheckout = ({ navigation }) => {
       </CstScreen >
    )
 } //end CstCheckout
-
-export default CstCheckout

@@ -17,10 +17,10 @@ import DsScanQrToAddCode from './DsScanQrToAddCode'
 import DsMenuOrderChangeStart from './DsMenuOrderChangeStart'
 import DsMenuOrderChangeSummary from './DsMenuOrderChangeSummary'
 import DsMenuOrderChangeInvoice from './DsMenuOrderChangeInvoice'
-import CdsMenuCategoryScreen from './CdsMenuCategoryScreen'
-import CdsMenuItemRemarkAndPhotoScreen from './CdsMenuItemRemarkAndPhotoScreen'
-import CdsCamera from './CdsCamera'
-import CdsMenuSearchScreen from './CdsMenuSearchScreen';
+import { CdsMenuCategoryScreen } from './CdsMenuCategoryScreen'
+import { CdsMenuItemRemarkAndPhotoScreen } from './CdsMenuItemRemarkAndPhotoScreen'
+import { CdsCamera } from './CdsCamera'
+import { CdsMenuSearchScreen } from './CdsMenuSearchScreen';
 
 
 const RootStack = createStackNavigator(

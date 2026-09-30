@@ -8,7 +8,7 @@ import { PrjSpacer } from 'DWcmn/Prj'
 import CstSpinnerScreen from './CstSpinnerScreen';
 import { PRJ_STYLES } from 'DWcmn/PrjStyles'
 import GCHeader from 'DWcmn/GCHeader' //NOTE doing the default import
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import { GCFooterWithSingleIcon } from 'DWcmn/GCFooterForIcons'
 import { CmnServiceLevelBanner } from 'DWcmn/CmnServiceLevelBanner'
 import { strX } from 'DWcmn/I18n';
@@ -23,6 +23,7 @@ import { CST } from './CST'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20221003 changed route select to be full wide touchable
 //20231107 added check for processing time adjustment in route
@@ -104,15 +105,15 @@ const serviceLevelFilter = (route, serviceLevel) => {
 }
 
 
-const CstCheckoutSelectRoutePickup = ({ navigation }) => {
+export function CstCheckoutSelectRoutePickup() {
 
+   const navigation = useNavigation()
+   const { order = null, reschedule = false } = useRoute().params ?? {}
    const refresh = useRefresh()
    const isMountedRef = useIsMounted()
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const [selIndex, setSelIndex] = useState(-1)
    const [routes, setRoutes] = useState([])
-   const orderRef = useRef(null)
-   const rescheduleRef = useRef(false)
    const staticMapPointerRef = useRef(null)
 
    //load the routes for the pickup window .. called at mount and again when we come back to the foreground
@@ -123,16 +124,16 @@ const CstCheckoutSelectRoutePickup = ({ navigation }) => {
       try {
          const minMinutesTillPickup = CST.getShop().routeAvailableOffset
          const hoursToDisplay = CST.getShop().hoursOfPickupRoutes
-         const shopId = orderRef.current.shopId
+         const shopId = order.shopId
 
-         const adjustedCurrentMoment = getCurrentMomentAdjustedForCurfew(orderRef.current)
+         const adjustedCurrentMoment = getCurrentMomentAdjustedForCurfew(order)
          const earliestMoment = adjustedCurrentMoment.add(minMinutesTillPickup, "minutes")
 
          const earliestTime = earliestMoment.toDate()
          const latestTime = earliestMoment.add(hoursToDisplay, "hours").toDate()
 
          const allRoutes = await dwdbfsShopGetRoutesAsArray(shopId, earliestTime, latestTime)
-         newRoutes = allRoutes.filter((route) => serviceLevelFilter(route, orderRef.current.serviceLevel))
+         newRoutes = allRoutes.filter((route) => serviceLevelFilter(route, order.serviceLevel))
       }
       catch (error) {
          prjCloudLogError('CstCheckoutSelectRoutePickup', error)
@@ -151,12 +152,10 @@ const CstCheckoutSelectRoutePickup = ({ navigation }) => {
 
       //ASSERT check that shop.id === cust.shopId === order.shopId
       //ASSERT order is not null
-      orderRef.current = navigation.getParam('order', null)
-      rescheduleRef.current = navigation.getParam('reschedule', false)
 
       loadRoutes() //NOTE we do NOT set isComponentInitialized here .. loadRoutes does that when the first load completes
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, nav params are read once, loadRoutes only uses refs and setters
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, nav params are read once, loadRoutes only uses order and setters
    }, [])
 
 
@@ -181,7 +180,7 @@ const CstCheckoutSelectRoutePickup = ({ navigation }) => {
          if (appStateSubscription && appStateSubscription.remove) { appStateSubscription.remove() }
          else { AppState.removeEventListener('change', handleAppStateChange) }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, loadRoutes only uses refs and setters
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-time only, loadRoutes only uses order and setters
    }, [])
 
 
@@ -190,9 +189,6 @@ const CstCheckoutSelectRoutePickup = ({ navigation }) => {
          <CstSpinnerScreen />
       );
    }
-
-   const order = orderRef.current
-   const reschedule = rescheduleRef.current
 
    const renderRouteButton = ({ item, index }) => {
 
@@ -298,5 +294,3 @@ const CstCheckoutSelectRoutePickup = ({ navigation }) => {
    );
 
 }// end CstCheckoutSelectRoutePickup
-
-export default CstCheckoutSelectRoutePickup

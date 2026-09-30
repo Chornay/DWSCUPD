@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { FlatList } from 'react-native'
-import { withNavigation } from 'react-navigation';
 
 import DsOrderTile from './DsOrderTile'
 
 //prop orders (array)
 
-class DsViewRouteTabOrders extends Component {
+export default class DsViewRouteTabOrders extends Component {
 
 
   constructor() {
@@ -40,5 +39,3 @@ class DsViewRouteTabOrders extends Component {
   } //end render
 
 } //end DsViewRouteTabOrders
-
-export default withNavigation(DsViewRouteTabOrders);

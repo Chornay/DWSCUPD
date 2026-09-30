@@ -14,6 +14,7 @@ import { cdsMenuRenderNoteAboutItemInfo } from './cdsMenuRenderNoteAboutItemInfo
 import { APP } from 'DWcmn/APP'
 import { LogBox } from 'react-native'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 
@@ -21,16 +22,17 @@ import { useRefresh } from 'DWcmn/prjUseRefresh'
 //nav parameter priceList
 
 
-export default function CstMenuShoppingCart({ navigation }) {
+export function CstMenuShoppingCart() {
 
+   const navigation = useNavigation()
+   const { priceList = null } = useRoute().params ?? {}
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const refresh = useRefresh()
 
-   const priceListRef = useRef(null)
    const stackRef = useRef([]) //will contain the 'active' pricelist entries
 
 
-   //one-time setup: pull the priceList from nav params and collect the selected entries
+   //one-time setup: collect the selected entries from the priceList (nav param)
    useEffect(() => {
 
       //recursively collect every selected (included) entry into the stack
@@ -47,13 +49,11 @@ export default function CstMenuShoppingCart({ navigation }) {
          })
       }
 
-      priceListRef.current = navigation.getParam('priceList', null);
-
       //CLAUDE: a null priceList (or one without .top.entries) will throw here - needs protection/logging
       //extract all the pricelist entries that have been selected
       //this list will not change even if they decrement an item to zero
       stackRef.current = []
-      priceListRef.current.top.entries.forEach((category) => {
+      priceList.top.entries.forEach((category) => {
          selectCategory(category)
       })
 
@@ -74,8 +74,6 @@ export default function CstMenuShoppingCart({ navigation }) {
          <CstSpinnerScreen />
       );
    }
-
-   const priceList = priceListRef.current
 
    return (
       <CstScreen>

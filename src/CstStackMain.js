@@ -5,27 +5,27 @@ import auth from '@react-native-firebase/auth';
 
 import { APP } from 'DWcmn/APP'
 import { CST } from './CST'
-import CstMain from './CstMain';
-import CstMainShopSelect from './CstMainShopSelect'
-import CstMenuMain from './CstMenuMain';
-import CdsMenuCategoryScreen from './CdsMenuCategoryScreen'
-import CstCheckout from './CstCheckout';
-import CstCheckoutServiceLevel from './CstCheckoutServiceLevel'
-import CstCheckoutSelectRoutePickup from './CstCheckoutSelectRoutePickup';
-import CstPayment from './CstPayment';
-import CstCheckoutSelectRouteDelivery from './CstCheckoutSelectRouteDelivery';
-import CstCheckoutSummary from './CstCheckoutSummary'
-import CstPaymentOptions from './CstPaymentOptions';
-import CstProfile from './CstProfile';
-import CstOrderDetail from './CstOrderDetail';
-import CstMenuShoppingCart from './CstMenuShoppingCart';
-import CdsCamera from './CdsCamera'
+import { CstMain } from './CstMain';
+import { CstMainShopSelect } from './CstMainShopSelect'
+import { CstMenuMain } from './CstMenuMain';
+import { CdsMenuCategoryScreen } from './CdsMenuCategoryScreen'
+import { CstCheckout } from './CstCheckout';
+import { CstCheckoutServiceLevel } from './CstCheckoutServiceLevel'
+import { CstCheckoutSelectRoutePickup } from './CstCheckoutSelectRoutePickup';
+import { CstPayment } from './CstPayment';
+import { CstCheckoutSelectRouteDelivery } from './CstCheckoutSelectRouteDelivery';
+import { CstCheckoutSummary } from './CstCheckoutSummary'
+import { CstPaymentOptions } from './CstPaymentOptions';
+import { CstProfile } from './CstProfile';
+import { CstOrderDetail } from './CstOrderDetail';
+import { CstMenuShoppingCart } from './CstMenuShoppingCart';
+import { CdsCamera } from './CdsCamera'
 import { CstCheckoutCoupon } from './CstCheckoutCoupon'
-import CstMainNewOrderFromQR from './CstMainNewOrderFromQR'
-import CdsMenuItemRemarkAndPhotoScreen from './CdsMenuItemRemarkAndPhotoScreen'
-import CstMenuOptions from './CstMenuOptions'
+import { CstMainNewOrderFromQR } from './CstMainNewOrderFromQR'
+import { CdsMenuItemRemarkAndPhotoScreen } from './CdsMenuItemRemarkAndPhotoScreen'
+import { CstMenuOptions } from './CstMenuOptions'
 import { CstSystemActionScreen } from './CstSystemActionScreen';
-import CdsMenuSearchScreen from './CdsMenuSearchScreen'
+import { CdsMenuSearchScreen } from './CdsMenuSearchScreen'
 
 import { dwdbfsShopGet } from 'DWcmn/dwdbfsShop'
 
@@ -93,7 +93,7 @@ const RootStack = createStackNavigator(
       CstMenuOptions: {
          screen: CstMenuOptions,
       },
-      CstSystemActionScreen:{
+      CstSystemActionScreen: {
          screen: CstSystemActionScreen,
       }
 

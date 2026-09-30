@@ -10,7 +10,7 @@ import { COLORS } from 'DWcmn/Global';
 import { cdsMenuPricelistUpdateTotals } from './cdsMenuPricelistUpdateTotals'
 import { APP } from 'DWcmn/APP'
 import { LogBox } from 'react-native'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 
 
 

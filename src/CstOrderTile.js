@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper';
 import moment from 'moment';
 import { OrderActionEnum } from 'DWcmn/Global'
 import { cmnOrderStatusStr, cmnOrderStatusColor } from 'DWcmn/TypeCmnFunctions.js'
@@ -38,7 +38,9 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 //prop order
 //prop readonly
 
-function CstOrderTile({ order, readonly, navigation }) {
+export default function CstOrderTile({ order, readonly }) {
+
+   const navigation = useNavigation()
 
    const [isItemsVisible, setIsItemsVisible] = useState(false)
    const [action, setAction] = useState(OrderActionEnum.noop)
@@ -233,4 +235,3 @@ const styles = StyleSheet.create({
 
 
 })
-export default withNavigation(CstOrderTile)

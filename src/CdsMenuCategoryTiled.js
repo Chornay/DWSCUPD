@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, FlatList, TouchableOpacity, Dimensions, Image } from 'react-native'
 
 import { cdsMenuGetThumbnail } from './cdsMenuGetThumbnail'
-import { withNavigation } from 'react-navigation'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 import { GCText } from 'DWcmn/Gc'
 import { COLORS } from 'DWcmn/Global'
 import { prjPriceListItemStr } from 'DWcmn/PrjCmnFunctions'
@@ -18,7 +18,9 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window') || {};
 
 //prop priceList
 //prop category
-function CdsMenuCategoryTiled({ category, priceList, navigation }) {
+export default function CdsMenuCategoryTiled({ category, priceList }) {
+
+   const navigation = useNavigation()
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
 
@@ -103,8 +105,6 @@ function CategoryTile({ category, height, width, onPress }) {
    )
 } //end CategoryTile
 
-
-export default withNavigation(CdsMenuCategoryTiled)
 
 const styles = StyleSheet.create({
    tileStyle: {

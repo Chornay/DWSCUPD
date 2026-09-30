@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View } from 'react-native'
 import { DsScreen } from './CdsScreen';
 import GCHeader from 'DWcmn/GCHeader'
-import GCFooterForIcons, { GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import CdsSpinnerScreen from './CdsSpinnerScreen'
 import { CmnQrScan } from 'DWcmn/CmnQrScan'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
