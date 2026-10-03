@@ -209,7 +209,7 @@ export default function CdsSigninLogo() {
               <CdsSigninNotation size={14} i18n='cmnNEW.OrSigninWith' />
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }} >
                 {/* calling class component doesn't work so gc change to calling method same as googleButton */}
-                {(Platform.OS === 'ios') && signinApple()}
+                {(Platform.OS === 'ios') && signinApple(signinAppType)}
                 {googleButton()}
                 {/* disable for now because of facebook developer app review reasion */}
                 {/* <FacebookButton /> */}
