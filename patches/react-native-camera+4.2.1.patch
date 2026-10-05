@@ -1,11 +1,9 @@
 diff --git a/node_modules/react-native-camera/.DS_Store b/node_modules/react-native-camera/.DS_Store
 new file mode 100644
-index 0000000..b80d90b
-Binary files /dev/null and b/node_modules/react-native-camera/.DS_Store differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/.DS_Store b/node_modules/react-native-camera/android/.DS_Store
 new file mode 100644
-index 0000000..003c42e
-Binary files /dev/null and b/node_modules/react-native-camera/android/.DS_Store differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build.gradle b/node_modules/react-native-camera/android/build.gradle
 index 4aed495..e9041e9 100644
 --- a/node_modules/react-native-camera/android/build.gradle
@@ -28,8 +26,7 @@ index 0000000..0d259dd
 +o/classes
 diff --git a/node_modules/react-native-camera/android/build/.transforms/7e2620e5270a2a958eaa74a5e71ae9e2/transformed/classes/classes.dex b/node_modules/react-native-camera/android/build/.transforms/7e2620e5270a2a958eaa74a5e71ae9e2/transformed/classes/classes.dex
 new file mode 100644
-index 0000000..6560666
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/.transforms/7e2620e5270a2a958eaa74a5e71ae9e2/transformed/classes/classes.dex differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/generated/source/buildConfig/general/debug/org/reactnative/camera/BuildConfig.java b/node_modules/react-native-camera/android/build/generated/source/buildConfig/general/debug/org/reactnative/camera/BuildConfig.java
 new file mode 100644
 index 0000000..e168758
@@ -116,12 +113,10 @@ index 0000000..9e26dfe
 \ No newline at end of file
 diff --git a/node_modules/react-native-camera/android/build/intermediates/compile_library_classes_jar/generalDebug/classes.jar b/node_modules/react-native-camera/android/build/intermediates/compile_library_classes_jar/generalDebug/classes.jar
 new file mode 100644
-index 0000000..4b1622f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/compile_library_classes_jar/generalDebug/classes.jar differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/compile_r_class_jar/generalDebug/R.jar b/node_modules/react-native-camera/android/build/intermediates/compile_r_class_jar/generalDebug/R.jar
 new file mode 100644
-index 0000000..a396742
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/compile_r_class_jar/generalDebug/R.jar differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/compile_symbol_list/generalDebug/R.txt b/node_modules/react-native-camera/android/build/intermediates/compile_symbol_list/generalDebug/R.txt
 new file mode 100644
 index 0000000..b382849
@@ -2080,12 +2075,10 @@ index 0000000..b382849
 +int xml rn_dev_preferences 0x0
 diff --git a/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout-v14_texture_view.xml.flat b/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout-v14_texture_view.xml.flat
 new file mode 100644
-index 0000000..6cc3cdb
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout-v14_texture_view.xml.flat differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout_surface_view.xml.flat b/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout_surface_view.xml.flat
 new file mode 100644
-index 0000000..6cb69f5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/compiled_local_resources/generalDebug/out/layout_surface_view.xml.flat differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/incremental/generalDebug/packageGeneralDebugResources/compile-file-map.properties b/node_modules/react-native-camera/android/build/intermediates/incremental/generalDebug/packageGeneralDebugResources/compile-file-map.properties
 new file mode 100644
 index 0000000..61a7d01
@@ -2250,728 +2243,547 @@ index 0000000..ee5f2c6
 \ No newline at end of file
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio$1.class
 new file mode 100644
-index 0000000..4866cae
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio.class
 new file mode 100644
-index 0000000..780624f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/AspectRatio.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$1.class
 new file mode 100644
-index 0000000..5a0dd23
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$2.class
 new file mode 100644
-index 0000000..c669179
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1.class
 new file mode 100644
-index 0000000..ec45eb5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$1.class
 new file mode 100644
-index 0000000..034f6dd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$2.class
 new file mode 100644
-index 0000000..e5a9706
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$3.class
 new file mode 100644
-index 0000000..0a600dc
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10.class
 new file mode 100644
-index 0000000..211e252
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$10.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$11.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$11.class
 new file mode 100644
-index 0000000..a06b18b
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$11.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$2.class
 new file mode 100644
-index 0000000..8657f47
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$3.class
 new file mode 100644
-index 0000000..d6c8eba
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$4.class
 new file mode 100644
-index 0000000..07ff35f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$5.class
 new file mode 100644
-index 0000000..4643e1d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$6.class
 new file mode 100644
-index 0000000..a3368c6
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$7.class
 new file mode 100644
-index 0000000..6ebbeaa
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$8.class
 new file mode 100644
-index 0000000..48b85ea
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$9.class
 new file mode 100644
-index 0000000..5403fbd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1.class
 new file mode 100644
-index 0000000..fc7684f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$1.class
 new file mode 100644
-index 0000000..8c274e9
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$2.class
 new file mode 100644
-index 0000000..affc23a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$3.class
 new file mode 100644
-index 0000000..2a5bda2
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$4.class
 new file mode 100644
-index 0000000..a75f5b5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$5.class
 new file mode 100644
-index 0000000..7b2a879
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$6.class
 new file mode 100644
-index 0000000..285e4a7
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$7.class
 new file mode 100644
-index 0000000..144ad00
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$8.class
 new file mode 100644
-index 0000000..0dba4a3
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$9.class
 new file mode 100644
-index 0000000..3f4ccf9
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$PictureCaptureCallback.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$PictureCaptureCallback.class
 new file mode 100644
-index 0000000..199ae35
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2$PictureCaptureCallback.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2.class
 new file mode 100644
-index 0000000..1e56d26
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2Api23.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2Api23.class
 new file mode 100644
-index 0000000..484333e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Camera2Api23.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$1.class
 new file mode 100644
-index 0000000..815b1a1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Callback.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Callback.class
 new file mode 100644
-index 0000000..0d12701
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Callback.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$CallbackBridge.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$CallbackBridge.class
 new file mode 100644
-index 0000000..5bf079a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$CallbackBridge.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Facing.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Facing.class
 new file mode 100644
-index 0000000..a301e2c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Facing.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Flash.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Flash.class
 new file mode 100644
-index 0000000..e378243
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$Flash.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState$1.class
 new file mode 100644
-index 0000000..3ebf978
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState.class
 new file mode 100644
-index 0000000..387331b
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView$SavedState.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView.class
 new file mode 100644
-index 0000000..aab104f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraView.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl$Callback.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl$Callback.class
 new file mode 100644
-index 0000000..08b9a02
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl$Callback.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl.class
 new file mode 100644
-index 0000000..7c48c48
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/CameraViewImpl.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Constants.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Constants.class
 new file mode 100644
-index 0000000..cbad22f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Constants.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector$1.class
 new file mode 100644
-index 0000000..0d6f002
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector.class
 new file mode 100644
-index 0000000..4efe308
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/DisplayOrientationDetector.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl$Callback.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl$Callback.class
 new file mode 100644
-index 0000000..85d2034
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl$Callback.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl.class
 new file mode 100644
-index 0000000..f5988bd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/PreviewImpl.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size$1.class
 new file mode 100644
-index 0000000..d2292b1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size.class
 new file mode 100644
-index 0000000..c85d008
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/Size.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SizeMap.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SizeMap.class
 new file mode 100644
-index 0000000..e0feb81
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SizeMap.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview$1.class
 new file mode 100644
-index 0000000..36aaa04
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview.class
 new file mode 100644
-index 0000000..119d70d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/SurfaceViewPreview.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview$1.class
 new file mode 100644
-index 0000000..448e892
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview.class
 new file mode 100644
-index 0000000..416e45d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/google/android/cameraview/TextureViewPreview.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$GPS.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$GPS.class
 new file mode 100644
-index 0000000..33af4aa
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$GPS.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$ImageMutationFailedException.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$ImageMutationFailedException.class
 new file mode 100644
-index 0000000..2a4ed7d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage$ImageMutationFailedException.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage.class
 new file mode 100644
-index 0000000..b00b10e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/MutableImage.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$CameraInfoWrapper.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$CameraInfoWrapper.class
 new file mode 100644
-index 0000000..6f4fb65
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$CameraInfoWrapper.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$Resolution.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$Resolution.class
 new file mode 100644
-index 0000000..ec036bd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera$Resolution.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera.class
 new file mode 100644
-index 0000000..cf226bd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCamera.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$1.class
 new file mode 100644
-index 0000000..622924f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$2.class
 new file mode 100644
-index 0000000..8d1d126
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$3.class
 new file mode 100644
-index 0000000..616cd91
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$4.class
 new file mode 100644
-index 0000000..1c893a2
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$5.class
 new file mode 100644
-index 0000000..c98972c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$6.class
 new file mode 100644
-index 0000000..94fee17
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$7.class
 new file mode 100644
-index 0000000..baf2df9
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$8.class
 new file mode 100644
-index 0000000..f971536
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$9.class
 new file mode 100644
-index 0000000..e845bc5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1.class
 new file mode 100644
-index 0000000..950403b
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$2.class
 new file mode 100644
-index 0000000..dd93e94
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3$1.class
 new file mode 100644
-index 0000000..f1d1b19
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3.class
 new file mode 100644
-index 0000000..b0008f7
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$4.class
 new file mode 100644
-index 0000000..d4ddc5b
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$5.class
 new file mode 100644
-index 0000000..c3ea6cc
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule.class
 new file mode 100644
-index 0000000..5e13047
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraModule.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraUtils.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraUtils.class
 new file mode 100644
-index 0000000..519fd00
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraUtils.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView$1.class
 new file mode 100644
-index 0000000..2d79489
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView.class
 new file mode 100644
-index 0000000..f3d5af5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraView.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$1.class
 new file mode 100644
-index 0000000..26d37d0
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$2.class
 new file mode 100644
-index 0000000..dc48e86
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$ReaderAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$ReaderAsyncTask.class
 new file mode 100644
-index 0000000..572d8aa
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder$ReaderAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder.class
 new file mode 100644
-index 0000000..5c1cd03
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewFinder.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewManager.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewManager.class
 new file mode 100644
-index 0000000..84084b1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTCameraViewManager.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$1.class
 new file mode 100644
-index 0000000..24087df
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$Listener.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$Listener.class
 new file mode 100644
-index 0000000..c78f3b2
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker$Listener.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker.class
 new file mode 100644
-index 0000000..3f2fe0d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationChecker.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationListener.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationListener.class
 new file mode 100644
-index 0000000..d8eb599
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/com/lwansbrough/RCTCamera/RCTSensorOrientationListener.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/BarcodeFormatUtils.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/BarcodeFormatUtils.class
 new file mode 100644
-index 0000000..02ea949
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/BarcodeFormatUtils.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/RNBarcodeDetector.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/RNBarcodeDetector.class
 new file mode 100644
-index 0000000..dd7f31d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/barcodedetector/RNBarcodeDetector.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/BuildConfig.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/BuildConfig.class
 new file mode 100644
-index 0000000..cc21faf
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/BuildConfig.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$1.class
 new file mode 100644
-index 0000000..ff70444
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$10.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$10.class
 new file mode 100644
-index 0000000..8273494
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$10.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$11.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$11.class
 new file mode 100644
-index 0000000..c16df89
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$11.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$12.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$12.class
 new file mode 100644
-index 0000000..2c0580e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$12.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$13.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$13.class
 new file mode 100644
-index 0000000..0302e0a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$13.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$14.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$14.class
 new file mode 100644
-index 0000000..b92a3a6
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$14.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$1.class
 new file mode 100644
-index 0000000..a87e559
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$2.class
 new file mode 100644
-index 0000000..c51c9b2
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$3.class
 new file mode 100644
-index 0000000..0997edb
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1.class
 new file mode 100644
-index 0000000..57ef504
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$2.class
 new file mode 100644
-index 0000000..02c1e33
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$3.class
 new file mode 100644
-index 0000000..407e081
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$4.class
 new file mode 100644
-index 0000000..98ee301
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$5.class
 new file mode 100644
-index 0000000..8fb97b3
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$6.class
 new file mode 100644
-index 0000000..1376db8
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$7.class
 new file mode 100644
-index 0000000..f5f1a0f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$8.class
 new file mode 100644
-index 0000000..0c31120
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$9.class
 new file mode 100644
-index 0000000..4ab7f3e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2.class
 new file mode 100644
-index 0000000..b99639d
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$3.class
 new file mode 100644
-index 0000000..8bd1f9c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$4.class
 new file mode 100644
-index 0000000..746b6c1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$5.class
 new file mode 100644
-index 0000000..93fa0d3
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$6.class
 new file mode 100644
-index 0000000..55bb101
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$7.class
 new file mode 100644
-index 0000000..4185950
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$8.class
 new file mode 100644
-index 0000000..cbbe780
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$9.class
 new file mode 100644
-index 0000000..0a975d4
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule.class
 new file mode 100644
-index 0000000..174d5ff
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraModule.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager$Events.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager$Events.class
 new file mode 100644
-index 0000000..9439059
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager$Events.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager.class
 new file mode 100644
-index 0000000..3aaba7a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/CameraViewManager.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/Constants.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/Constants.class
 new file mode 100644
-index 0000000..7efa6cf
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/Constants.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraPackage.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraPackage.class
 new file mode 100644
-index 0000000..24baf5e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraPackage.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$1.class
 new file mode 100644
-index 0000000..0663f18
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$2.class
 new file mode 100644
-index 0000000..0aa2704
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$3.class
 new file mode 100644
-index 0000000..94975c5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$4.class
 new file mode 100644
-index 0000000..fdc66f2
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$5.class
 new file mode 100644
-index 0000000..0fab96a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$6.class
 new file mode 100644
-index 0000000..4527e04
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$7.class
 new file mode 100644
-index 0000000..e91c217
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView.class
 new file mode 100644
-index 0000000..80abac9
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraView.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$1.class
 new file mode 100644
-index 0000000..b4158e8
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$10.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$10.class
 new file mode 100644
-index 0000000..8a1470e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$10.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$11.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$11.class
 new file mode 100644
-index 0000000..a941cdb
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$11.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$12.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$12.class
 new file mode 100644
-index 0000000..0c6044f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$12.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$13.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$13.class
 new file mode 100644
-index 0000000..1fbed65
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$13.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$2.class
 new file mode 100644
-index 0000000..f813eac
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$3.class
 new file mode 100644
-index 0000000..0bb4dbd
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$4.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$4.class
 new file mode 100644
-index 0000000..11ff9b7
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$4.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$5.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$5.class
 new file mode 100644
-index 0000000..0bff499
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$5.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$6.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$6.class
 new file mode 100644
-index 0000000..838fca1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$6.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$7.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$7.class
 new file mode 100644
-index 0000000..4ed0c1a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$7.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$8.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$8.class
 new file mode 100644
-index 0000000..8fff80c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$8.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$9.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$9.class
 new file mode 100644
-index 0000000..244be81
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper$9.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper.class
 new file mode 100644
-index 0000000..88af32e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/RNCameraViewHelper.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarCodeReadEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarCodeReadEvent.class
 new file mode 100644
-index 0000000..2914002
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarCodeReadEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodeDetectionErrorEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodeDetectionErrorEvent.class
 new file mode 100644
-index 0000000..c1a4ec6
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodeDetectionErrorEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodesDetectedEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodesDetectedEvent.class
 new file mode 100644
-index 0000000..d09e024
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/BarcodesDetectedEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraMountErrorEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraMountErrorEvent.class
 new file mode 100644
-index 0000000..f5db838
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraMountErrorEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraReadyEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraReadyEvent.class
 new file mode 100644
-index 0000000..02e3722
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/CameraReadyEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FaceDetectionErrorEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FaceDetectionErrorEvent.class
 new file mode 100644
-index 0000000..c44997f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FaceDetectionErrorEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FacesDetectedEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FacesDetectedEvent.class
 new file mode 100644
-index 0000000..74998a1
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/FacesDetectedEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureSavedEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureSavedEvent.class
 new file mode 100644
-index 0000000..7a0799c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureSavedEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureTakenEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureTakenEvent.class
 new file mode 100644
-index 0000000..35a5110
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/PictureTakenEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingEndEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingEndEvent.class
 new file mode 100644
-index 0000000..33a5e94
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingEndEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingStartEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingStartEvent.class
 new file mode 100644
-index 0000000..24bfc86
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/RecordingStartEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TextRecognizedEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TextRecognizedEvent.class
 new file mode 100644
-index 0000000..4cfa56a
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TextRecognizedEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TouchEvent.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TouchEvent.class
 new file mode 100644
-index 0000000..74ba44c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/events/TouchEvent.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTask.class
 new file mode 100644
-index 0000000..6adf8de
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTaskDelegate.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTaskDelegate.class
 new file mode 100644
-index 0000000..bb8527c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarCodeScannerAsyncTaskDelegate.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTask.class
 new file mode 100644
-index 0000000..748fa8e
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTaskDelegate.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTaskDelegate.class
 new file mode 100644
-index 0000000..affe740
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/BarcodeDetectorAsyncTaskDelegate.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTask.class
 new file mode 100644
-index 0000000..9a3c739
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTaskDelegate.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTaskDelegate.class
 new file mode 100644
-index 0000000..901f4fc
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/FaceDetectorAsyncTaskDelegate.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/PictureSavedDelegate.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/PictureSavedDelegate.class
 new file mode 100644
-index 0000000..e462ec4
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/PictureSavedDelegate.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask$1.class
 new file mode 100644
-index 0000000..61ff548
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask.class
 new file mode 100644
-index 0000000..197ddf3
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/ResolveTakenPictureAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTask.class
 new file mode 100644
-index 0000000..3de2ea9
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTaskDelegate.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTaskDelegate.class
 new file mode 100644
-index 0000000..0985061
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/tasks/TextRecognizerAsyncTaskDelegate.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ImageDimensions.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ImageDimensions.class
 new file mode 100644
-index 0000000..38e037c
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ImageDimensions.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ObjectUtils.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ObjectUtils.class
 new file mode 100644
-index 0000000..e8655ed
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ObjectUtils.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/RNFileUtils.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/RNFileUtils.class
 new file mode 100644
-index 0000000..5281121
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/RNFileUtils.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ScopedContext.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ScopedContext.class
 new file mode 100644
-index 0000000..fd47804
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/camera/utils/ScopedContext.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$1.class
 new file mode 100644
-index 0000000..5288711
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$2.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$2.class
 new file mode 100644
-index 0000000..2db3abc
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$2.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$3.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$3.class
 new file mode 100644
-index 0000000..1689720
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1$3.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1.class
 new file mode 100644
-index 0000000..28d6b9f
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule$1.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule.class
 new file mode 100644
-index 0000000..e07e053
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorModule.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorUtils.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorUtils.class
 new file mode 100644
-index 0000000..df042c5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/FaceDetectorUtils.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/RNFaceDetector.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/RNFaceDetector.class
 new file mode 100644
-index 0000000..c9e2571
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/RNFaceDetector.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/tasks/FileFaceDetectionAsyncTask.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/tasks/FileFaceDetectionAsyncTask.class
 new file mode 100644
-index 0000000..ddcbec8
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/facedetector/tasks/FileFaceDetectionAsyncTask.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrame.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrame.class
 new file mode 100644
-index 0000000..acb2a06
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrame.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrameFactory.class b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrameFactory.class
 new file mode 100644
-index 0000000..d65ccc5
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/javac/generalDebug/classes/org/reactnative/frame/RNFrameFactory.class differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/local_only_symbol_list/generalDebug/R-def.txt b/node_modules/react-native-camera/android/build/intermediates/local_only_symbol_list/generalDebug/R-def.txt
 new file mode 100644
 index 0000000..8a7d807
@@ -3212,8 +3024,7 @@ index 0000000..4742c36
 +attr flash
 diff --git a/node_modules/react-native-camera/android/build/intermediates/runtime_library_classes_jar/generalDebug/classes.jar b/node_modules/react-native-camera/android/build/intermediates/runtime_library_classes_jar/generalDebug/classes.jar
 new file mode 100644
-index 0000000..b964d2b
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/intermediates/runtime_library_classes_jar/generalDebug/classes.jar differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-camera/android/build/intermediates/symbol_list_with_package_name/generalDebug/package-aware-r.txt b/node_modules/react-native-camera/android/build/intermediates/symbol_list_with_package_name/generalDebug/package-aware-r.txt
 new file mode 100644
 index 0000000..4d05f7b
@@ -4734,5 +4545,4 @@ index 0000000..43d9387
 +		INJECTED from /Users/chornaym1/DW/node_modules/react-native-camera/android/src/main/AndroidManifest.xml
 diff --git a/node_modules/react-native-camera/android/build/tmp/compileGeneralDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/react-native-camera/android/build/tmp/compileGeneralDebugJavaWithJavac/previous-compilation-data.bin
 new file mode 100644
-index 0000000..215d287
-Binary files /dev/null and b/node_modules/react-native-camera/android/build/tmp/compileGeneralDebugJavaWithJavac/previous-compilation-data.bin differ
+index 0000000..e69de29

@@ -71,10 +71,38 @@ allprojects {
         }
     }
 }
+// subprojects { subproject ->
+//     afterEvaluate {
+//         if (subproject.hasProperty('android')) {
+//             subproject.android {
+//                 compileOptions {
+//                     sourceCompatibility JavaVersion.VERSION_1_8
+//                     targetCompatibility JavaVersion.VERSION_1_8
+//                 }
+//             }
+//         }
+//         subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+//             kotlinOptions {
+//                 jvmTarget = "1.8"
+//             }
+//         }
+//     }
+// }
+
 subprojects { subproject ->
     afterEvaluate {
         if (subproject.hasProperty('android')) {
             subproject.android {
+                // Set namespace from the manifest's package if the library doesn't declare one
+                if (namespace == null) {
+                    def manifestFile = file("${subproject.projectDir}/src/main/AndroidManifest.xml")
+                    if (manifestFile.exists()) {
+                        def pkg = new XmlSlurper().parse(manifestFile).@package.text()
+                        if (pkg) {
+                            namespace pkg
+                        }
+                    }
+                }
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_1_8
                     targetCompatibility JavaVersion.VERSION_1_8
@@ -88,7 +116,6 @@ subprojects { subproject ->
         }
     }
 }
-
 //need this block for generating aab file 
 gradle.projectsEvaluated {
     def appProject = project(':app')
