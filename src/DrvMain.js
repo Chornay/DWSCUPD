@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, FlatList } from 'react-native'
 
 
@@ -18,6 +18,8 @@ import { GCI18n } from 'DWcmn/Gc'
 import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20201023 no longer pass action to Route
 //20230628 change to use PrjTabBar
@@ -25,108 +27,34 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 //20250218 display just today's routes and add Other tab and implement refresh
 //20250220 use DsRouteTile
 
-export default class DrvMain extends Component {
+export function DrvMain() {
 
-   constructor() {
-      super();
-      this.state = {
-         routes: [],
-         isComponentInitialized: false, //not set until we get our first data
-      };
-   }
+   const navigation = useNavigation()
 
-   componentDidMount() {
-      // find all the routes for this driver
-      this.refreshQuery()
-      SplashScreen.hide()//have to do this in case we navigate right here without logo screen
-   }
+   const [routes, setRoutes] = useState([])
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false) //not set until we get our first data
 
-   refreshQuery() {
-      // find all today's routes for this driver
-      //TODO sort driver routes in creation time order .. decreasing (most recent first)
-      try {
-         const startTime = moment().startOf('day').toDate()
-         const endTime = moment().endOf('day').toDate()
-         this.unsubscribeRoutes && this.unsubscribeRoutes() //unsubscribe previous query if there
-         this.unsubscribeRoutes = firestore().collectionGroup("Routes")
-            .where("archive", "==", false)
-            .where("comboShopId", "==", DS.getComboShopId())
-            .where("schedDate", ">=", startTime)
-            .where("schedDate", "<=", endTime)
-            .orderBy("schedDate")
-            .onSnapshot(this.getRoutes, error => { prjAlert(error) });
-      }
-      catch (error) {
-         prjAlert(error.message)
-      }
-   }//end refreshQuery
-
+   const unsubscribeRoutesRef = useRef(null)
 
    //the changeListener will be invoked any time a change in the routes query is detected
    //we just reload the routes array state variable
    //NOTE this also loads our data the first time
-   getRoutes = (querySnapshot) => {
+   const getRoutes = (querySnapshot) => {
 
       let localRoutes = dwdbfsRouteLoadSnapshots(querySnapshot)
-      this.setState({ routes: localRoutes });
-
-      //if this is the first time we have loaded data from the db
-      if (!this.state.isComponentInitialized) { this.setState({ isComponentInitialized: true }); }
+      setRoutes(localRoutes)
+      setIsComponentInitialized(true)
 
    } //end getRoutes
 
-
-   componentWillUnmount() {
-      this.unsubscribeRoutes && this.unsubscribeRoutes();
-   } //end componentWillUnmount
-
-   //show all available routes
-   render() {
-      //we are not done until initialization is finished AND we have our first DB results
-      if (!this.state.isComponentInitialized || this.state.waitingForFirstQueryResult) {
-         return (
-            <DrvSpinnerScreen />
-         );
-      } //end if 
-
-
-      //display routes, open route, wait for route
-      else { //display routes, open route, wait for route
-         return (
-            <DrvScreen padding={10}>
-               <GCHeader titleText={DRV.getId()} />
-               {/* DATA SECTION */}
-               <View style={{ flex: 1}}>
-                  {this.displayList(this.state.routes)}
-               </View>
-
-               <GCFooterForIcons>
-                  <GCFooterCmdIcon code="REFRESH"
-                     onPress={async () => { this.refreshQuery() }} />
-                  <GCFooterCmdIcon code="ROUTES"
-                     onPress={() => this.props.navigation.navigate('DsViewOtherRoutes')
-                     } />
-                  <GCFooterCmdIcon code="SEARCH"
-                     onPress={
-                        () => { this.props.navigation.navigate('DsSearch') }
-                     } />
-                  <GCFooterCmdIcon code="SCAN_QR"
-                     onPress={() => this.props.navigation.navigate('DsScanQrForOrder')} />
-               </GCFooterForIcons>
-            </DrvScreen >
-
-         )
-      }
-   }// end render
-
-   displayList = (routes) => {
+   const displayList = (routesToDisplay) => {
       return (
-         (routes.length == 0) ?
+         (routesToDisplay.length == 0) ?
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                <GCI18n code='cmnNEW.Waiting' />
             </View>
             : <FlatList
-               data={routes}
+               data={routesToDisplay}
                renderItem={({ item }) => {
                   return (<DsRouteTile route={item} />)
                }}
@@ -136,4 +64,59 @@ export default class DrvMain extends Component {
       )
    }
 
-}// end class DrvMain
+   //set up today's routes query for this driver; mount-only now that REFRESH remounts the screen
+   //instead of re-invoking this, so there is no longer a case where it runs more than once per mount
+   //TODO sort driver routes in creation time order .. decreasing (most recent first)
+   useEffect(() => {
+      try {
+         const startTime = moment().startOf('day').toDate()
+         const endTime = moment().endOf('day').toDate()
+         unsubscribeRoutesRef.current = firestore().collectionGroup("Routes")
+            .where("archive", "==", false)
+            .where("comboShopId", "==", DS.getComboShopId())
+            .where("schedDate", ">=", startTime)
+            .where("schedDate", "<=", endTime)
+            .orderBy("schedDate")
+            .onSnapshot(getRoutes, error => { prjCloudLogError('DrvMain routes listener', error, {toastI18n:"cmnNEW.MsgSnapshotError"}) });
+      }
+      catch (error) {
+         prjCloudLogError('DrvMain routes setup', error)
+      }
+      SplashScreen.hide()//have to do this in case we navigate right here without logo screen
+      return () => { unsubscribeRoutesRef.current && unsubscribeRoutesRef.current() }
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only effect, mirrors original componentDidMount/componentWillUnmount
+   }, [])
+
+   //we are not done until initialization is finished AND we have our first DB results
+   if (!isComponentInitialized) {
+      return (
+         <DrvSpinnerScreen />
+      );
+   } //end if 
+
+   //display routes, open route, wait for route
+   return (
+      <DrvScreen padding={10}>
+         <GCHeader titleText={DRV.getId()} optionsBurger={() => { navigation.navigate('DrvProfile') }}/>
+         {/* DATA SECTION */}
+         <View style={{ flex: 1}}>
+            {displayList(routes)}
+         </View>
+
+         <GCFooterForIcons>
+            <GCFooterCmdIcon code="REFRESH"
+               onPress={() => { navigation.replace('DrvMain') }} />
+            <GCFooterCmdIcon code="ROUTES"
+               onPress={() => navigation.navigate('DsViewOtherRoutes')
+               } />
+            <GCFooterCmdIcon code="SEARCH"
+               onPress={
+                  () => { navigation.navigate('DsSearch') }
+               } />
+            <GCFooterCmdIcon code="SCAN_QR"
+               onPress={() => navigation.navigate('DsScanQrForOrder')} />
+         </GCFooterForIcons>
+      </DrvScreen >
+
+   )
+}// end DrvMain

@@ -1,14 +1,16 @@
 import React from 'react'
 import CdsQuestionScreen from './CdsQuestionScreen'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
+export function CdsSigninEmailForgotSent() {
 
-export default function CdsSigninEmailForgotSent(props) {
+   const navigation = useNavigation()
 
    return (
       <CdsQuestionScreen
          text='cmnNEW.EmailForgotSent'
          onOkay={async () => {
-            props.navigation.popToTop();
+            navigation.popToTop();
          }}
       />
    )

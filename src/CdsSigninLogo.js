@@ -68,7 +68,7 @@ GoogleSignin.configure({
   // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
-export default function CdsSigninLogo() {
+export function CdsSigninLogo() {
 
   const navigation = useNavigation()
   const { signinAppType = null } = useRoute().params ?? {}
@@ -110,7 +110,7 @@ export default function CdsSigninLogo() {
           // console.log("user from database", dbUser)
           //TODO this next does not seem right ... can't navigate to other stack?
           if (dbUser) { // we already have a db entry
-            global.rootNav.navigate("StackMain", { 'user': dbUser, 'comeFrom': 'logo' })
+            navigation.replace("StackMain", { 'user': dbUser, 'comeFrom': 'logo' })
           }
           else { // log them out and let them log in again
             await cmnSignoutFirebaseOnly()

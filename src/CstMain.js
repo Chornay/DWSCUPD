@@ -161,13 +161,8 @@ export function CstMain() {
 
    //focus listener ... we need to know when we get focus because user may have changed in profile
    useEffect(() => {
-      unsubscribeCustMainFocusListenerRef.current = navigation.addListener('didFocus', gotFocus)
-
-      // NOTE not we don't set init flag until first db read.
-
-      return () => {
-         unsubscribeCustMainFocusListenerRef.current && unsubscribeCustMainFocusListenerRef.current.remove();
-      }
+      return navigation.addListener('focus', gotFocus)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is a stable dispatch, navigation is stable per screen
    }, [])
 
    //hardware back key listener (returns true means no action taken)

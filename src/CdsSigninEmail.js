@@ -13,11 +13,14 @@ import { COLORS } from 'DWcmn/Global'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
-export default function CdsSigninEmail(props) {
+export function CdsSigninEmail() {
 
-   const [isComponentInitialized, setIsComponentInitialized] = useState(false);
+   const navigation = useNavigation()
+   const { appType = null } = useRoute().params ?? {}
+
    const [isLoginInProgress, setIsLoginInProgress] = useState(false);
    const [errorMessage, setErrorMessage] = useState(null);
    const refresh = useRefresh();
@@ -26,7 +29,6 @@ export default function CdsSigninEmail(props) {
    // genuine refs: mutable values that must survive renders without triggering one
    const emailAddressRef = useRef("");
    const emailPasswordRef = useRef("");
-   const appTypeRef = useRef('');
 
    // NOTE: this must keep stable identity across renders — validateForm mutates
    // these field objects to track per-field error state, and XFormInput reads
@@ -51,12 +53,6 @@ export default function CdsSigninEmail(props) {
    ]);
    const fields = fieldsRef.current;
 
-   useEffect(() => {
-      appTypeRef.current = props.navigation.getParam('appType');
-      setIsComponentInitialized(true);
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- appType is fixed
-   }, []);
-
    const handleSignIn = async () => {
       ////DEBUG
       // emailAddressRef.current = "GRAMMY@FOOBAR.COM"
@@ -80,11 +76,11 @@ export default function CdsSigninEmail(props) {
          const { user } = await firebase.auth().signInWithEmailAndPassword(emailAddressRef.current, emailPasswordRef.current);
          if (!(user.email.toLowerCase().includes('foobar.com') || user.emailVerified)) {
             setIsLoginInProgress(false)
-            props.navigation.navigate('CdsSigninEmailNotVerified')
+            navigation.navigate('CdsSigninEmailNotVerified')
          }
          else {
             //NOTE isLoginInProgress is not reset until we have read the database
-            await navigateForAuthorizedCust(props.navigation, appTypeRef.current, { 'authType': 'email' })
+            await navigateForAuthorizedCust(navigation, appType, { 'authType': 'email' })
          }
       } catch (error) { //unsuccessful login goes here
          if (error.code === 'auth/user-not-found') {
@@ -145,13 +141,14 @@ export default function CdsSigninEmail(props) {
                <CdsSigninNotation size={14} i18n='cstNEW.ForgotYourPassword'
                   onPress={() => {
                      // validateForm(fields) //have to do this to load the email address
-                     props.navigation.navigate("CdsSigninEmailForgot", { 'emailAddress': emailAddressRef.current });
+                     //CLAUDE seems that the emailAddress param is never used here
+                     navigation.navigate("CdsSigninEmailForgot", { 'emailAddress': emailAddressRef.current });
                   }}
                />
 
                <View style={{ height: 40 }} />
-               {(appTypeRef.current == 'cst') && <CdsSigninNotation i18n='cst.signin.NEW_USER'
-                  onPress={() => { props.navigation.navigate("CstSigninEmailSignup"); }}
+               {(appType == 'cst') && <CdsSigninNotation i18n='cst.signin.NEW_USER'
+                  onPress={() => { navigation.navigate("CstSigninEmailSignup"); }}
                />}
             </View>
          </View>

@@ -7,15 +7,15 @@ import auth from '@react-native-firebase/auth';
 import { APP } from 'DWcmn/APP'
 import { DRV } from './DRV'
 import { DS } from './DS'
-import DrvMain from './DrvMain';
-import DrvProfile from './DrvProfile'
-import DrvViewOrder from './DrvViewOrder';
-import DrvViewRoute from './DrvViewRoute'
-import DsSearch from './DsSearch'
-import DsScanQrForOrder from './DsScanQrForOrder'
-import DsViewOtherRoutes from './DsViewOtherRoutes'
-import DsScanQrToAddCode from './DsScanQrToAddCode'
-import CdsShopBoundaries from './CdsShopBoundaries'
+import { DrvMain } from './DrvMain';
+import { DrvProfile } from './DrvProfile'
+import { DrvViewOrder } from './DrvViewOrder';
+import { DrvViewRoute } from './DrvViewRoute'
+import { DsSearch } from './DsSearch'
+import { DsScanQrForOrder } from './DsScanQrForOrder'
+import { DsViewOtherRoutes } from './DsViewOtherRoutes'
+import { DsScanQrToAddCode } from './DsScanQrToAddCode'
+import { CdsShopBoundaries } from './CdsShopBoundaries'
 
 import { dwdbfsShopGet } from 'DWcmn/dwdbfsShop'
 import { dwdbfsComboShopGet } from 'DWcmn/dwdbfsShop'

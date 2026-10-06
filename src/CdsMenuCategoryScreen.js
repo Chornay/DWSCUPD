@@ -36,13 +36,11 @@ export function CdsMenuCategoryScreen() {
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const refresh = useRefresh()
 
-
    //redraw whenever we regain focus, then show the screen
    useEffect(() => {
-      const focusSubscription = navigation.addListener('didFocus', refresh)
       setIsComponentInitialized(true)
-      return () => focusSubscription.remove()
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- subscribe once, as the class did in componentDidMount
+      return navigation.addListener('focus', refresh)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is a stable dispatch, navigation is stable per screen
    }, [])
 
 

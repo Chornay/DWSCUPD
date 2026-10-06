@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { GCText, GCI18n } from 'DWcmn/Gc'
 import CdsSpinnerScreen from './CdsSpinnerScreen'
@@ -11,6 +11,8 @@ import { cdsMenuPricelistUpdateTotals } from './cdsMenuPricelistUpdateTotals'
 import { APP } from 'DWcmn/APP'
 import { LogBox } from 'react-native'
 import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
+import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 
@@ -19,157 +21,148 @@ import { GCFooterForIcons, GCFooterCmdIcon } from 'DWcmn/GCFooterForIcons'
 //nav parameter priceList
 
 
-export default class DsMenuOrderChangeSummary extends Component {
+export function DsMenuOrderChangeSummary() {
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-         toggle: false,
-      };
-      this.priceList = null
-      this.stack = []
-      this.stackEZ = []
+   const navigation = useNavigation()
+   const { priceList = null } = useRoute().params ?? {}
+   const refresh = useRefresh()
 
-   }
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
 
-   async componentDidMount() {
+   const stackRef = useRef([])
+   const stackEZRef = useRef([])
 
-      this.unsubscribeMenuCatFocusListener = await this.props.navigation.addListener('didFocus', this.gotFocus)
-
-      this.priceList = this.props.navigation.getParam('priceList', null);
-
-      //extract all the pricelist entries that have been selected
-      //this list will not change even if they decrement an item to zero
-      this.stack = []
-      this.priceList.top.entries.forEach((category) => {
-         this.selectCategory(category, category.type)
-      })
-
-      //tunn off warnings because we get a pesky warning when items get removed by decrementing
-      LogBox.ignoreAllLogs(true)
-
-      this.setState({ isComponentInitialized: true });
-
-   } //end componentDidMount
-
-   componentWillUnmount() {
-      LogBox.ignoreAllLogs(false)
-      this.unsubscribeMenuCatFocusListener?.remove();
-   } //end componentWillUnmount
-
-   gotFocus = () => {
-      this.forceUpdate()
-   }
-
-   selectCategory = (category, type) => {
+   //recursively collect selected entries into stack or stackEZ depending on the top-level category's type
+   function selectCategory(category, type) {
       category.entries.forEach((entry) => {
          if (entry.isCategory) {
-            this.selectCategory(entry, type) //NOTICE we used parent's type
+            selectCategory(entry, type) //NOTICE we used parent's type
          }
          else {
             if (entry.included) {
                if (type == 'EZ') {
-                  this.stackEZ.push(entry)
+                  stackEZRef.current.push(entry)
                }
                else {
-                  this.stack.push(entry)
+                  stackRef.current.push(entry)
                }
             }
          }
       })
    }
 
-   render() {
+   function rebuildStacks() {
+      stackRef.current = []
+      stackEZRef.current = []
+      priceList.top.entries.forEach((category) => {
+         selectCategory(category, category.type)
+      })
+   }
 
-      if (!this.state.isComponentInitialized) { //not finished our preparation yet
-         return (
-            <CdsSpinnerScreen />
-         );
-      }
+   useEffect(() => {
+      rebuildStacks()
+      setIsComponentInitialized(true)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only setup, as the class did in componentDidMount
+   }, [])
 
+   //turn off warnings because we get a pesky warning when items get removed by decrementing
+   useEffect(() => {
+      LogBox.ignoreAllLogs(true)
+      return () => { LogBox.ignoreAllLogs(false) }
+   }, [])
+
+
+   useEffect(() => {
+      return navigation.addListener('focus', updateAndRefreshScreen)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is a stable dispatch, navigation is stable per screen
+   }, [])
+
+   //recalc totals and cause a render
+   function updateAndRefreshScreen() {
+         cdsMenuPricelistUpdateTotals(priceList)
+         rebuildStacks()
+         refresh()
+   } //updateAndRefreshScreen
+
+
+   if (!isComponentInitialized) { //not finished our preparation yet
       return (
-         // <View><Text>Fooo</Text></View>
-         <DsScreen blah={this.state.toggle}>
+         <CdsSpinnerScreen />
+      );
+   }
 
-            <GCHeader back cancel titleI18n='cmnNEW.ORDER_CHANGE_SUMMARY' />
-            <View style={{ flex: 1 }}>
-               {/* Stack EZ */}
-               {(this.stackEZ.length != 0) && <><View style={styles.titleBanner}>
-                  {/* //TODO add traslation */}
-                  <GCText large bold>EZ ORDER</GCText>
-               </View>
-                  <ScrollView style={styles.eZContent}>
-                     <View foo={this.state.toggle} />
-                     {this.stackEZ.map((item, index) => {
-                        return (<CdsMenuLineDisplay
-                           onLeftTouch={() => { this.props.navigation.navigate('CdsMenuItemRemarkAndPhotoScreen', { 'line': item }) }}
-                           changedSomething={() => {
-                              cdsMenuPricelistUpdateTotals(this.priceList);
-                              if (this.priceList.count <= 0) {
-                                 this.props.navigation.popToTop()
-                              }
-                              else {
-                                 this.toggle()
-                              }
-                           }}
-                           line={item} key={index}
-                           useLongName></CdsMenuLineDisplay>)
-                     })}
-                  </ScrollView>
+   return (
+      // <View><Text>Fooo</Text></View>
+      <DsScreen>
 
-                  <View style={styles.titleBanner}>
-                     {/* //TODO add traslation */}
-                     <GCText large bold>CHANGE ORDER</GCText>
-                  </View></>}
-
-               <ScrollView style={styles.changeOrderContent}>
-                  <View foo={this.state.toggle} />
-                  {this.stack.map((item, index) => {
+         <GCHeader back cancel titleI18n='cmnNEW.ORDER_CHANGE_SUMMARY' />
+         <View style={{ flex: 1 }}>
+            {/* Stack EZ */}
+            {(stackEZRef.current.length != 0) && <><View style={styles.titleBanner}>
+               {/* //TODO add traslation */}
+               <GCText large bold>EZ ORDER</GCText>
+            </View>
+               <ScrollView style={styles.eZContent}>
+                  {stackEZRef.current.map((item, index) => {
                      return (<CdsMenuLineDisplay
+                        onLeftTouch={() => { navigation.navigate('CdsMenuItemRemarkAndPhotoScreen', { 'line': item }) }}
                         changedSomething={() => {
-                           cdsMenuPricelistUpdateTotals(this.priceList);
-                           if (this.priceList.count <= 0) {
-                              this.props.navigation.popToTop()
+                           cdsMenuPricelistUpdateTotals(priceList);
+                           if (priceList.count <= 0) {
+                              navigation.popToTop()
                            }
                            else {
-                              this.toggle()
+                              refresh()
                            }
                         }}
                         line={item} key={index}
                         useLongName></CdsMenuLineDisplay>)
                   })}
                </ScrollView>
-               {cdsMenuRenderSummaryBox(this.priceList)}
 
-               {/* FOOTER SECTION */}
-               <GCFooterForIcons>
-                  <GCFooterCmdIcon
-                     code='SEARCH'
-                     //??               hide={this.priceList.count == 0}
-                     onPress={() => {
-                        this.props.navigation.navigate('CdsMenuSearchScreen', { 'priceList': this.priceList })
+               <View style={styles.titleBanner}>
+                  {/* //TODO add traslation */}
+                  <GCText large bold>CHANGE ORDER</GCText>
+               </View></>}
+
+            <ScrollView style={styles.changeOrderContent}>
+               {stackRef.current.map((item, index) => {
+                  return (<CdsMenuLineDisplay
+                     changedSomething={() => {
+                        cdsMenuPricelistUpdateTotals(priceList);
+                        if (priceList.count <= 0) {
+                           navigation.popToTop()
+                        }
+                        else {
+                           refresh()
+                        }
                      }}
-                  />
-                  <GCFooterCmdIcon
-                     code='NEXT_IS_ORDER_CHANGE_INVOICE'
-                     onPress={() => {
-                        this.props.navigation.navigate('DsMenuOrderChangeInvoice', { 'priceList': this.priceList })
-                     }}
-                  />
-               </GCFooterForIcons>
-            </View>
-         </DsScreen>
+                     line={item} key={index}
+                     useLongName></CdsMenuLineDisplay>)
+               })}
+            </ScrollView>
+            {cdsMenuRenderSummaryBox(priceList)}
 
-      );
-   } //end render
+            {/* FOOTER SECTION */}
+            <GCFooterForIcons>
+               <GCFooterCmdIcon
+                  code='SEARCH'
+                  //??               hide={priceList.count == 0}
+                  onPress={() => {
+                     navigation.navigate('CdsMenuSearchScreen', { 'priceList': priceList })
+                  }}
+               />
+               <GCFooterCmdIcon
+                  code='NEXT_IS_ORDER_CHANGE_INVOICE'
+                  onPress={() => {
+                     navigation.navigate('DsMenuOrderChangeInvoice', { 'priceList': priceList })
+                  }}
+               />
+            </GCFooterForIcons>
+         </View>
+      </DsScreen>
 
-
-   //toggle a state variable to cause a render
-   toggle = () => {
-      this.setState({ toggle: !this.state.toggle })
-   } //toggle 
-
+   );
 } //end DsMenuOrderChangeSummary
 
 const styles = StyleSheet.create({

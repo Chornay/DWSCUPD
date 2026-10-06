@@ -23,6 +23,24 @@ export function dsLoadPriceListFromOrder(priceList, order) {
    return true
 }
 
+//throws error if can't find an order item in pricelist
+export function dsLoadPriceListFromOrderThrows(priceList, order) {
+
+   priceList.orderId = order.id
+   priceList.orderChangeCount = 0
+   priceList.orderChangeInProgress = true
+
+   for (const item of order.items) {
+      const result = dsSearchPriceListForCode(priceList, item.code)
+      if (result) {
+         fillPriceListEntryFromOrder(item, result)
+      }
+      else {
+         throw new Error(`Can't find ${item.code} in pricelist`)
+      }
+   }
+}
+
 function fillPriceListEntryFromOrder(orderItem, priceListEntry) {
    // console.log('orderitem to fill',orderItem)
    priceListEntry.count = orderItem.count

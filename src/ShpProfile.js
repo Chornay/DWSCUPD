@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity } from 'react-native'
-import {ListItemXYZ} from 'DWcmn/GCNB'
+import { ListItemXYZ } from 'DWcmn/GCNB'
 
 import { ShpScreen } from './CdsScreen';
 import { PrjIcon } from 'DWcmn/PrjIconComponents';
@@ -16,80 +16,60 @@ const MODES = {
    MAIN: 0,
 }
 
-export default class ShpProfile extends Component {
+export function ShpProfile() {
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-         mode: MODES.MAIN,
-      };
-   }
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true })
-   }
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const [mode, setMode] = useState(MODES.MAIN)
 
-   render() {
+   useEffect(() => {
+      setIsComponentInitialized(true)
+   }, [])
 
-      if (!this.state.isComponentInitialized) return null
+   if (!isComponentInitialized) return null
 
-      switch (this.state.mode) {
+   switch (mode) {
 
-         case MODES.MAIN:
-            return (
+      case MODES.MAIN:
+         return (
 
-               <ShpScreen>
-                  <GCHeader back titleI18n='cmnNEW.Profile' />
-                  <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <ProfileField
-                        onPress={async () => { await cmnSignout() }}
-                        id={"LOGOUT"}
-                        i18n='cmnNEW.Logout'
-                     />
-                  </View>
-               </ShpScreen>
-            )
-            break;
+            <ShpScreen>
+               <GCHeader back titleI18n='cmnNEW.Profile' />
+               <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
+                  <ProfileField
+                     onPress={async () => {
+                        await cmnSignout()
+                     }}
+                     id={"LOGOUT"}
+                     i18n='cmnNEW.Logout'
+                  />
+               </View>
+            </ShpScreen>
+         )
+         break;
 
-         default:
-            return null
-            break;
+      default:
+         return null
+         break;
 
-      }//end switch
-   } //end render
-
-   doPress = (val) => {
-      I18n.locale = val;
-      this.setState({ displayLanguage: false });
-   }
+   }//end switch
 } //end ShpProfile
 
 //prop onPress
 //prop id   //icon to display
 //prop i18n //followed by text
-class ProfileField extends Component {
+function ProfileField({ onPress, id, i18n }) {
 
-   constructor() {
-      super();
-      this.state = {
-         displayLanguage: false,
-      };
-   }
+   return (
+      <ListItemXYZ>
+         <TouchableOpacity
+            onPress={onPress}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+               <PrjIcon style={{}} id={id} />
+               <GCText>  </GCText>
+               <GCI18n code={i18n} />
+            </View>
+         </TouchableOpacity>
+      </ListItemXYZ>
 
-   render() {
-
-      return (
-         <ListItemXYZ>
-            <TouchableOpacity
-               onPress={this.props.onPress}>
-               <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-                  <PrjIcon style={{}} id={this.props.id} />
-                  <GCText>  </GCText>
-                  <GCI18n code={this.props.i18n} />
-               </View>
-            </TouchableOpacity>
-         </ListItemXYZ>
-
-      )
-   }//end render
+   )
 }//end ProfileField

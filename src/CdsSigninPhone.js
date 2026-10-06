@@ -20,16 +20,19 @@ import { COLORS } from 'DWcmn/Global'
 import * as RNLocalize from "react-native-localize"
 import { prjToast } from 'DWcmn/PrjToast'
 import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 //param appType
-export default function CdsSigninPhone(props) {
+export function CdsSigninPhone() {
+
+   const navigation = useNavigation()
+   const { appType = null } = useRoute().params ?? {}
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false);
    const [isLoginInProgress, setIsLoginInProgress] = useState(false);
    const [receivedCallback, setReceivedCallback] = useState(false);
 
-   const appTypeRef = useRef(null) //set on mount
    const defaultPhoneNumberRef = useRef("") //we currently don't provide any help for phone number
    const otpRef = useRef("")
    const confirmationMethodRef = useRef(null) //callback return from firebase auth to confirm the otp
@@ -51,8 +54,6 @@ export default function CdsSigninPhone(props) {
    }, [])
 
    useEffect(() => {
-
-      appTypeRef.current = props.navigation.getParam('appType');
 
       (async () => {
          try {
@@ -77,7 +78,7 @@ export default function CdsSigninPhone(props) {
    //happen automatically from the phone processing the otp
    const onAuthStateChanged = (user) => {
       if (user) {
-         navigateForAuthorizedCust(props.navigation, appTypeRef.current, { 'authType': 'phone' },
+         navigateForAuthorizedCust(navigation, appType, { 'authType': 'phone' },
             () => { if (isMountedRef.current) setIsLoginInProgress(false) })
       }
    }
@@ -91,7 +92,7 @@ export default function CdsSigninPhone(props) {
          defaultPhoneNumberRef.current = phoneNumberRef.current
       }
       else {
-         props.navigation.goBack()
+         navigation.goBack()
       }
    }
 

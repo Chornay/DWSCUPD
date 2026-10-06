@@ -50,18 +50,16 @@ export function CstMenuOptions() {
 
 
    //redraw whenever we regain focus (e.g. coming back from the shopping cart)
-   //CLAUDE still v4 here: 'didFocus' and subscription.remove(). v5 wants 'focus' and the unsubscribe function returned directly, so this needs changing when the wrapper handles listeners
    useEffect(() => {
-      const focusSubscription = navigation.addListener('didFocus', refresh)
-      return () => focusSubscription.remove()
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- navigation is stable for the life of this screen
-   }, [refresh])
+      return navigation.addListener('focus', updateAndRefreshScreen)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is a stable dispatch, navigation is stable per screen
+   }, [])
 
    //recalc totals and cause a render
-   function recalculateScreen() {
+   function updateAndRefreshScreen() {
       cdsMenuPricelistUpdateTotals(priceList)
       refresh()
-   } //recalculateScreen
+   } //updateAndRefreshScreen
 
 
    if (!isComponentInitialized) { return null }
@@ -80,7 +78,7 @@ export function CstMenuOptions() {
 
          {/* The options can only be a list  */}
          <View style={{ flex: 1 }}>
-            <CdsMenuCategory countChanged={recalculateScreen}
+            <CdsMenuCategory countChanged={updateAndRefreshScreen}
                navigation={navigation}
                category={category}
                priceList={priceList}

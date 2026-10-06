@@ -1,68 +1,64 @@
-import React, { Component } from 'react'
+import React, { useContext, useEffect, useRef } from 'react';
+import 'react-native-gesture-handler' //Claude says put this way up here
+import { NavigationContainer, NavigationContext } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-import messaging from '@react-native-firebase/messaging';
+import '@react-native-firebase/firestore'; //Claude wanted this 
 import firebase from '@react-native-firebase/app';
-import Sound from 'react-native-sound'
-// import RingerMode from 'react-native-ringer-mode';
+import messaging from '@react-native-firebase/messaging';
+import Sound from 'react-native-sound';
 
 import CdsStackSigninOrMain from './CdsStackSigninOrMain';
 import CstStackSignin from './CstStackSignin';
-import CstStackMain from './CstStackMain'
-import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions'
+import CstStackMain from './CstStackMain';
+import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions';
+import { prjCloudLogError } from 'DWcmn/prjCloudLog';
 
+//NOTE that we test our context ... if someone else has created the navigation container then we will not
+//Lets us be called by a multi-app that contains customer, shop and driver
 
+const Stack = createStackNavigator();
 
-import { prjAlertText } from 'DWcmn/PrjCmnFunctions'
+firebase.firestore().settings({ ignoreUndefinedProperties: true })
 
-//NOTE that route names are generic so that common login components can be used for Cust,Driv,Shop
+export default function CstApp() {
+  const parentNavigation = useContext(NavigationContext);
+  const notifySoundRef = useRef(null);
 
-const SwitchNavigator = createSwitchNavigator(
-    {
-        StackSigninOrMain: { screen: CdsStackSigninOrMain, params: { appType: 'cst' } },
-        StackSignin: { screen: CstStackSignin },
-        StackMain: { screen: CstStackMain },
-    },
-    {
-        initialRouteName: 'StackSigninOrMain',
+  useEffect(() => {
+    const sound = new Sound('notify_cust.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) prjCloudLogError('CstApp.SoundLoad', error);
     });
-const AppContainer = createAppContainer(SwitchNavigator);
+    notifySoundRef.current = sound;
 
-export default class CstApp extends Component {
+    return () => {
+      sound.release();
+    };
+  }, []);
 
-    constructor() {
-        super();
-        this.state = {
+  useEffect(() => {
+    try {
+      const unsubscribe = messaging().onMessage((remoteMessage) => {
+        try {
+          cmnAlertPopup({ title: JSON.stringify(remoteMessage?.notification?.body) });
+          notifySoundRef.current?.play?.();
+        } catch (error) {
+          prjCloudLogError('CstApp.OnMessageHandler', error);
         }
-        firebase.firestore().settings({ ignoreUndefinedProperties: true })
-    } //end constructor 
-
-    async componentDidMount() {
-        
-        //get the sound object ready to use
-        this.notifySound = new Sound('notify_cust.mp3', Sound.MAIN_BUNDLE,
-            (error) => {
-                console.log('Sound', error)
-            }) //TODO add error processing for sound init
-        //This is the setting of the media player slider .... not what we want
-        // this.notifySound.getSystemVolume((vol)=>{console.log(vol)})
-        // var mode = await RingerMode.getRingerMode(); console.log(mode)
-
-        //a notifications listener
-        this.unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
-            // console.log('Fore ground message------------>', JSON.stringify(remoteMessage?.notification?.body))
-            cmnAlertPopup({ title: JSON.stringify(remoteMessage?.notification?.body) })
-            this.notifySound?.play?.()
-        }); //end 
-
+      });
+      return unsubscribe;
+    } catch (error) {
+      prjCloudLogError('CstApp.OnMessageSetup', error);
     }
+  }, []);
 
-    async componentWillUnmount() {
-        this.unsubscribeNotifications && this.unsubscribeNotifications()
-        this.notifySound.release()
-    }
+  //CLAUDE: a stack keeps StackSigninOrMain underneath StackMain (switch navigator discarded it). Leave via replace()/reset(), or switch to conditional screens on auth state.
+  const stack = (
+    <Stack.Navigator initialRouteName="StackSigninOrMain" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="StackSigninOrMain" component={CdsStackSigninOrMain} initialParams={{ appType: 'cst' }} />
+      <Stack.Screen name="StackSignin" component={CstStackSignin} />
+      <Stack.Screen name="StackMain" component={CstStackMain} />
+    </Stack.Navigator>)
 
-    render() {
-        return (<AppContainer />);
-    }
-}// end CstApp
+  return parentNavigation ? stack : <NavigationContainer>{stack}</NavigationContainer>;
+}

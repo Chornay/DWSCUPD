@@ -2,26 +2,22 @@ import React, { Component } from 'react'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import CdsSigninLogo from './CdsSigninLogo'
-import CdsSigninEmail from './CdsSigninEmail'
-import CdsSigninEmailNotVerified from './CdsSigninEmailNotVerified'
-import CdsSigninEmailVerifySent from './CdsSigninEmailVerifySent'
-import CdsSigninEmailForgot from './CdsSigninEmailForgot'
-import CdsSigninEmailForgotSent from './CdsSigninEmailForgotSent'
-import CstSigninEmailSignup from './CstSigninEmailSignup'
-import CdsSigninPhone from './CdsSigninPhone'
+import { CdsSigninLogo } from './CdsSigninLogo'
+import { CdsSigninEmail } from './CdsSigninEmail'
+import { CdsSigninEmailNotVerified } from './CdsSigninEmailNotVerified'
+import { CdsSigninEmailVerifySent } from './CdsSigninEmailVerifySent'
+import { CdsSigninEmailForgot } from './CdsSigninEmailForgot'
+import { CdsSigninEmailForgotSent } from './CdsSigninEmailForgotSent'
+import { CdsSigninPhone } from './CdsSigninPhone'
 
 const RootStack = createStackNavigator(
   {
     CdsSigninLogo: {
       screen: CdsSigninLogo,
-      params:{signinAppType:'drv'}
+      params: { signinAppType: 'drv' }
     },
     CdsSigninEmail: {
       screen: CdsSigninEmail,
-    },
-    CstSigninEmailSignup: {
-      screen:CstSigninEmailSignup,
     },
     CdsSigninEmailNotVerified: {
       screen: CdsSigninEmailNotVerified,
@@ -30,10 +26,10 @@ const RootStack = createStackNavigator(
       screen: CdsSigninEmailVerifySent,
     },
     CdsSigninEmailForgot: {
-      screen:CdsSigninEmailForgot,
+      screen: CdsSigninEmailForgot,
     },
     CdsSigninEmailForgotSent: {
-      screen:CdsSigninEmailForgotSent,
+      screen: CdsSigninEmailForgotSent,
     },
     CdsSigninPhone: {
       screen: CdsSigninPhone,

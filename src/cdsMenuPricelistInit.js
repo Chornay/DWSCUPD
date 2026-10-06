@@ -5,7 +5,7 @@ import { pruneCategory } from "./cdsMenuPricelistUpdateTotals"
 
 //TODO NOTE that this method should probably use cdsMenuPricelistUpdateTotals
 
-export async function cdsMenuPricelistInit(priceList, codeFromQr) {
+export function cdsMenuPricelistInit(priceList, codeFromQr) {
 
    priceList.top.entries.forEach((category) => {
       initCategory(priceList, category)

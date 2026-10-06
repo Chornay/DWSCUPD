@@ -111,13 +111,9 @@ export function CstMenuMain() {
       })()
    }, [])
 
-   //focus listener
    useEffect(() => {
-      const unsubscribeMenuMainFocusListener = navigation.addListener('didFocus', gotFocus)
-
-      return () => {
-         unsubscribeMenuMainFocusListener?.remove();
-      }
+      return navigation.addListener('focus', gotFocus)
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is a stable dispatch, navigation is stable per screen
    }, [])
 
    const gotFocus = () => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 
 
@@ -24,158 +24,141 @@ import { getIconCodeForAction } from 'DWcmn/PrjCmnFunctions'
 import { prjRouteTimeFormatted } from 'DWcmn/PrjCmnFunctions'
 import { cmnFilterOrders, cmnSortOrders } from 'DWcmn/CmnFunctionsFilterSort'
 import { drvProcessRouteActionOnEvent } from './drvRouteActionProcessing'
-import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions';
 import { DRV } from './DRV'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 //20201023 removed action property
 //20230628 use PrjTabBar
 //20250207 move back arrow up
 
-//navigation param - routeDocId
-//navigation param - routeName //DEPRECATED??
-//navigation param - schedDate
+//nav param - routeDocId
 
+export function DrvViewRoute() {
 
-//props  onExitRoute ??
-export default class DrvViewRoute extends Component {
+   const navigation = useNavigation()
+   const { routeDocId = null } = useRoute().params ?? {}
 
-   constructor() {
-      super();
-      this.state = {
-         route: null,
-         orders: [],                        //array of all orders in route
-         filteredOrders: [],                //array of only the orders to be displayed
-         filterOrdersSetting: 'all',        //what orders do we want to see? -- all,pickup,delivery
-         sortOrdersSetting: 'name',           //how to sort the orders? -- TODO
-         isSettingsVisible: false,           //settings modal display flag
-         waitingForRouteResult: true,
-         isComponentInitialized: false,
-         action: RouteActionEnum.noop,
-         selectedTab: 0,
-      };
-      this.tabFields = [
-         { key: 0, i18n: 'cmn.LIST' },
-         { key: 1, i18n: 'cmn.MAP' },
-         { key: 2, i18n: 'cmn.SUMMARY' },
-      ]
-   }// end constructor
+   const [route, setRoute] = useState(null)
+   const [orders, setOrders] = useState([])                        //array of all orders in route
+   const [filteredOrders, setFilteredOrders] = useState([])                //array of only the orders to be displayed
+   const [filterOrdersSetting, setFilterOrdersSetting] = useState('all')        //what orders do we want to see? -- all,pickup,delivery
+   const [sortOrdersSetting, setSortOrdersSetting] = useState('name')           //how to sort the orders? -- TODO
+   const [isSettingsVisible, setIsSettingsVisible] = useState(false)           //settings modal display flag
+   const [waitingForRouteResult, setWaitingForRouteResult] = useState(true)
+   const [action, setAction] = useState(RouteActionEnum.noop)
+   const [selectedTab, setSelectedTab] = useState(0)
 
-   componentDidMount() {
-      //ASSERT this.props.route != null
+   const tabFields = [
+      { key: 0, i18n: 'cmn.LIST' },
+      { key: 1, i18n: 'cmn.MAP' },
+      { key: 2, i18n: 'cmn.SUMMARY' },
+   ]
 
-      const docId = this.props.navigation.getParam('routeDocId', null);
-      const routeName = this.props.navigation.getParam('routeName', null)
-      const schedDate = this.props.navigation.getParam('schedDate', null)
-
-      // get the route
-      this.unsubscribeRoute = firestore().collectionGroup("Routes").where("docId", "==", docId)
-         .onSnapshot(this.getRoute, error => { cmnAlertPopup({ text: error.message }) });
-      // find all the orders for this route
-      this.unsubscribeOrders = firestore().collection("Orders").where("routesArray", "array-contains", docId)
-         .onSnapshot(this.getOrders, error => { cmnAlertPopup({ text: error.message }) });
-      //TODO not sorted??
-
-      this.setState({ filterOrdersSetting: 'all' });
-      this.setState({ sortOrdersSetting: 'name' });
-
-      this.setState({ isComponentInitialized: true });
-      //TODO disable back handler?
-   }
-
-   getRoute = (querySnapshot) => {
+   const getRoute = (querySnapshot) => {
       let localRoute = dwdbfsRouteLoadSingleSnapshot(querySnapshot.docs[0])
-      this.setState({ route: localRoute })
-      this.setState({ waitingForRouteResult: false })
+      setRoute(localRoute)
+      setWaitingForRouteResult(false)
    } //end getRoute
 
-   getOrders = (querySnapshot) => {
+   const getOrders = (querySnapshot) => {
       //get the orders from db
       let localOrders = dwdbfsOrderLoadSnapshots(querySnapshot)
-      this.setState({ orders: localOrders })
+      setOrders(localOrders)
 
       //update the filtered (and sorted) array
-      let localFilteredOrders = cmnFilterOrders(this.state.filterOrdersSetting, localOrders)
-      cmnSortOrders(this.state.sortOrdersSetting, localFilteredOrders)
-      this.setState({ filteredOrders: localFilteredOrders });
+      let localFilteredOrders = cmnFilterOrders(filterOrdersSetting, localOrders)
+      cmnSortOrders(sortOrdersSetting, localFilteredOrders)
+      setFilteredOrders(localFilteredOrders)
    } //end getOrders
 
-   componentWillUnmount() {
-      this.unsubscribeRoute && this.unsubscribeRoute();
-      this.unsubscribeOrders && this.unsubscribeOrders();
-   } //end componentWillUnmount
+   useEffect(() => {
+      //ASSERT routeDocId != null
 
-   render() {
+      let unsubscribeRoute
+      let unsubscribeOrders
+      try {
+         // get the route
+         unsubscribeRoute = firestore().collectionGroup("Routes").where("docId", "==", routeDocId)
+            .onSnapshot(getRoute, error => { prjCloudLogError('DrvViewRoute route listener', error, {toastI18n:"cmnNEW.MsgSnapshotError"}) });
+         // find all the orders for this route
+         unsubscribeOrders = firestore().collection("Orders").where("routesArray", "array-contains", routeDocId)
+            .onSnapshot(getOrders, error => { prjCloudLogError('DrvViewRoute orders listener', error, {toastI18n:"cmnNEW.MsgSnapshotError"}) });
+         //TODO not sorted??
+      }
+      catch (error) {
+         prjCloudLogError('DrvViewRoute listener setup', error)
+      }
 
+      //TODO disable back handler?
 
-      //we are not done until initialization is finished AND we have our first DB results
-      //TODO do we really want to wait here for the DB ... or display empty columns with the spinner?
-      if (!this.state.isComponentInitialized || this.state.waitingForRouteResult) {
-         return (
-            <DrvSpinnerScreen />
-         );
-      } //end if 
+      return () => {
+         unsubscribeRoute && unsubscribeRoute();
+         unsubscribeOrders && unsubscribeOrders();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only effect, mirrors original componentDidMount/componentWillUnmount
+   }, [])
 
-      const route = this.state.route;
-      const readonly = route.status != RouteStatusEnum.open //Driver can only change when 'owns' the route.
-      //TODO what should be readonly next ... we need to be able to open the route...
-      const actions = drvGenerateRouteDetailActions(DRV.getId(), route)
-
+   //we are not done until we have our first DB results
+   //TODO do we really want to wait here for the DB ... or display empty columns with the spinner?
+   if (waitingForRouteResult) {
       return (
-         <DrvScreen>
-            <DrvRouteSettingsModal isVisible={this.state.isSettingsVisible}
-               onDone={() => { let foo = { isSettingsVisible: false }; this.setState(foo) }} //TODO WTF
-               onSet={(x) => { this.setState(x) }}
+         <DrvSpinnerScreen />
+      );
+   } //end if 
+
+   const readonly = route.status != RouteStatusEnum.open //Driver can only change when 'owns' the route.
+   //TODO what should be readonly next ... we need to be able to open the route...
+   const actions = drvGenerateRouteDetailActions(DRV.getId(), route)
+
+   return (
+      <DrvScreen>
+         <DrvRouteSettingsModal isVisible={isSettingsVisible}
+            onDone={() => { setIsSettingsVisible(false) }}
+            onSet={(x) => {
+               if (x.filterOrdersSetting !== undefined) { setFilterOrdersSetting(x.filterOrdersSetting) }
+               if (x.sortOrdersSetting !== undefined) { setSortOrdersSetting(x.sortOrdersSetting) }
+               if (x.isSettingsVisible !== undefined) { setIsSettingsVisible(x.isSettingsVisible) }
+            }}
+         />
+         {(action == RouteActionEnum.noop) ? null :
+            drvProcessRouteAction(DRV.getId(), route, orders, action,
+               () => { setAction(RouteActionEnum.noop) })}
+         {/* HEADER SECTION */}
+         <GCHeader back titleText={prjRouteTimeFormatted(route)}
+            optionsBurger={() => navigation.navigate('CdsShopBoundaries', { 'shopId': route.shopId })}
+
+      // optionsBurger={() => setIsSettingsVisible(true)}
             />
-            {(this.state.action == RouteActionEnum.noop) ? null :
-               drvProcessRouteAction(DRV.getId(), route, this.state.orders, this.state.action,
-                  () => { this.setState({ action: RouteActionEnum.noop }) })}
-            {/* HEADER SECTION */}
-            <GCHeader back titleText={prjRouteTimeFormatted(route)}
-               optionsBurger={() =>this.props.navigation.navigate('CdsShopBoundaries',{ 'shopId': route.shopId }) }
-               
-         // optionsBurger={() => this.setState({ isSettingsVisible: true })}
-               />
-            {/* <View style={{height:10}}/> */}
-            {/* DATA SECTION (LIST OR MAP) */}
-            <View style={{ flex: 1 }}>
-               <PrjTabBar fields={this.tabFields}
-                  selectedTab={this.state.selectedTab}
-                  onPress={(index) => this.setState({ selectedTab: index })} />
-               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                  {this.state.selectedTab == 0 && <DsViewRouteTabOrders orders={this.state.filteredOrders} readonly={readonly} />}
-                  {this.state.selectedTab == 1 && <DrvViewRouteTabMap orders={this.state.filteredOrders} />}
-                  {this.state.selectedTab == 2 && <DsViewRouteTabSummary route={route} orders={this.state.filteredOrders} />}
-               </View>
+         {/* <View style={{height:10}}/> */}
+         {/* DATA SECTION (LIST OR MAP) */}
+         <View style={{ flex: 1 }}>
+            <PrjTabBar fields={tabFields}
+               selectedTab={selectedTab}
+               onPress={(index) => setSelectedTab(index)} />
+            <View style={{ flex: 1, marginHorizontal: 10 }}>
+               {selectedTab == 0 && <DsViewRouteTabOrders orders={filteredOrders} readonly={readonly} />}
+               {selectedTab == 1 && <DrvViewRouteTabMap orders={filteredOrders} />}
+               {selectedTab == 2 && <DsViewRouteTabSummary route={route} orders={filteredOrders} />}
             </View>
+         </View>
 
-            <GCFooterForIcons>
-               {actions.map((action, index) =>
-                  <GCFooterCmdIcon
-                     key={index}
-                     code={getIconCodeForAction(action)}
+         <GCFooterForIcons>
+            {actions.map((act, index) =>
+               <GCFooterCmdIcon
+                  key={index}
+                  code={getIconCodeForAction(act)}
 
-                     onPress={() => {
+                  onPress={() => {
 
-                        if (!drvProcessRouteActionOnEvent(this.props.navigation, DRV.getId(), route, this.state.filteredOrders, action)) {
-                           this.setState({ action: action })
-                        }
-                     }}
-                  />
-               )}
-            </GCFooterForIcons>
+                     if (!drvProcessRouteActionOnEvent(navigation, DRV.getId(), route, filteredOrders, act)) {
+                        setAction(act)
+                     }
+                  }}
+               />
+            )}
+         </GCFooterForIcons>
 
-         </DrvScreen >
-      )
-   } //end render
-
-   onExitRoute = (item, action) => {
-      // if (action == RouteActionEnum.close) {
-      //     reallm.write(() => {
-      //         item.ptr.status = 'close' //TODO wtf
-      //         // item.ptr.status = RouteStatusEnum.completed.name
-      //     })
-      // }
-      this.props.navigation.goBack();
-   }   // end onExitRoute
-
+      </DrvScreen >
+   )
 } //end DrvViewRoute

@@ -10,10 +10,13 @@ import { CdsSigninButton, CdsSigninNotation } from './CdsSigninComponents'
 import { prjToast } from 'DWcmn/PrjToast'
 import { COLORS } from 'DWcmn/Global'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20241016 removed all sorts of commented old code
 
-export default function CdsSigninEmailForgot(props) {
+export function CdsSigninEmailForgot() {
+
+   const navigation = useNavigation()
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false);
    const [errorMessage, setErrorMessage] = useState(null);
@@ -51,7 +54,7 @@ export default function CdsSigninEmailForgot(props) {
       try {
          await firebase.auth().sendPasswordResetEmail(emailAddressRef.current)
          setIsLoginInProgress(false)
-         props.navigation.navigate("CdsSigninEmailForgotSent");
+         navigation.navigate("CdsSigninEmailForgotSent");
       } catch (error) {
          setIsLoginInProgress(false)
          prjToast({ type: 'danger', text: error.message }) //OK

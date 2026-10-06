@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
 
@@ -9,83 +9,69 @@ import { GCText, GCI18n } from 'DWcmn/Gc'
 import GCHeader from 'DWcmn/GCHeader'
 import { cmnSignout } from 'DWcmn/CmnFunctions'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
 const MODES = {
    MAIN: 0,
 }
 
-export default class DrvProfile extends Component {
+export function DrvProfile() {
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-         mode: MODES.MAIN,
-      };
-   }
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true })
-   }
+   const [isComponentInitialized, setIsComponentInitialized] = useState(false)
+   const [mode, setMode] = useState(MODES.MAIN)
 
-   render() {
+   useEffect(() => {
+      setIsComponentInitialized(true)
+   }, [])
 
-      if (!this.state.isComponentInitialized) return null
+   if (!isComponentInitialized) return null
 
-      switch (this.state.mode) {
+   switch (mode) {
 
-         case MODES.MAIN:
-            return (
+      case MODES.MAIN:
+         return (
 
-               <DrvScreen>
-                  <GCHeader back titleI18n='cmnNEW.Profile' />
-                  <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     <ProfileField
-                        onPress={async () => { await cmnSignout() }}
-                        id={"LOGOUT"}
-                        i18n='cmnNEW.Logout'
-                     />
+            <DrvScreen>
+               <GCHeader back titleI18n='cmnNEW.Profile' />
+               <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
+                  <ProfileField
+                     onPress={async () => {
+                        try {
+                           await cmnSignout()
+                        }
+                        catch (error) {
+                           prjCloudLogError('DrvProfile signout', error)
+                        }
+                     }}
+                     id={"LOGOUT"}
+                     i18n='cmnNEW.Logout'
+                  />
 
-                  </View>
-               </DrvScreen>
-            )
-            break;
-         default:
-            return null
-            break;
+               </View>
+            </DrvScreen>
+         )
+         break;
+      default:
+         return null
+         break;
 
-      }//end switch
-   } //end render
-
-   doPress = (val) => {
-      I18n.locale = val;
-      this.setState({ displayLanguage: false });
-   }
+   }//end switch
 } //end DrvProfile
 
 //prop onPress
 //prop id   //icon to display
 //prop i18n //followed by text
-class ProfileField extends Component {
+function ProfileField({ onPress, id, i18n }) {
 
-   constructor() {
-      super();
-      this.state = {
-         displayLanguage: false,
-      };
-   }
+   return (
+      <ListItemGBC button
+         onPress={onPress}>
+         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+            <PrjIcon style={{}} id={id} />
+            <GCText>  </GCText>
+            <GCI18n code={i18n} />
+         </View>
+      </ListItemGBC>
 
-   render() {
-
-      return (
-         <ListItemGBC button
-            onPress={this.props.onPress}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-               <PrjIcon style={{}} id={this.props.id} />
-               <GCText>  </GCText>
-               <GCI18n code={this.props.i18n} />
-            </View>
-         </ListItemGBC>
-
-      )
-   }//end render
+   )
 }//end ProfileField

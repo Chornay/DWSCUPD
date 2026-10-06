@@ -7,16 +7,17 @@ import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 //otherwise we navigate to the initialization code in the auth stack
 //NOTE the method as 3rd parameter ... currently email login masks the display and we don't
 //      want to remove the display until after we have accessed the customer db
-export async function navigateForAuthorizedCust(localNavStack, appType, options, removeMask) {
+export async function navigateForAuthorizedCust(navigation, appType, options, removeMask) {
    const fbUser = firebase.auth().currentUser
    if (fbUser) { //THIS SHOULD ALWAYS BE TRUE
       try {
          let dbUser = await dwdbfsUserGetByAuthAndAppType(appType, fbUser.uid)
          if (dbUser) {
-            global.rootNav.navigate("StackMain", { 'user': dbUser })
+            //CLAUDE: v5 - navigate bubbles from the sign-in stack up to StackMain in CstApp's stack, so global.rootNav is no longer needed here. Try replace() once the back-button test passes
+            navigation.navigate("StackMain", { 'user': dbUser })
          }
          else if (appType === 'cst') { //ONLY customer will setup an account
-            localNavStack.navigate("CstSignupInitializeAccount", { 'options': options })
+            navigation.navigate("CstSignupInitializeAccount", { 'options': options })
          }
          else {
             prjCloudLogError('navigateForAuthorizedCust', 'non-customer tries to setup account')
@@ -24,14 +25,17 @@ export async function navigateForAuthorizedCust(localNavStack, appType, options,
             // prjCloudLog('navigateForAuthorized non-customer tries to setup account')
          }
       } catch (error) {
-         prjCloudLogError('navigateForAuthorizedCust', error)
+         prjCloudLogError('navigateForAuthorizedCust', error, { toastI18n: "cmnNEW.MsgDbReadError" })
          // prjToast({ type: 'danger', text: 'Unspecified error retrieving account' })
          // prjCloudLog('navigateForAuthorized ' + error.message)
       } finally {
+         //CLAUDE: with navigate the old screen stays mounted, so this is safe; with replace() it would fire on an unmounted screen. Better for each caller to await this function and own/guard its mask in its own finally
          removeMask?.()
       }
    }
    else {
-      localNavStack.navigate("StackSignin")
+      //CLAUDE: effectively an assert - signed-in flow with no currentUser. Logged only; the user is already in the sign-in stack, so there is nowhere sensible to send them
+      prjCloudLogError('navigateForAuthorizedCust', 'no firebase currentUser after sign-in')
+      removeMask?.() //the finally above doesn't cover this path
    }
 }//end navigateForAuthorizedCust

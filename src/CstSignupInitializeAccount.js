@@ -1,5 +1,4 @@
-
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import firebase from '@react-native-firebase/app';
 import { cmnSignout } from 'DWcmn/CmnFunctions'
@@ -36,7 +35,8 @@ import { CST } from './CST'
 import { CstSignupNotificationPermission } from './CstSignupNotificationPermission'
 import { CstSignupVerifyShopAndAddress } from './CstSignupVerifyShopAndAddress';
 import { dwdbfsCouponsAddWelcome } from 'DWcmn/dwdbfsCoupons'
-import { prjCloudLogInfp } from 'DWcmn/prjCloudLog'
+import { prjCloudLogInfo } from 'DWcmn/prjCloudLog'
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
 
 //20210909 allowed write of null shopId to new customer
@@ -67,7 +67,14 @@ const MODES = {
    SLIDE_INTRO: 900
 }
 
-//param options 
+//TODO - the following are Claude comments
+// Side effects during render preserved as-is: the original class literally mutates this.profileData
+//  inside render() for RETURN_WITHOUT_REG and VERIFY_SHOP_AND_ADDRESS — unusual, but I kept that exact
+//  behavior (now mutating profileDataRef.current in the function body on each render reaching those
+//  cases) rather than moving it into an effect, since changing when that runs could change behavior
+//  and you didn't ask for that fix.
+
+//nav param options
 
 //we expect an options block which contains:
 //  authType: 'google' (login info from google signin)
@@ -79,37 +86,35 @@ const MODES = {
 //  //location: (optional) iff address is there
 //  //shop:     (optional) they may have selected on logo screen (verify)  
 //NOTE we get further user credentials from auth().currentUser (including uid)
-export default class CstSignupInitializeAccount extends Component {
+export function CstSignupInitializeAccount() {
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         isComponentInitialized: false,
-         mode: MODES.INIT,
-         isCustomerDbInProgress: false,
-         toggle: false
-      };
-      this.options = null
-      this.fbauthUser = null
-      // this.shopIdFromQRCode = "DEMO" //DEBUG
-      // this.shopIdFromQRCode = "XXX" //DEBUG
-      // this.shopIdFromQRCode = "DEMOBLDG" //DEBUG
-      // this.shopIdFromQRCode = "MYDodel" //DEBUG
-      // this.shopIdFromQRCode = "DEMOBLDG" //DEBUG
-      this.shopIdFromQRCode = null
+   const navigation = useNavigation()
+   const { options = null } = useRoute().params ?? {}
 
-      this.initializeProfileData()
-      this.shop = null
+   const [mode, setMode] = useState(MODES.INIT)
+   const [isCustomerDbInProgress, setIsCustomerDbInProgress] = useState(false)
 
-      this.newUser = null   //only define when a new user is created
-   }
+   const fbauthUserRef = useRef(null)
+   // this.shopIdFromQRCode = "DEMO" //DEBUG
+   // this.shopIdFromQRCode = "XXX" //DEBUG
+   // this.shopIdFromQRCode = "DEMOBLDG" //DEBUG
+   // this.shopIdFromQRCode = "MYDodel" //DEBUG
+   // this.shopIdFromQRCode = "DEMOBLDG" //DEBUG
+   const shopIdFromQRCodeRef = useRef(null)
+   const shopFromQRCodeRef = useRef(null)
+   const shopRef = useRef(null)
+   const newUserRef = useRef(null) //only defined when a new user is created
+   const profileDataRef = useRef(null)
 
-   //TODO may want to move init stuff from didMount to get email stuff etc.
+   //TODO may want to move init stuff from mount effect to get email stuff etc.
    //we are trying to allow a case where we Cancel back to restart stuff
-   initializeProfileData() {
-      this.profileData = {
+   function initializeProfileData() {
+      profileDataRef.current = {
          //these fields may have come from auth
-         authType: this.props.authType,
+         //CLAUDE: original read this.props.authType here, but this screen takes no custom props
+         //(only the nav route param 'options') - this value is always overwritten by
+         //loadAuthProfileData() below before it's ever used, so behaviour is unchanged
+         authType: null,
          email: null,
          phoneNumber: null,
          name: null,
@@ -120,401 +125,65 @@ export default class CstSignupInitializeAccount extends Component {
 
       }
    }
+   if (profileDataRef.current === null) { initializeProfileData() }
 
-   //TODO use this in DidMount
-   loadAuthProfileData() {
-      this.profileData.email = this.fbauthUser.email
-      this.profileData.name = this.fbauthUser.displayName
-      this.profileData.phoneNumber = this.fbauthUser.phoneNumber
-      this.profileData.authType = this.options.authType
+   //TODO use this in mount effect
+   function loadAuthProfileData() {
+      profileDataRef.current.email = fbauthUserRef.current.email
+      profileDataRef.current.name = fbauthUserRef.current.displayName
+      profileDataRef.current.phoneNumber = fbauthUserRef.current.phoneNumber
+      profileDataRef.current.authType = options.authType
    }
 
-   async componentDidMount() {
+   useEffect(() => {
+      (async () => {
 
-      this.options = this.props.navigation.getParam('options', null)
-      this.fbauthUser = firebase.auth().currentUser
-      let dbUser
-      //First make sure our entry conditions are met, we have options and and logged in user
-      if (!this.options) {
-         prjAlert('missing option block', 'in CstSignupInitializeAccount')
-         this.props.navigation.popToTop()
-      }
-      else if (!this.fbauthUser) {
-         prjAlert('no fbauthUser', 'in CstSignupInitializeAccount')
-         this.props.navigation.popToTop()
-      }
-      //TODO don't think this case happens?
-      else if (dbUser = await dwdbfsCustGetByAuth(this.fbauthUser.uid)) {
-         global.rootNav.navigate("StackMain", { 'user': dbUser })
-      }
-      else { //okay, we have stuff to do
-         this.loadAuthProfileData()
-         if (this.shopIdFromQRCode) { //shop identified on QR code
-            this.shopFromQRCode = await dwdbfsShopGet(this.shopIdFromQRCode)
-            if (!this.shopFromQRCode) {
-               this.setState({ mode: MODES.QR_INVALID_SHOP })
-               this.setState({ isComponentInitialized: true })
+         fbauthUserRef.current = firebase.auth().currentUser
+         let dbUser
+         //First make sure our entry conditions are met, we have options and and logged in user
+         if (!options) {
+            prjAlert('missing option block', 'in CstSignupInitializeAccount')
+            navigation.popToTop()
+         }
+         else if (!fbauthUserRef.current) {
+            prjAlert('no fbauthUser', 'in CstSignupInitializeAccount')
+            navigation.popToTop()
+         }
+         //TODO don't think this case happens?
+         else if (dbUser = await dwdbfsCustGetByAuth(fbauthUserRef.current.uid)) {
+            navigation.replace("StackMain", { 'user': dbUser })
+         }
+         else { //okay, we have stuff to do
+            loadAuthProfileData()
+            if (shopIdFromQRCodeRef.current) { //shop identified on QR code
+               shopFromQRCodeRef.current = await dwdbfsShopGet(shopIdFromQRCodeRef.current)
+               if (!shopFromQRCodeRef.current) {
+                  setMode(MODES.QR_INVALID_SHOP)
+               }
+               else if (shopFromQRCodeRef.current.isBuildingService) {
+                  setMode(MODES.QR_CONFIRM_BUILDING_SERVICE)
+               }
+               else { //normal shop ..we will get address and then make sure we are in area of shop
+                  setMode(MODES.QR_GET_ADDRESS)
+               }
             }
-            else if (this.shopFromQRCode.isBuildingService) {
-               this.setState({ mode: MODES.QR_CONFIRM_BUILDING_SERVICE })
-               this.setState({ isComponentInitialized: true })
-            }
-            else { //normal shop ..we will get address and then make sure we are in area of shop
-               this.setState({ mode: MODES.QR_GET_ADDRESS })
-               this.setState({ isComponentInitialized: true })
+            else { //no QRcode shop specified
+               setMode(options.isNewUser ? MODES.START_REG : MODES.RETURN_WITHOUT_REG)
             }
          }
-         else { //no QRcode shop specified
-            this.setState({ mode: this.options.isNewUser ? MODES.START_REG : MODES.RETURN_WITHOUT_REG })
-            this.setState({ isComponentInitialized: true })
-         }
-
-      }
-
-      //we can NOT do this here ... it causes errors for the cases where we do
-      //a navigate ... so BE SURE every case takes care of setting the flag if they 
-      //are not going to navigate away.
-      // this.setState({ isComponentInitialized: true })
-
-
-   }
-
-   render() {
-
-      switch (this.state.mode) {
-
-         case MODES.INIT:
-            return (
-               <CstSpinnerScreen />
-            );
-            break;
-
-         //they have an auth but no db account, invite them to enter profile
-         //NOTE that we can also 'cancel' our way back here
-         case MODES.RETURN_WITHOUT_REG:
-            //when they cancel their way back here we want to tidy up 
-            this.initializeProfileData()
-            this.loadAuthProfileData()
-
-            return (
-               <CdsQuestionScreen
-                  text='cstNEW.RegistrationReturnWithout'
-                  i18nCancel='cmnNEW.NotNowArrowLeft'
-                  onCancelCode='PREV_IS_NOT_NOW'
-                  onOkay={async () => {
-                     this.setState({ mode: MODES.START_REG })
-                  }}
-                  onCancel={async () => {
-                     await cmnSignout()
-                     this.props.navigation.popToTop()
-                  }}
-               />
-            );
-            break;
-
-         //first get their location (by phone location or from map)
-         case MODES.START_REG:
-         case MODES.GET_ADDR:
-            return (
-               <CdsScreen>
-                  <CmnAddressInput requestPermission
-                     title={strX("cstNEW.Your_Location")}
-                     defaultAddress={null}
-                     defaultLocation={null}
-                     onCancel={() => {
-                        this.setState({ mode: MODES.RETURN_WITHOUT_REG })
-                     }}
-                     onSelect={(address, location) => { //
-                        prjStopInitHomeStopWithAddressLoc(this.profileData.homeStop, address, location)
-                        prjStopInitialize(this.profileData.altStop)
-                        this.setState({ mode: MODES.GET_SHOP })
-                     }} />
-               </CdsScreen >
-            );
-            break;
-
-         //use the location to look for a shop
-         //if there is only one or they choose one then onSelect will be called
-         //if they cancel or there is no shop (they will be told) onCancel will be called
-         //NOTE we can return null shop onSelect
-         case MODES.GET_SHOP: //then let them select a shop 
-            return (
-               <CstSignupShopSelect
-                  title={strX("cstNEW.ChooseYourShop")}
-                  custLocation={this.profileData.homeStop.location}
-                  onCancel={() => { this.setState({ mode: MODES.GET_ADDR }) }} //back to get address
-                  onNoShop={() => { this.setState({ mode: MODES.NO_SHOP }) }}
-                  onSelect={(shop) => {
-                     this.shop = shop;
-                     this.profileData.shopIsABuildingService = this.shop.isBuildingService
-                     if (this.shop.isBuildingService) {
-                        prjStopInitHomeStopFromBuildingService(this.profileData.homeStop, this.shop)
-                        prjStopInitialize(this.profileData.altStop)
-                        // this.profileData.homeStop.code = 'building'
-                        // this.profileData.homeStop.buildingName = this.shop.buildingName
-                     }
-                     console.log('after shop', this.profileData)
-                     this.setState({ mode: MODES.VERIFY_SHOP_AND_ADDRESS })
-                  }}
-               ></CstSignupShopSelect>
-            );
-            break;
-
-         //no shop ... give them a chance to register...
-         case MODES.NO_SHOP:
-            return (
-               <CdsQuestionScreen
-                  text='cstNEW.RegistrationContinue'
-                  onCancelCode='PREV_IS_NO_THANKS'
-                  onOkay={async () => {
-                     this.setState({ mode: MODES.PRIVACY })
-                  }}
-                  onCancel={() => {
-                     const homeLocation = this.profileData?.homeStop?.location
-                     const locationStr = homeLocation ? `[${homeLocation.latitude},${homeLocation.longitude}]` : '';
-                     prjCloudLogInfo('CstSignupInitializeAccount','SHOP NOT FOUND - NO REG - '+locationStr)
-                     this.setState({ mode: MODES.RETURN_WITHOUT_REG })
-                  }}
-               />
-            );
-            break;
-
-         ////////////////////////////////////SPECIAL QR CODE PROCESSING
-
-         //the shop in the QR code does not exist
-         case MODES.QR_INVALID_SHOP:
-            return (
-               <CdsQuestionScreen
-                  text='cstNEW.RegistrationQRShopNotFound'
-                  onCancelCode="PREV_IS_NO_THANKS"
-                  onOkay={async () => {
-                     this.setState({ mode: MODES.GET_ADDR })
-                  }}
-                  onCancel={async () => {
-                     await cmnSignout()
-                     this.props.navigation.popToTop()
-                  }}
-               />
-            );
-            break;
-
-         //the shop in the QR code is a building service so we let them just acknowledge that they are in that
-         //building without any address input
-         case MODES.QR_CONFIRM_BUILDING_SERVICE:
-            return (
-               <CdsScreen>
-                  {/* <GCHeader titleI18n='cmnNEW.ShopSelection' /> */}
-
-                  <PrjSpacer size={40} />
-                  <View style={{ flex: .2 }}>
-                     <GCI18n large code='cstNEW.RegistrationQRIsThisYourBuilding' style={{ textAlign: 'center' }} />
-                  </View>
-                  <View style={{ flex: .8 }}>
-                     <CstShopTile
-                        shop={this.shopFromQRCode}
-                        selected={true}
-                        clickable={false}
-                        onPress={() => { }}
-                     />
-                  </View>
-                  <GCFooterWithTwoIcons
-                     onOkayCode='NEXT_IS_YES'
-                     onCancelCode='PREV_IS_NO'
-                     onOkay={() => {//we use the shop data to fill in user location. Unit will come later
-                        this.shop = this.shopFromQRCode;
-                        this.profileData.shopIsABuildingService = true
-                        prjStopInitHomeStopFromBuildingService(this.profileData.homeStop, this.shop)
-                        prjStopInitialize(this.profileData.altStop)
-                        this.setState({ mode: MODES.VERIFY_SHOP_AND_ADDRESS })
-                     }}
-                     onCancel={() => this.setState({ mode: MODES.GET_ADDR })}
-                  />
-               </CdsScreen >
-            )
-            break;
-
-         case MODES.QR_GET_ADDRESS:
-            return (
-               <CdsScreen>
-                  <CmnAddressInput requestPermission
-                     title={strX("cstNEW.RegistrationQRYourShopIs", { shop: this.shopFromQRCode.name })}
-                     defaultAddress={null}
-                     defaultLocation={null}
-                     onCancel={() => { this.setState({ mode: MODES.RETURN_WITHOUT_REG }) }}
-                     onSelect={(address, location) => {
-                        const locOkay = prjcmnInShopArea(location, this.shopFromQRCode, false)
-                        if (locOkay) {
-                           prjStopInitHomeStopWithAddressLoc(this.profileData.homeStop, address, location)
-                           prjStopInitialize(this.profileData.altStop)
-
-                           this.shop = this.shopFromQRCode
-                           this.profileData.shopId = this.shop.shopId
-                           this.setState({ mode: MODES.VERIFY_SHOP_AND_ADDRESS })
-                        }
-                        else {
-                           this.setState({ mode: MODES.QR_LOCATION_NOT_IN_SHOP_AREA })
-                        }
-                     }} />
-               </CdsScreen >
-            );
-            break;
-
-         case MODES.QR_LOCATION_NOT_IN_SHOP_AREA:
-            return (
-               <CdsQuestionScreen
-                  text='cstNEW.RegistrationQRNotInShopArea'
-                  onOkayCode='NEXT_IS_WRONG_ADDRESS_'
-                  onCancelCode='PREV_IS_WRONG_SHOP_'
-                  onOkay={() => {
-                     //try different addresses for the QR shop
-                     this.setState({ mode: MODES.QR_GET_ADDRESS })
-                  }}
-                  onCancel={() => {
-                     //go back to regular processing to look for other shops perhaps
-                     this.setState({ mode: MODES.GET_ADDR })
-                  }}
-               />
-            );
-            break;
-
-         //confirm their shop and address ... here we will insist on unit info building service
-         case MODES.VERIFY_SHOP_AND_ADDRESS:
-            this.profileData.shopIsABuildingService = prjStopType(this.profileData?.homeStop) == 'building'
-            // console.log('verify start', this.profileData)
-            return (
-               <CstSignupVerifyShopAndAddress
-               profileData = {this.profileData}
-               chosenShop = {this.shop}
-               onOkay = {()=>{this.setState({ mode: MODES.PRIVACY })}}
-               onCancel = {()=>{this.setState({ mode: MODES.GET_ADDR })}}
-               />
-            )
-            break;
-
-         //get agreement to our privacy policy
-         case MODES.PRIVACY:
-            //NOTE that we pass the key parameter so r/n will remount webView
-            return (
-               <CstSignupWebViewWithAccept
-                  key={1}
-                  titleI18n='cst.signin.Privacy_Policy'
-                  url='https://www.dobbywalla.com/app-privacypolicy'
-                  onAccept={() => { this.setState({ mode: MODES.T_AND_C }) }}
-                  onDecline={() => { this.setState({ mode: MODES.RETURN_WITHOUT_REG }) }}
-               />)
-            break;
-
-         //get agreement to our terms and conditions
-         case MODES.T_AND_C:
-            //NOTE that we pass the key parameter so r/n will remount webView
-            return (
-               <CstSignupWebViewWithAccept
-                  key={2}
-                  titleI18n='cst.signin.Terms_and_Conditions'
-                  url='https://www.dobbywalla.com/apps-termsandcondition'
-                  onAccept={() => { this.setState({ mode: MODES.NOTIFICATIONS }) }}
-                  onDecline={() => { this.setState({ mode: MODES.RETURN_WITHOUT_REG }) }}
-               />)
-            break;
-
-         //ask for permission to send notifications
-         case MODES.NOTIFICATIONS:
-            return (
-               <CstSignupNotificationPermission
-                  onOkay={() => { this.setState({ mode: MODES.GET_PERSONAL_DETAILS }) }}
-               />)
-            break;
-
-         //get the necessary personal information
-         case MODES.GET_PERSONAL_DETAILS:
-            return (
-               <CstSignupProfilePersonal
-                  shop={this.shop}
-                  details={this.profileData}
-                  onBack={() => { this.setState({ mode: MODES.RETURN_WITHOUT_REG }) }}
-                  onForward={(name, phoneNumber, email) => {
-                     this.profileData.name = name
-                     this.profileData.phoneNumber = phoneNumber
-                     this.profileData.email = email
-                     this.setState({ mode: MODES.DONE })
-                  }}
-               />
-            )
-            break;
-
-         // //get the necessary address data and alternate address
-         // case MODES.GET_ADDRESS_DETAILS:
-         //    return (
-         //       <CstSignupProfileAddresses
-         //          shop={this.shop}
-         //          details={this.profileData}
-         //          onBack={() => { this.setState({ mode: MODES.GET_PERSONAL_DETAILS }) }}
-         //          onForward={() => {
-         //             this.setState({ mode: MODES.DONE })
-         //          }}
-         //       />
-         //    )
-         //    break;
-
-         //write the customer record to db
-         //any error will be annunciated and we will stay in this mode
-         //but if successful move on to the intro slides
-         case MODES.DONE:
-            return (
-               <>
-                  {(this.state.isCustomerDbInProgress) && <PrjBusyMask />}
-                  <CdsQuestionScreen
-                     text='cstNEW.RegistrationComplete'
-                     onOkay={async () => {
-                        this.setState({ isCustomerDbInProgress: true })
-                        this.newUser = await this.makeCustomer()
-                        this.setState({ isCustomerDbInProgress: false })
-                        if (this.newUser) { this.setState({ mode: MODES.SLIDE_INTRO }) }
-                     }}
-                     onCancel={() => {
-                        this.setState({ mode: MODES.RETURN_WITHOUT_REG })
-                     }}
-                  />
-               </>
-            )
-            break;
-
-         //show our little usage demo
-         // NOTE we know that this.newUser is defined .. only come here from .DONE
-         case MODES.SLIDE_INTRO:
-            return (
-               <CstSignupSlideIntro
-                  onOkay={async () => {
-                     global.rootNav.navigate("StackMain", { 'user': this.newUser })
-                  }}
-               />
-
-            )
-            break;
-
-         //invalid mode? hard to see how that would happen    
-         default:
-            prjAlert("Invalid mode in CstSignupInitializeAccount")
-            this.props.navigation.goBack()
-            return null
-            break;
-      }
-   } //end render
-
-   //toggle a state variable to cause a render
-   toggle = () => {
-      this.setState({ toggle: !this.state.toggle })
-   } //toggle 
+      })()
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only effect, mirrors original componentDidMount; options is a nav param read once
+   }, [])
 
    //create a new customer using stuff in profileData map and the authId in the firebase auth block
    //returns the record if successful ow null
    //NOTE for convenience, if the selected shop is a building service we set flag in customer
-   makeCustomer = async () => {
+   const makeCustomer = async () => {
       let ref = null
       //TODO make sure that authid doesn't exist??
-      this.profileData.shopId = this.shop ? this.shop.id : null
+      profileDataRef.current.shopId = shopRef.current ? shopRef.current.id : null
       //errors are caught and annunciated within the dwdb
-      ref = await dwdbfsCustAdd(this.fbauthUser.uid, this.profileData)
+      ref = await dwdbfsCustAdd(fbauthUserRef.current.uid, profileDataRef.current)
       global.cstxRef = ref
       CST.setShop(ref ? await dwdbfsShopGet(ref.shopId) : null)
       await dwdbfsCouponsAddWelcome(ref.id)
@@ -522,9 +191,322 @@ export default class CstSignupInitializeAccount extends Component {
       return ref
    }
 
+   switch (mode) {
 
+      case MODES.INIT:
+         return (
+            <CstSpinnerScreen />
+         );
+         break;
+
+      //they have an auth but no db account, invite them to enter profile
+      //NOTE that we can also 'cancel' our way back here
+      case MODES.RETURN_WITHOUT_REG:
+         //when they cancel their way back here we want to tidy up 
+         initializeProfileData()
+         loadAuthProfileData()
+
+         return (
+            <CdsQuestionScreen
+               text='cstNEW.RegistrationReturnWithout'
+               i18nCancel='cmnNEW.NotNowArrowLeft'
+               onCancelCode='PREV_IS_NOT_NOW'
+               onOkay={async () => {
+                  setMode(MODES.START_REG)
+               }}
+               onCancel={async () => {
+                  await cmnSignout()
+                  navigation.popToTop()
+               }}
+            />
+         );
+         break;
+
+      //first get their location (by phone location or from map)
+      case MODES.START_REG:
+      case MODES.GET_ADDR:
+         return (
+            <CdsScreen>
+               <CmnAddressInput requestPermission
+                  title={strX("cstNEW.Your_Location")}
+                  defaultAddress={null}
+                  defaultLocation={null}
+                  onCancel={() => {
+                     setMode(MODES.RETURN_WITHOUT_REG)
+                  }}
+                  onSelect={(address, location) => { //
+                     prjStopInitHomeStopWithAddressLoc(profileDataRef.current.homeStop, address, location)
+                     prjStopInitialize(profileDataRef.current.altStop)
+                     setMode(MODES.GET_SHOP)
+                  }} />
+            </CdsScreen >
+         );
+         break;
+
+      //use the location to look for a shop
+      //if there is only one or they choose one then onSelect will be called
+      //if they cancel or there is no shop (they will be told) onCancel will be called
+      //NOTE we can return null shop onSelect
+      case MODES.GET_SHOP: //then let them select a shop 
+         return (
+            <CstSignupShopSelect
+               title={strX("cstNEW.ChooseYourShop")}
+               custLocation={profileDataRef.current.homeStop.location}
+               onCancel={() => { setMode(MODES.GET_ADDR) }} //back to get address
+               onNoShop={() => { setMode(MODES.NO_SHOP) }}
+               onSelect={(shop) => {
+                  shopRef.current = shop;
+                  profileDataRef.current.shopIsABuildingService = shopRef.current.isBuildingService
+                  if (shopRef.current.isBuildingService) {
+                     prjStopInitHomeStopFromBuildingService(profileDataRef.current.homeStop, shopRef.current)
+                     prjStopInitialize(profileDataRef.current.altStop)
+                     // this.profileData.homeStop.code = 'building'
+                     // this.profileData.homeStop.buildingName = this.shop.buildingName
+                  }
+                  console.log('after shop', profileDataRef.current)
+                  setMode(MODES.VERIFY_SHOP_AND_ADDRESS)
+               }}
+            ></CstSignupShopSelect>
+         );
+         break;
+
+      //no shop ... give them a chance to register...
+      case MODES.NO_SHOP:
+         return (
+            <CdsQuestionScreen
+               text='cstNEW.RegistrationContinue'
+               onCancelCode='PREV_IS_NO_THANKS'
+               onOkay={async () => {
+                  setMode(MODES.PRIVACY)
+               }}
+               onCancel={() => {
+                  const homeLocation = profileDataRef.current?.homeStop?.location
+                  const locationStr = homeLocation ? `[${homeLocation.latitude},${homeLocation.longitude}]` : '';
+                  prjCloudLogInfo('CstSignupInitializeAccount','SHOP NOT FOUND - NO REG - '+locationStr)
+                  setMode(MODES.RETURN_WITHOUT_REG)
+               }}
+            />
+         );
+         break;
+
+      ////////////////////////////////////SPECIAL QR CODE PROCESSING
+
+      //the shop in the QR code does not exist
+      case MODES.QR_INVALID_SHOP:
+         return (
+            <CdsQuestionScreen
+               text='cstNEW.RegistrationQRShopNotFound'
+               onCancelCode="PREV_IS_NO_THANKS"
+               onOkay={async () => {
+                  setMode(MODES.GET_ADDR)
+               }}
+               onCancel={async () => {
+                  await cmnSignout()
+                  navigation.popToTop()
+               }}
+            />
+         );
+         break;
+
+      //the shop in the QR code is a building service so we let them just acknowledge that they are in that
+      //building without any address input
+      case MODES.QR_CONFIRM_BUILDING_SERVICE:
+         return (
+            <CdsScreen>
+               {/* <GCHeader titleI18n='cmnNEW.ShopSelection' /> */}
+
+               <PrjSpacer size={40} />
+               <View style={{ flex: .2 }}>
+                  <GCI18n large code='cstNEW.RegistrationQRIsThisYourBuilding' style={{ textAlign: 'center' }} />
+               </View>
+               <View style={{ flex: .8 }}>
+                  <CstShopTile
+                     shop={shopFromQRCodeRef.current}
+                     selected={true}
+                     clickable={false}
+                     onPress={() => { }}
+                  />
+               </View>
+               <GCFooterWithTwoIcons
+                  onOkayCode='NEXT_IS_YES'
+                  onCancelCode='PREV_IS_NO'
+                  onOkay={() => {//we use the shop data to fill in user location. Unit will come later
+                     shopRef.current = shopFromQRCodeRef.current;
+                     profileDataRef.current.shopIsABuildingService = true
+                     prjStopInitHomeStopFromBuildingService(profileDataRef.current.homeStop, shopRef.current)
+                     prjStopInitialize(profileDataRef.current.altStop)
+                     setMode(MODES.VERIFY_SHOP_AND_ADDRESS)
+                  }}
+                  onCancel={() => setMode(MODES.GET_ADDR)}
+               />
+            </CdsScreen >
+         )
+         break;
+
+      case MODES.QR_GET_ADDRESS:
+         return (
+            <CdsScreen>
+               <CmnAddressInput requestPermission
+                  title={strX("cstNEW.RegistrationQRYourShopIs", { shop: shopFromQRCodeRef.current.name })}
+                  defaultAddress={null}
+                  defaultLocation={null}
+                  onCancel={() => { setMode(MODES.RETURN_WITHOUT_REG) }}
+                  onSelect={(address, location) => {
+                     const locOkay = prjcmnInShopArea(location, shopFromQRCodeRef.current, false)
+                     if (locOkay) {
+                        prjStopInitHomeStopWithAddressLoc(profileDataRef.current.homeStop, address, location)
+                        prjStopInitialize(profileDataRef.current.altStop)
+
+                        shopRef.current = shopFromQRCodeRef.current
+                        profileDataRef.current.shopId = shopRef.current.shopId
+                        setMode(MODES.VERIFY_SHOP_AND_ADDRESS)
+                     }
+                     else {
+                        setMode(MODES.QR_LOCATION_NOT_IN_SHOP_AREA)
+                     }
+                  }} />
+            </CdsScreen >
+         );
+         break;
+
+      case MODES.QR_LOCATION_NOT_IN_SHOP_AREA:
+         return (
+            <CdsQuestionScreen
+               text='cstNEW.RegistrationQRNotInShopArea'
+               onOkayCode='NEXT_IS_WRONG_ADDRESS_'
+               onCancelCode='PREV_IS_WRONG_SHOP_'
+               onOkay={() => {
+                  //try different addresses for the QR shop
+                  setMode(MODES.QR_GET_ADDRESS)
+               }}
+               onCancel={() => {
+                  //go back to regular processing to look for other shops perhaps
+                  setMode(MODES.GET_ADDR)
+               }}
+            />
+         );
+         break;
+
+      //confirm their shop and address ... here we will insist on unit info building service
+      case MODES.VERIFY_SHOP_AND_ADDRESS:
+         profileDataRef.current.shopIsABuildingService = prjStopType(profileDataRef.current?.homeStop) == 'building'
+         // console.log('verify start', profileDataRef.current)
+         return (
+            <CstSignupVerifyShopAndAddress
+            profileData = {profileDataRef.current}
+            chosenShop = {shopRef.current}
+            onOkay = {()=>{setMode(MODES.PRIVACY)}}
+            onCancel = {()=>{setMode(MODES.GET_ADDR)}}
+            />
+         )
+         break;
+
+      //get agreement to our privacy policy
+      case MODES.PRIVACY:
+         //NOTE that we pass the key parameter so r/n will remount webView
+         return (
+            <CstSignupWebViewWithAccept
+               key={1}
+               titleI18n='cst.signin.Privacy_Policy'
+               url='https://www.dobbywalla.com/app-privacypolicy'
+               onAccept={() => { setMode(MODES.T_AND_C) }}
+               onDecline={() => { setMode(MODES.RETURN_WITHOUT_REG) }}
+            />)
+         break;
+
+      //get agreement to our terms and conditions
+      case MODES.T_AND_C:
+         //NOTE that we pass the key parameter so r/n will remount webView
+         return (
+            <CstSignupWebViewWithAccept
+               key={2}
+               titleI18n='cst.signin.Terms_and_Conditions'
+               url='https://www.dobbywalla.com/apps-termsandcondition'
+               onAccept={() => { setMode(MODES.NOTIFICATIONS) }}
+               onDecline={() => { setMode(MODES.RETURN_WITHOUT_REG) }}
+            />)
+         break;
+
+      //ask for permission to send notifications
+      case MODES.NOTIFICATIONS:
+         return (
+            <CstSignupNotificationPermission
+               onOkay={() => { setMode(MODES.GET_PERSONAL_DETAILS) }}
+            />)
+         break;
+
+      //get the necessary personal information
+      case MODES.GET_PERSONAL_DETAILS:
+         return (
+            <CstSignupProfilePersonal
+               shop={shopRef.current}
+               details={profileDataRef.current}
+               onBack={() => { setMode(MODES.RETURN_WITHOUT_REG) }}
+               onForward={(name, phoneNumber, email) => {
+                  profileDataRef.current.name = name
+                  profileDataRef.current.phoneNumber = phoneNumber
+                  profileDataRef.current.email = email
+                  setMode(MODES.DONE)
+               }}
+            />
+         )
+         break;
+
+      // //get the necessary address data and alternate address
+      // case MODES.GET_ADDRESS_DETAILS:
+      //    return (
+      //       <CstSignupProfileAddresses
+      //          shop={this.shop}
+      //          details={this.profileData}
+      //          onBack={() => { this.setState({ mode: MODES.GET_PERSONAL_DETAILS }) }}
+      //          onForward={() => {
+      //             this.setState({ mode: MODES.DONE })
+      //          }}
+      //       />
+      //    )
+      //    break;
+
+      //write the customer record to db
+      //any error will be annunciated and we will stay in this mode
+      //but if successful move on to the intro slides
+      case MODES.DONE:
+         return (
+            <>
+               {(isCustomerDbInProgress) && <PrjBusyMask />}
+               <CdsQuestionScreen
+                  text='cstNEW.RegistrationComplete'
+                  onOkay={async () => {
+                     setIsCustomerDbInProgress(true)
+                     newUserRef.current = await makeCustomer()
+                     setIsCustomerDbInProgress(false)
+                     if (newUserRef.current) { setMode(MODES.SLIDE_INTRO) }
+                  }}
+                  onCancel={() => {
+                     setMode(MODES.RETURN_WITHOUT_REG)
+                  }}
+               />
+            </>
+         )
+         break;
+
+      //show our little usage demo
+      // NOTE we know that newUserRef.current is defined .. only come here from .DONE
+      case MODES.SLIDE_INTRO:
+         return (
+            <CstSignupSlideIntro
+               onOkay={async () => {
+                  navigation.replace("StackMain", { 'user': newUserRef.current })
+               }}
+            />
+
+         )
+         break;
+
+      //invalid mode? hard to see how that would happen    
+      default:
+         prjAlert("Invalid mode in CstSignupInitializeAccount")
+         navigation.goBack()
+         return null
+         break;
+   }
 }// end CstSignupInitializeAccount
-
-
-
-

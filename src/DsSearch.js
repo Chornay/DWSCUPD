@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { TouchableOpacity, FlatList } from 'react-native'
 import { View } from 'react-native'
 import firestore from '@react-native-firebase/firestore';
@@ -17,6 +17,8 @@ import RadioButton from 'react-native-simple-radio-button-input';
 import { strX } from 'DWcmn/I18n';
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 import { ListItemGBC, ListItemRight, ListItemBody, ListItemLeft } from 'DWcmn/PrjNativeBase'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 //20250712 changed the customer display to give more detail
 
@@ -25,16 +27,10 @@ const MODES = {
    DISPLAY_RESULTS: 10,
 }
 
-//key is the table name, value is the string to display on the screen
-// const WHAT_TO_SEARCH = {
-//    "Orders": "Order",
-//    "Customers": "Customer",
-//    "Route": "Route"
-// }
 const WHAT_TO_SEARCH = [
    "Orders",
    "Customers",
-   "Route"
+   "Routes"
 ]
 
 //TODO implement Route search
@@ -42,7 +38,7 @@ const WHAT_TO_SEARCH = [
 const HOW_TO_SEARCH = {
    "Orders": ["name", "id", "phoneNumber", "address"],
    "Customers": ["address", "phoneNumber", "name", "id"],
-   // "Route": ["pickup", "delivery"]
+   // "Routes": ["pickup", "delivery"]
 }
 
 //want to translate the key (or table) name to something displayable
@@ -55,104 +51,27 @@ const DISPLAYABLE = {
    "Orders": "cmnNEW.Order",
    "phoneNumber": "cmn.Phone",
    "pickup": "Pickup",
-   "Route": "cmnNEW.Route",
+   "Routes": "cmnNEW.Route",
 }
 
-cnvText = (code) => {
+const cnvText = (code) => {
    return strX(DISPLAYABLE[code])
 }
 
 //you can navigate here
 //OR if you just display component you should pass 
-// 1. navigation  ie navigation={this.props.navigation}
-//2. an onBack method  eg onBack={()=>{this.setState({mode:MAIN})}}
+//1. an onBack method  eg onBack={()=>{setMode(MAIN)}}
+export function DsSearch({ onBack }) {
 
-export default class DsSearch extends Component {
+   const navigation = useNavigation()
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-         isSearchingInProgress: false,
-         mode: MODES.MAIN,
-         results: [], //results of the query .. could be from any of the tables.
-         whatToSearch: 'Orders', //the 'table' to search, orders/customers/routes
-
-      };
-   }
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true })
-   }
-
-   render() {
-
-      if (!this.state.isComponentInitialized) return null
-
-      switch (this.state.mode) {
-
-         case MODES.MAIN:
-            //NOTE that if there is no onBack we want to set back prop to true to get default behaviour
-            return (
-
-               <CdsScreen>
-                  <GCHeader back={this.props.onBack||true} titleText='Search' />
-                  {this.state.isSearchingInProgress && <PrjBusyMask />}
-                  {this.renderWhatToSearch()}
-                  <PrjSpacer size={40} />
-                  {this.renderHowToSearch()}
-               </CdsScreen>
-            )
-            break;
-
-         case MODES.DISPLAY_RESULTS:
-            //display the contents of the results[] state variable (depending on whatToSearch)
-            return (
-               <CdsScreen>
-                  <GCHeader
-                     back={() => this.setState({ mode: MODES.MAIN })}
-                     titleText='Results'
-                  />
-                  <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
-                     {this.state.results.length == 0 ?
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><GCText>No result found ...</GCText></View> :
-                        <FlatList
-                           data={this.state.results}
-                           keyExtractor={(item, index) => index.toString()}
-                           renderItem={({ item }) => {
-                              switch (this.state.whatToSearch) {
-                                 case 'Customers':
-                                    return (
-                                       <View>{this.renderCustomerItem(item)}</View>
-                                    )
-                                    break;
-                                 case 'Orders':
-                                    return (
-                                       <View>{this.renderOrderItem(item)}</View>
-                                    )
-                                    break;
-                                 case 'Routes':
-                                    return (
-                                       <View><GCText>Route</GCText></View>
-                                    )
-                                    break;
-                              }
-                           }} />
-                     }
-                  </View>
-               </CdsScreen>
-            )
-            break;
-         default:
-            prjAlert('Invalid mode ' + this.state.mode + ' in search')
-            return null
-            break;
-
-      }//end switch
-   } //end render
-
+   const [isSearchingInProgress, setIsSearchingInProgress] = useState(false)
+   const [mode, setMode] = useState(MODES.MAIN)
+   const [results, setResults] = useState([]) //results of the query .. could be from any of the tables.
+   const [whatToSearch, setWhatToSearch] = useState('Orders') //the 'table' to search, orders/customers/routes
 
    //user selects whether they want to look at Orders, Customers or Routes
-   renderWhatToSearch = () => {
+   const renderWhatToSearch = () => {
       return (
          <View style={{ paddingHorizontal: 20 }} >
             <GCText>Select an option</GCText>
@@ -163,8 +82,8 @@ export default class DsSearch extends Component {
                <View key={table} style={styles.radioButton}>
                   <RadioButton
                      color={COLORS.GC_THEME_DARK}
-                     selected={this.state.whatToSearch == table}
-                     onPress={() => { this.setState({ whatToSearch: table }) }}
+                     selected={whatToSearch == table}
+                     onPress={() => { setWhatToSearch(table) }}
                   />
                   <View style={{ paddingLeft: 10 }}>
                      <GCText color={COLORS.GC_TEXT_GREY}> {cnvText(table)} </GCText>
@@ -177,14 +96,14 @@ export default class DsSearch extends Component {
 
    //user presses how they want to look up the chosen category 
    //  the TouchableEdit calls doSearch
-   renderHowToSearch = () => {
+   const renderHowToSearch = () => {
       return (
          <View>
             <View style={{ paddingHorizontal: 20 }}>
                {/* Selection of search key...etc Name, ID, Phone, Address... */}
                <GCText>Select a search key</GCText>
                <FlatList
-                  data={HOW_TO_SEARCH[this.state.whatToSearch]}
+                  data={HOW_TO_SEARCH[whatToSearch]}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => {
                      return (
@@ -193,7 +112,7 @@ export default class DsSearch extends Component {
                            titleText={"Enter " +cnvText(item)}
                            onCancel={()=>{}}
                            onOkay={(keyValue)=>{
-                              this.doSearch(item,keyValue)
+                              doSearch(item,keyValue)
                            }}
                            >
                               <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
@@ -210,40 +129,17 @@ export default class DsSearch extends Component {
       )
    } //end renderHowToSearch
 
-   renderCustomerItemOLD = (cust) => {
+      const renderCustomerItem = (cust) => {
       return (
          <TouchableOpacity
-         // onPress={() => { this.props.navigation.navigate('OrderDetail', { 'id': order.id, }) }}
+         // onPress={() => { navigation.navigate('OrderDetail', { 'id': order.id, }) }}
          >
             <View style={styles.searchTileContent}>
                <PrjSpacer size={10} />
-               {/* Order id and date */}
-               <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                  <View style={{ flexDirection: 'column' }}>
-                     <GCText title >Name</GCText>
-                     <GCText details color={COLORS.GC_TEXT_GREY}>{cust.name}</GCText>
-                  </View>
-                  <View style={{ alignItems: 'flex-end' }}>
-                     <GCText title >Address</GCText>
-                     <GCText details color={COLORS.GC_TEXT_GREY}>{cust.homeStop?.address}</GCText>
-                  </View>
-               </View>
-            </View>
-         </TouchableOpacity>
-      )
-   } //end renderCustomerItem
-
-   renderCustomerItem = (cust) => {
-      return (
-         <TouchableOpacity
-         // onPress={() => { this.props.navigation.navigate('OrderDetail', { 'id': order.id, }) }}
-         >
-            <View style={styles.searchTileContent}>
-               <PrjSpacer size={10} />
-        {this.formLine('cmn.Name', cust.name)}
-        {this.formLine('cmnNEW.Id', cust.id)}
-        {this.formLine('cmn.Address', cust.address)}
-        {this.formLine('cmn.Phone', cust.phoneNumber)}
+        {formLine('cmn.Name', cust.name)}
+        {formLine('cmnNEW.Id', cust.id)}
+        {formLine('cmn.Address', cust.address)}
+        {formLine('cmn.Phone', cust.phoneNumber)}
             </View>
          </TouchableOpacity>
       )
@@ -253,7 +149,7 @@ export default class DsSearch extends Component {
   // left - an i18n tag for the name of the field to be displayed
   // right - the value of the field
   // styled - true iff the 'right' field is already styled
-  formLine(left, right, styled = false) {
+  function formLine(left, right, styled = false) {
     const COL1 = .3
     const COL2 = .7
     return (
@@ -266,10 +162,10 @@ export default class DsSearch extends Component {
       </View>)
   }
 
-   renderOrderItem = (order) => {
+   const renderOrderItem = (order) => {
       return (
          <TouchableOpacity
-            onPress={() => { this.props.navigation.navigate('OrderDetail', { 'id': order.id, }) }}
+            onPress={() => { navigation.navigate('OrderDetail', { 'id': order.id, }) }}
          >
             <View style={styles.searchTileContent}>
                <PrjSpacer size={10} />
@@ -303,40 +199,112 @@ export default class DsSearch extends Component {
       )
    } //end renderOrderItem
 
-   doSearch = async (key, keyValue) => {
+   const doSearch = async (key, keyValue) => {
 
       //if not value specified, we just return
       if (isBlank(keyValue)) {
          return
       }
-      let results = []
-      let type = this.state.whatToSearch
+      let newResults = []
 
-      this.setState({isSearchingInProgress:true})
-      switch (this.state.whatToSearch) {
-         //for orders and customers we have the table name and key name for lookup
-         case 'Orders':
-         case 'Customers':
-            let queryResult = await firestore().collection(this.state.whatToSearch)
-            .where(key, ">=", keyValue)
-            .where(key, "<=", keyValue+'z')
-            .get()
-            queryResult.forEach((doc) => {
-               const foo = doc.data()
-               results.push(foo)
-            })
-            this.setState({ results: results })
-            this.setState({ mode: MODES.DISPLAY_RESULTS })
-            break;
-         case 'Routes':
-            break;
-         default:
-            prjAlert('Invalid table specified in search')
-            break;
+      setIsSearchingInProgress(true)
+      try {
+         switch (whatToSearch) {
+            //for orders and customers we have the table name and key name for lookup
+            case 'Orders':
+            case 'Customers':
+               let queryResult = await firestore().collection(whatToSearch)
+               .where(key, ">=", keyValue)
+               .where(key, "<=", keyValue+'z')
+               .get()
+               queryResult.forEach((doc) => {
+                  const foo = doc.data()
+                  newResults.push(foo)
+               })
+               setResults(newResults)
+               setMode(MODES.DISPLAY_RESULTS)
+               break;
+            //CLAUDE: dead case - whatToSearch can only ever be 'Orders', 'Customers' or 'Route' (per
+            //WHAT_TO_SEARCH above), never 'Routes' (plural). This case, and the matching one in the
+            //DISPLAY_RESULTS renderItem switch below, can never be reached as written. Also note
+            //HOW_TO_SEARCH has no 'Route' entry either, so selecting Route currently dead-ends at
+            //renderHowToSearch with an empty key list - Route search isn't actually wired up yet,
+            //matching the "TODO implement Route search" comment above.
+            case 'Routes':
+               break;
+            default:
+               prjAlert('Invalid table specified in search')
+               break;
+         }
       }
-      this.setState({isSearchingInProgress:false})
+      catch (error) {
+         prjCloudLogError('DsSearch doSearch', error)
+      }
+      setIsSearchingInProgress(false)
 
    } //end doSearch
+
+   switch (mode) {
+
+      case MODES.MAIN:
+         //NOTE that if there is no onBack we want to set back prop to true to get default behaviour
+         return (
+
+            <CdsScreen>
+               <GCHeader back={onBack||true} titleText='Search' />
+               {isSearchingInProgress && <PrjBusyMask />}
+               {renderWhatToSearch()}
+               <PrjSpacer size={40} />
+               {renderHowToSearch()}
+            </CdsScreen>
+         )
+         break;
+
+      case MODES.DISPLAY_RESULTS:
+         //display the contents of the results[] state variable (depending on whatToSearch)
+         return (
+            <CdsScreen>
+               <GCHeader
+                  back={() => setMode(MODES.MAIN)}
+                  titleText='Results'
+               />
+               <View style={{ flex: 1, marginHorizontal: GC_STD_MARGIN }}>
+                  {results.length == 0 ?
+                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><GCText>No result found ...</GCText></View> :
+                     <FlatList
+                        data={results}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => {
+                           switch (whatToSearch) {
+                              case 'Customers':
+                                 return (
+                                    <View>{renderCustomerItem(item)}</View>
+                                 )
+                                 break;
+                              case 'Orders':
+                                 return (
+                                    <View>{renderOrderItem(item)}</View>
+                                 )
+                                 break;
+                              case 'Routes':
+                                 return (
+                                    <View><GCText>Route</GCText></View>
+                                 )
+                                 break;
+                           }
+                        }} />
+                  }
+               </View>
+            </CdsScreen>
+         )
+         break;
+      default:
+         prjAlert('Invalid mode ' + mode + ' in search')
+         return null
+         break;
+
+   }//end switch
+
 } //end DsSearch
 
 

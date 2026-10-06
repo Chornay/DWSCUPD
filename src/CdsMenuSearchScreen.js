@@ -10,6 +10,7 @@ import { prjPriceListItemStr } from 'DWcmn/PrjCmnFunctions'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 
+//NOTE that we will NOT search EZ entries
 //param priceList
 export function CdsMenuSearchScreen() {
 
@@ -31,7 +32,9 @@ export function CdsMenuSearchScreen() {
       function loadCategory(cat) {
          //CLAUDE: a category with null entries will throw here - needs protection/logging
          for (const entry of cat.entries) {
-            if (entry.isCategory) { loadCategory(entry) }
+            if (entry.isCategory) {
+               if (entry.type !== 'EZ') loadCategory(entry)
+            }
             else {
                tagsRef.current.push({
                   key: entry.code,
@@ -61,6 +64,7 @@ export function CdsMenuSearchScreen() {
          return
       }
       const result = tagsRef.current.filter(item => {
+         if (item.name.toLowerCase().includes(text.toLowerCase())) console.log(item.name)
          return item.name.toLowerCase().includes(text.toLowerCase())
       }
       );
@@ -93,11 +97,9 @@ export function CdsMenuSearchScreen() {
                   return (
                      <CdsMenuLineDisplay
                         onLeftTouch={() => {
-                           console.log('Left touch!')
                            navigation.navigate('CdsMenuItemRemarkAndPhotoScreen', { 'line': item.entry })
                         }}
                         changedSomething={() => {
-                           console.log('Right touch!')
                            cdsMenuPricelistUpdateTotals(priceList);
                            refresh()
                         }}

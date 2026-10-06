@@ -6,7 +6,6 @@ import { navigateForAuthorizedCust } from './CdsSigninFunctions'
 import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
 
 export function signinApple(signinAppType) {
-  console.log('-------------->', signinAppType)
   const navigation = useNavigation()
   return (
     <TouchableOpacity

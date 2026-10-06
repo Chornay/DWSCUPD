@@ -15,7 +15,7 @@ import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 //param shopId
 
-export default function CdsShopBoundaries(props) {
+export function CdsShopBoundaries(props) {
 
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const shopRef = useRef(null)

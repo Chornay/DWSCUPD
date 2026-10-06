@@ -67,10 +67,12 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // //WE USE BELOW FOR MULTI-APP CASE
-import React, { Component } from 'react'
+import React from 'react'
+import 'react-native-gesture-handler' //Claude says put this way up here
 import { View } from 'react-native';
-import { createAppContainer } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack';
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack';
+import '@react-native-firebase/firestore'; //Claude wanted this 
 import firebase from '@react-native-firebase/app';
 import { PrjToast } from 'DWcmn/PrjToast'
 
@@ -80,53 +82,27 @@ import UtilTop from './UtilTop'
 import ShpApp from './ShpApp'
 import Main from './Main';
 
-const TopStackNavigator = createStackNavigator({
-  Main: {
-    screen: Main,
-  },
-  CstApp: {
-    screen: CstApp,
-  },
-  DrvApp: {
-    screen: DrvApp,
-  },
-  ShpApp: {
-    screen: ShpApp,
-  },
-  UtilTop: {
-    screen: UtilTop,
-  }
-}, {
-  initialRouteName: "Main",
-  defaultNavigationOptions: {
-    header: null,
-  }
+const Stack = createStackNavigator()
 
-}) // end of TopStackNavigator
+firebase.firestore().settings({ ignoreUndefinedProperties: true })
 
-const AppContainer = createAppContainer(TopStackNavigator);
+export default function App() {
 
-export default class App extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-    }
-    firebase.firestore().settings({ ignoreUndefinedProperties: true })
-  } //end constructor
-
-  componentDidMount() {
-  } //end componentDidMount
-
-  render() {
-
-    return (
-      <View style={{ flex: 1 }}>
-        <AppContainer />
-        <PrjToast/>
-      </View>
-    )
-      ;
-
-  } //end render
-} //end class App
+  return (
+    <View style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Main"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen name="CstApp" component={CstApp} />
+          <Stack.Screen name="DrvApp" component={DrvApp} />
+          <Stack.Screen name="ShpApp" component={ShpApp} />
+          <Stack.Screen name="UtilTop" component={UtilTop} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <PrjToast/>
+    </View>
+  );
+} //end App

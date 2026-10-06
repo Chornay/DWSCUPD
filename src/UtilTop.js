@@ -20,7 +20,7 @@ import { dwdbfsCouponsGetForCustomer, dwdbfsCouponsGetAvailable } from 'DWcmn/dw
 import { dwdbfsCouponsAddNew, dwdbfsCouponsDelete } from 'DWcmn/dwdbfsCoupons'
 import { CstProfileAboutUs } from './CstProfileAboutUs'
 import { GC_STD_MARGIN } from 'DWcmn/Global'
-import DsSearch from './DsSearch'
+import { DsSearch } from './DsSearch'
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { prjcmnCalculateEnclosingMapRegionWithLocArray } from 'DWcmn/prjcmnLocationFunctions'
@@ -452,7 +452,7 @@ export default class UtilTop extends Component {
             break;
 
          case MODES.SEARCH: return (
-            <DsSearch navigation={this.props.navigation} onBack={() => { this.setState({ mode: MODES.MAIN }) }} />
+            <DsSearch  onBack={() => { this.setState({ mode: MODES.MAIN }) }} />
          )
             break;
 

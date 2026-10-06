@@ -1,64 +1,50 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react';
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper';
 
 import firebase from '@react-native-firebase/app';
-import { cmnSignout } from 'DWcmn/CmnFunctions'
+import { cmnSignout } from 'DWcmn/CmnFunctions';
 
 import CdsSpinnerScreen from './CdsSpinnerScreen';
-import { dwdbfsUserGetByAuthAndAppType } from 'DWcmn/DWDBfs'
-import { getInitialLanguage } from 'DWcmn/I18n'
+import { dwdbfsUserGetByAuthAndAppType } from 'DWcmn/DWDBfs';
+import { getInitialLanguage } from 'DWcmn/I18n';
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
+import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 
-//20250502 added language initialize
+export default function CdsStackSigninOrMain() {
+  const navigation = useNavigation();
+  const { appType = null } = useRoute().params ?? {};
+  const isMountedRef = useIsMounted();
 
-//param appType
-export default class CdsStackSigninOrMain extends Component {
+  useEffect(() => {
+    const init = async () => {
+      await getInitialLanguage();
+      const fbUser = firebase.auth().currentUser;
 
-   constructor() {
-      super();
-      this.state = {
+      let dbUser = null;
+      let readFailed = false;
+      if (fbUser) {
+        try {
+          dbUser = await dwdbfsUserGetByAuthAndAppType(appType, fbUser.uid);
+        } catch (error) {
+          readFailed = true;
+          prjCloudLogError('CdsStackSigninOrMain.UserGet', error, { toastI18n: "cmnNEW.MsgDbReadError" });
+        }
       }
-      this.appType = ''
-   }
+      if (!isMountedRef.current) return;
 
-   async componentDidMount() {
-
-      await getInitialLanguage()
-
-      this.appType = this.props.navigation.getParam('appType');
-
-      //check for an 'auto' login .. returning having not logged off
-      //we do NOT allow this for a user that has not finished enrolling
-      //because we always want to know their login method
-
-      let fbUser = firebase.auth().currentUser
-      // console.log(this.appType, 'CdsStackSigninOrMain mounted', fbUser)
-
-      if (fbUser) {  //if the user has a firebase authorization
-         let dbUser = await dwdbfsUserGetByAuthAndAppType(this.appType, fbUser.uid)
-         // console.log("user from database",dbUser)
-         if (dbUser) { // if we have a database record for that auth id
-            // console.log(this.appType, 'going to stackmain')
-            this.props.navigation.navigate("StackMain", { 'user': dbUser, 'comeFrom': 'auto' })
-         }
-         else {//they have auth entry but no database record 
-            //log them out and they will have to login again
-            await cmnSignout()
-            // console.log(this.appType, 'going to stacksignin')
-            this.props.navigation.navigate("StackSignin")
-         }
+      if (dbUser) {
+        navigation.replace('StackMain', { user: dbUser, comeFrom: 'auto' });
+        return;
       }
-      else { //go let them sign in
-         this.props.navigation.navigate("StackSignin")
-      }
-   }
 
-   componentWillUnmount() {
-      // console.log(this.appType, 'CdsStackSigninOrMain dismount')
-   }
+      //CLAUDE: signed in with no profile for this appType means sign out, but a failed read proves nothing, so never sign out on error
+      if (fbUser && !readFailed) await cmnSignout();
+      if (!isMountedRef.current) return;
+      navigation.replace('StackSignin');
+    };
 
-   render() {
-      return (
-         <CdsSpinnerScreen />
-      )
-   }
+    init();
+  }, []);
+
+  return <CdsSpinnerScreen />;
 }
-
