@@ -184,7 +184,7 @@ export function CstSignupInitializeAccount() {
       profileDataRef.current.shopId = shopRef.current ? shopRef.current.id : null
       //errors are caught and annunciated within the dwdb
       ref = await dwdbfsCustAdd(fbauthUserRef.current.uid, profileDataRef.current)
-      global.cstxRef = ref
+      global.cstxRef = ref //NOTE not used anywhere
       CST.setShop(ref ? await dwdbfsShopGet(ref.shopId) : null)
       await dwdbfsCouponsAddWelcome(ref.id)
 

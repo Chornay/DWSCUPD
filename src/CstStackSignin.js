@@ -16,15 +16,9 @@ import { CstSigninEmailSignup } from './CstSigninEmailSignup'
 const RootStack = createStackNavigator()
 
 
-//NOTE that anywhere in the Auth 'tree' we can use global.rootNav
-// which will give us access to this stack (and thus to the Main stack)
 export default function CstStackSignin() {
 
   const navigation = useNavigation()
-
-  //CLAUDE: must be set during render, not in an effect - child effects run before parent effects, so a child reading global.rootNav on mount would see the old value
-  //CLAUDE: callers of global.rootNav.navigate('StackMain', ...) leave this stack underneath StackMain; they should use reset/replace instead (a stack keeps what a switch navigator discarded)
-  global.rootNav = navigation
 
   return (
     <RootStack.Navigator

@@ -13,7 +13,7 @@ export async function navigateForAuthorizedCust(navigation, appType, options, re
       try {
          let dbUser = await dwdbfsUserGetByAuthAndAppType(appType, fbUser.uid)
          if (dbUser) {
-            //CLAUDE: v5 - navigate bubbles from the sign-in stack up to StackMain in CstApp's stack, so global.rootNav is no longer needed here. Try replace() once the back-button test passes
+            //CLAUDE: v5 - Try replace() once the back-button test passes
             navigation.navigate("StackMain", { 'user': dbUser })
          }
          else if (appType === 'cst') { //ONLY customer will setup an account

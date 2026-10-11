@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, StatusBar } from 'react-native'
 import { Platform } from 'react-native'
-import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
+import { SafeAreaConsumer } from 'react-native-safe-area-context';
 import { COLORS } from 'DWcmn/Global'
 import I18n from 'i18n-js';
 
@@ -64,7 +64,6 @@ const renderScreen = (props) => {
   //for android we use StatusBar background color
   //in both cases the SafeAreaView starts BELOW the status bar (it is padded)
   return (
-        <SafeAreaProvider>
           <View style={{ flex: 1, backgroundColor: statusBarColor }}>
             {/* CLAUDE SafeAreaConsumer doesn't take a style prop, so the style below is ignored */}
             <SafeAreaConsumer style={{ flex: 1, backgroundColor: statusBarColor }}>
@@ -76,7 +75,6 @@ const renderScreen = (props) => {
               </View>}
             </SafeAreaConsumer>
           </View>
-        </SafeAreaProvider>
   )
 } //end renderScreen
 

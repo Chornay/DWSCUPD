@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef } from 'react';
 import 'react-native-gesture-handler' //Claude says put this way up here
+import React, { useContext, useEffect, useRef } from 'react';
 import { NavigationContainer, NavigationContext } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '@react-native-firebase/firestore'; //Claude wanted this 
 import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
@@ -60,5 +60,5 @@ export default function CstApp() {
       <Stack.Screen name="StackMain" component={CstStackMain} />
     </Stack.Navigator>)
 
-  return parentNavigation ? stack : <NavigationContainer>{stack}</NavigationContainer>;
+  return parentNavigation ? stack : <SafeAreaProvider><NavigationContainer>{stack}</NavigationContainer></SafeAreaProvider>;
 }

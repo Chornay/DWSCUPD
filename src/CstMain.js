@@ -30,7 +30,7 @@ import { CST } from './CST'
 import { cmnSendEmailAsync } from 'DWcmn/cmnSendEmailAsync'
 import { prjToast } from 'DWcmn/PrjToast'
 import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions'
-import { cstCheckSystem } from './cstCheckSystem'
+import { cstCheckSystemSafe } from './cstCheckSystem'
 
 
 // import { LoginManager } from 'react-native-fbsdk-next';
@@ -139,7 +139,7 @@ export function CstMain() {
    useEffect(() => {
       (async () => {
          // the following may navigate to 'must update'/'can't continue' screens or do popup
-         await cstCheckSystem(navigation)
+         await cstCheckSystemSafe(navigation)
 
          await refreshImageSlider()
 

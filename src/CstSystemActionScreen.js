@@ -1,68 +1,58 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Platform } from 'react-native'
 import CdsQuestionScreen from './CdsQuestionScreen'
 import { View, Linking, StyleSheet } from "react-native";
-import { cstGetSystemHealth } from './cstCheckSystem';
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
+import { cstGetSystemHealthSafe } from './cstCheckSystem';
+import { cmnAlertPopup } from 'DWcmn/cmnAnnunciationFunctions'
+import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 
 //param payLoad .. the object returned from the checkSystem cloud function
 
 //we are here if the user has done a system check and found that either
 //  mustUpdate .. the user must update to a newer version
-//  cannotContinue .. the system is not available .. will be a message in msgText
-export class CstSystemActionScreen extends Component {
+//  cannotContinue .. the system is not available   .. will be a message in msgText
+export function CstSystemActionScreen() {
 
-   constructor() {
-      super();
-      this.state = {
-         isComponentInitialized: false,
-      };
+   const navigation = useNavigation()
+   const { payLoad = null } = useRoute().params ?? {}
+   const isMountedRef = useIsMounted()
+
+   if (payLoad?.mustUpdate) {
+      return (
+         <CdsQuestionScreen
+            text='cmnNEW.MsgRequireAppUpdate'
+            onOkayCode='UPDATE'
+            onOkay={() => {
+               //CLAUDE: the store URLs/package id are hard-coded literals, candidates for named constants
+               Linking.openURL(
+                  Platform.OS === "ios"
+                     //TODO add link for iOS device
+                     ? "itms-apps://itunes.apple.com/app/idYOUR_APP_ID"
+                     : "https://play.google.com/store/apps/details?id=com.dobbywalla.cust"
+               )
+            }}
+         />
+      )
    }
+   return (
+      <CdsQuestionScreen
+         text='cmnNEW.MsgSystemUnavailable'
+         onOkay={async () => {
+            const newPayLoad = await cstGetSystemHealthSafe() //never throws
+            if (!isMountedRef.current) return
 
-   componentDidMount() {
-      this.setState({ isComponentInitialized: true });
-   }
+            if (newPayLoad?.mustUpdate || newPayLoad?.cannotContinue || newPayLoad?.cloudFnError) {
+               navigation.replace('CstSystemActionScreen', { payLoad: newPayLoad })
+               return
+            }
+            if (newPayLoad?.msgAvail) {
+               cmnAlertPopup({ text: newPayLoad.msgText })
+            }
+            navigation.pop()
+         }} />   )
+}
 
-   render() {
 
-      if (!this.state.isComponentInitialized) return null
-
-      const payLoad = this.props.navigation.getParam('payLoad')
-
-      if (payLoad?.mustUpdate) {
-         //NOTE that we do not provide a LATER option because there is nowhere for us to go
-         //we can't popToTop because we will just end up back in the same place
-         //logging them out would not do them any favours
-         return (
-            <CdsQuestionScreen
-               text='cmnNEW.MsgRequireAppUpdate'
-               onOkayCode='UPDATE'
-               onOkay={() => {
-                  Linking.openURL(
-                     Platform.OS === "ios"
-                        //TODO add link for iOS device
-                        ? "itms-apps://itunes.apple.com/app/idYOUR_APP_ID"
-                        : "https://play.google.com/store/apps/details?id=com.dobbywalla.cust"
-                  )
-               }}
-            />
-         )
-      }
-      else if (payLoad?.cannotContinue) { //DEBUG
-         //NOTE that we do not provide a LATER option because there is nowhere for us to go
-         //we can't popToTop because we will just end up back in the same place
-         //logging them out would not do them any favours
-         return (
-            <CdsQuestionScreen
-               text='cmnNEW.MsgSystemUnavailable'
-               extra={payLoad.msgText}
-               onOkay={async () => {
-                  const newPayLoad = await cstGetSystemHealth()
-                  if (!newPayLoad?.cannotContinue) { this.props.navigation.popToTop() }
-               }}
-            />
-         )
-      }
-   }
-
-}// end CstSystemActionScreen
+// end CstSystemActionScreen

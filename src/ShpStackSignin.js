@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { createAppContainer } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
+import React, { useEffect } from 'react'
+import { useNavigation } from 'DWcmn/PrjNav5Wrapper'
+import { createStackNavigator } from '@react-navigation/stack'
 
 import { CdsSigninLogo } from './CdsSigninLogo'
 import { CdsSigninEmail } from './CdsSigninEmail'
@@ -11,63 +11,33 @@ import { CdsSigninEmailForgotSent } from './CdsSigninEmailForgotSent'
 import { CdsSigninPhone } from './CdsSigninPhone'
 
 //NOTE the drv and shp signin stacks are identical except for the appType
-const RootStack = createStackNavigator(
-  {
-    CdsSigninLogo: {
-      screen: CdsSigninLogo,
-      params: { signinAppType: 'shp' }
-    },
-    CdsSigninEmail: {
-      screen: CdsSigninEmail,
-    },
-    CdsSigninEmailNotVerified: {
-      screen: CdsSigninEmailNotVerified,
-    },
-    CdsSigninEmailVerifySent: {
-      screen: CdsSigninEmailVerifySent,
-    },
-    CdsSigninEmailForgot: {
-      screen: CdsSigninEmailForgot,
-    },
-    CdsSigninEmailForgotSent: {
-      screen: CdsSigninEmailForgotSent,
-    },
-    CdsSigninPhone: {
-      screen: CdsSigninPhone,
-    },
-  }, //end of routes
-
-  { //Navigator config options 
-    initialRouteName: 'CdsSigninLogo',
-    defaultNavigationOptions: {
-      header: null,
-    }
-  }
-
-); //end stack navigator
+const RootStack = createStackNavigator()
 
 
-const AppContainer = createAppContainer(RootStack);
+export default function ShpStackSignin() {
 
+  const navigation = useNavigation()
 
-//NOTE that anywhere in the Auth 'tree' we can use global.rootNav
-// which will give us access to this stack (and thus to the Main stack)
-export default class ShpStackSignin extends Component {
-
-  componentDidMount() {
+  useEffect(() => {
     console.log("ShpStackSignin mounted")
-  }
 
-  componentWillUnmount() {
-    console.log("ShpStackSignin unmounted", global.ShpxRec)
-  } //end componentWillUnmount
+    return () => {
+      console.log("ShpStackSignin unmounted")
+    }
+  }, [])
 
-  render() {
-    global.rootNav = this.props.navigation
-    return (
-      <AppContainer />
-    );
-  }
-} //end class ShpStackSignin
-
-
+  return (
+    <RootStack.Navigator
+      initialRouteName="CdsSigninLogo"
+      screenOptions={{ headerShown: false }}
+    >
+      <RootStack.Screen name="CdsSigninLogo" component={CdsSigninLogo} initialParams={{ signinAppType: 'shp' }} />
+      <RootStack.Screen name="CdsSigninEmail" component={CdsSigninEmail} />
+      <RootStack.Screen name="CdsSigninEmailNotVerified" component={CdsSigninEmailNotVerified} />
+      <RootStack.Screen name="CdsSigninEmailVerifySent" component={CdsSigninEmailVerifySent} />
+      <RootStack.Screen name="CdsSigninEmailForgot" component={CdsSigninEmailForgot} />
+      <RootStack.Screen name="CdsSigninEmailForgotSent" component={CdsSigninEmailForgotSent} />
+      <RootStack.Screen name="CdsSigninPhone" component={CdsSigninPhone} />
+    </RootStack.Navigator>
+  )
+} //end ShpStackSignin

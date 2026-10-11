@@ -17,7 +17,6 @@ import { GC_STD_MARGIN } from 'DWcmn/Global'
 import { PrjButtonWithConfirm } from 'DWcmn/PrjButtonWithConfirm'
 import { PrjBusyMask } from 'DWcmn/PrjBusyMask'
 import { prjIconEditableBox } from 'DWcmn/PrjIconComponents'
-import {goBackToScreen} from 'DWcmn/prjNavigation'
 import { prjCloudLogError } from 'DWcmn/prjCloudLog'
 import { useRefresh } from 'DWcmn/prjUseRefresh'
 import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
@@ -93,7 +92,8 @@ export function DsMenuOrderChangeInvoice() {
       try {
          let newId = await dwdbfsOrderChange(orderRef.current)
          //NOTE both driver and shop use this screen name
-         goBackToScreen(navigation,'OrderDetail')
+         // goBackToScreen(navigation,'OrderDetail')
+         navigation.navigate('OrderDetail')
       }
       catch (error) {
          prjCloudLogError('DsMenuOrderChangeInvoice submitChanges', error, { toastI18n: 'cmnNEW.ERRORModifyingOrder' })

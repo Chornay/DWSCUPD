@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useNavigation, useRoute } from 'DWcmn/PrjNav5Wrapper'
 import { CdsScreen } from './CdsScreen'
 import GCHeader from 'DWcmn/GCHeader'
 import { dwdbfsShopGet } from 'DWcmn/dwdbfsShop'
@@ -15,8 +16,10 @@ import { useIsMounted } from 'DWcmn/prjUseIsMounted'
 
 //param shopId
 
-export function CdsShopBoundaries(props) {
+export function CdsShopBoundaries() {
 
+   const navigation = useNavigation()
+   const { shopId = null } = useRoute().params ?? {}
    const [isComponentInitialized, setIsComponentInitialized] = useState(false)
    const shopRef = useRef(null)
    const mapPointerRef = useRef(null)
@@ -24,18 +27,25 @@ export function CdsShopBoundaries(props) {
 
    useEffect(() => {
       async function init() {
-         const shopId = props.navigation.getParam('shopId', null)
-         const shop = await dwdbfsShopGet(shopId)
-         //TODO check shop not null
-         if (isMountedRef.current) {
-            shopRef.current = shop
+         try {
+            const shopRec = await dwdbfsShopGet(shopId)
+            if (!isMountedRef.current) return
+            if (!shopRec) {
+               prjCloudLogError('CdsShopBoundaries', 'shop not found: ' + shopId, { toastI18n: "cmnNEW.MsgDbReadError" })
+               navigation.goBack()
+               return
+            }
+            shopRef.current = shopRec
             setIsComponentInitialized(true)
+         } catch (error) {
+            prjCloudLogError('CdsShopBoundaries', error, { toastI18n: "cmnNEW.MsgDbReadError" })
+            if (isMountedRef.current) navigation.goBack()
          }
       }
 
       init()
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount; shopId is a route param fixed for the life of this screen
    }, [])
-
    if (!isComponentInitialized) return null
 
    const shop = shopRef.current
@@ -44,7 +54,7 @@ export function CdsShopBoundaries(props) {
    return (
       <CdsScreen>
          <View style={{ flex: 1 }}>
-            <GCHeader back={() => { props.navigation.goBack() }}
+            <GCHeader back={() => { navigation.goBack() }}
                titleText={'Boundaries for Shop ' + shop.id}
             />
 
@@ -86,6 +96,7 @@ const styles = {
       flex: 1,
       paddingLeft: 0,
       paddingRight: 0,
+      //CLAUDE: 'marginButtom' is a typo for marginBottom, so it has never done anything (and it's 0, so fixing it changes nothing visible)
       marginButtom: 0,
    },
    map: {
