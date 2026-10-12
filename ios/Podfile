@@ -1,9 +1,9 @@
 
 # require_relative'../node_modules/react-native/scripts/react_native_pods'
-# require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# require_relative '../node_modules/react-native/node_modules/@react-native-community/cli-platform-ios/native_modules'
 # permissions_path = '../node_modules/react-native-permissions/ios'
 # platform :ios, '13.0'
-# require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# require_relative '../node_modules/react-native/node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 # target 'DW' do
 #   config = use_native_modules!
@@ -158,10 +158,10 @@
 
 
 require_relative'../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# require_relative '../node_modules/react-native/node_modules/@react-native-community/cli-platform-ios/native_modules'
 permissions_path = '../node_modules/react-native-permissions/ios'
 platform :ios, '13.0'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative '../node_modules/react-native/node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'DW' do
   config = use_native_modules!
@@ -279,7 +279,67 @@ end
 #   end
 # end
 
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+#     target.build_configurations.each do |config|
+#       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+#       config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+#       config.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
+#       config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+#       config.build_settings['CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS'] = 'NO'
+#       config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+#       config.build_settings['SWIFT_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+#       config.build_settings['SWIFT_INSTALL_OBJC_HEADER'] = 'NO'
+#       config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -lswift_Concurrency -lswift_StringProcessing'
+#       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+      
+#     end
+
+#     if target.name == 'BoringSSL-GRPC'
+#       target.build_configurations.each do |config|
+#         config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = nil
+#       end
+#       target.source_build_phase.files.each do |file|
+#         if file.settings && file.settings['COMPILER_FLAGS']
+#           flags = file.settings['COMPILER_FLAGS'].split
+#           flags.reject! { |flag| flag.start_with?('-GCC_WARN') || flag == '-G' }
+#           file.settings['COMPILER_FLAGS'] = flags.join(' ')
+#         end
+#       end
+#     end
+
+#   if target.name == 'react-native-geolocation-service'
+#       target.build_configurations.each do |config|
+#         config.build_settings['SWIFT_VERSION'] = '5.0'
+#         config.build_settings['OTHER_SWIFT_FLAGS'] = '$(inherited) -Xfrontend -disable-reflection-metadata'
+#         config.build_settings['SWIFT_DEPLOYMENT_TARGET'] = '13.0'
+#         config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'minimal'
+#       end
+#     end
+#   end
+# end
+
+
+
 post_install do |installer|
+  react_native_post_install(installer)
+
+  # Temporary fix: ABSL_CONST_INIT breaks FirebaseFirestore 8.8.0 on new Xcode.
+  firestore_settings = "#{installer.sandbox.root}/FirebaseFirestore/Firestore/Source/API/FIRFirestoreSettings.mm"
+  if File.exist?(firestore_settings)
+    File.chmod(0644, firestore_settings)
+    File.write(firestore_settings, File.read(firestore_settings).gsub('ABSL_CONST_INIT ', ''))
+  end
+
+  # Fix: FBReactNativeSpec "Generate Specs" fails because `tee` gets an empty output file.
+  installer.pods_project.targets.each do |t|
+    next unless t.name == 'FBReactNativeSpec'
+    t.build_phases.each do |phase|
+      next unless phase.respond_to?(:shell_script) && phase.name.to_s.include?('Generate Specs')
+      phase.shell_script = phase.shell_script.gsub(/\|\s*tee\s+[^\n]*/, '')
+    end
+  end
+
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
@@ -291,6 +351,7 @@ post_install do |installer|
       config.build_settings['SWIFT_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
       config.build_settings['SWIFT_INSTALL_OBJC_HEADER'] = 'NO'
       config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -lswift_Concurrency -lswift_StringProcessing'
+      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
     end
 
     if target.name == 'BoringSSL-GRPC'
@@ -306,7 +367,7 @@ post_install do |installer|
       end
     end
 
-  if target.name == 'react-native-geolocation-service'
+    if target.name == 'react-native-geolocation-service'
       target.build_configurations.each do |config|
         config.build_settings['SWIFT_VERSION'] = '5.0'
         config.build_settings['OTHER_SWIFT_FLAGS'] = '$(inherited) -Xfrontend -disable-reflection-metadata'

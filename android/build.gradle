@@ -13,6 +13,7 @@ buildscript {
         googlePlayServicesAuthVersion = "19.2.0"
         hermesEnabled = project.hasProperty('hermesEnabled') ? project.hermesEnabled : true
         SOLOADER_VERSION = "0.10.4"
+        ndkVersion = "21.4.7075529"
 
     }
     repositories {

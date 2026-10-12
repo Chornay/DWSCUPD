@@ -35,8 +35,8 @@
     "moment": "^2.29.1",
     "nodemailer": "^6.9.1",
     "npm": "^10.9.1",
-    "react": "16.13.1",
-    "react-native": "0.63.3",
+    "react": "17.0.1",
+    "react-native": "0.64.3",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-barcode-mask": "^1.2.4",
     "react-native-calendars": "^1.1254.0",
@@ -81,18 +81,18 @@
     "rn-qr-generator": "^1.4.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.9",
     "@react-native-community/eslint-config": "^1.1.0",
     "@types/react-native-input-spinner": "^1.4.2",
-    "babel-jest": "^25.1.0",
+    "babel-jest": "^26.6.3",
     "eslint": "^6.5.1",
-    "jest": "^25.1.0",
-    "metro-react-native-babel-preset": "^0.59.0",
+    "jest": "^26.6.3",
+    "metro-react-native-babel-preset": "^0.64.0",
     "patch-package": "^8.0.1",
     "postinstall-postinstall": "^2.1.0",
     "postinstall-prepare": "^2.0.0",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "17.0.1"
   },
   "jest": {
     "preset": "react-native"
