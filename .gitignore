@@ -8,3 +8,25 @@ android/app/.cxx/
 *.apk
 *.aab
 *.log
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+
+# Xcode build output
+DerivedData/
+build/
+*.xcscmblueprint
+
+# macOS
+.DS_Store
+
+# Node / RN
+.env
+*.jsbundle
+
+android/.cxx/
+android/local.properties
+android/app/debug.keystore
+*.iml
+.idea/
