@@ -126,7 +126,8 @@ android {
     // compileSdkVersion 34 //B4 SDK 35
     namespace "com.dobbywalla.cust"
     // compileSdkVersion 35
-    compileSdkVersion 36
+    compileSdkVersion 31
+    buildToolsVersion = "30.0.3"
     buildFeatures {
         buildConfig true
     }
@@ -136,14 +137,13 @@ android {
     // }
 
     defaultConfig {
-        multiDexEnabled true
         applicationId "com.dobbywalla.cust"
         // minSdkVersion rootProject.ext.minSdkVersion
-        // minSdkVersion = 21
         // targetSdkVersion 34 //B4 SDK 35
         minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion = 21
         // targetSdkVersion 35
-        targetSdkVersion 36
+        targetSdkVersion 21
         versionCode 61
         versionName "2.61.0"
         multiDexEnabled true

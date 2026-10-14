@@ -63,15 +63,15 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     SoLoader.init(this, /* native exopackage */ false);
     //     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
-  // 20250505 added for app crashing after update to SDK 34
-  @Override
-    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
-        if (Build.VERSION.SDK_INT >= 34 && getApplicationInfo().targetSdkVersion >= 34) {
-            return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
-        } else {
-            return super.registerReceiver(receiver, filter);
-        }
-    }
+  // // 20250505 added for app crashing after update to SDK 34
+  // @Override
+  //   public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+  //       if (Build.VERSION.SDK_INT >= 34 && getApplicationInfo().targetSdkVersion >= 34) {
+  //           return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+  //       } else {
+  //           return super.registerReceiver(receiver, filter);
+  //       }
+  //   }
   
 
   /**

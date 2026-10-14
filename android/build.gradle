@@ -2,36 +2,25 @@
 
 buildscript {
     ext {
-        // compileSdkVersion = 35
-        // targetSdkVersion = 35
-        compileSdkVersion = 36
-        targetSdkVersion = 36
-        buildToolsVersion = "36.0.0"
-        // minSdkVersion = 21
-        minSdkVersion = 23
-        // buildToolsVersion = "34.0.0"
+        buildToolsVersion = "30.0.3"
+        minSdkVersion = 21 //20240906 from 19
+        compileSdkVersion = 31
+        targetSdkVersion = 31 //changed from 30 20260915 to work on s26 and a25
+        ndkVersion = "21.4.7075529" // Crucial for 0.64 compilation stability        
         googlePlayServicesAuthVersion = "19.2.0"
         hermesEnabled = project.hasProperty('hermesEnabled') ? project.hermesEnabled : true
         SOLOADER_VERSION = "0.10.4"
-        ndkVersion = "21.4.7075529"
-
+        kotlinVersion = "1.5.31"
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        // classpath("com.android.tools.build:gradle:3.5.3")
-        classpath 'com.google.gms:google-services:4.3.13'
-        classpath 'com.google.gms:google-services:4.3.10' 
-        // classpath("com.android.tools.build:gradle:8.13.0")
-        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"   // <--- THIS
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
-
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.google.gms:google-services:4.3.10'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"    
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
     }
 }
 
