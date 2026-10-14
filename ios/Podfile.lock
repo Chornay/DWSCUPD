@@ -1062,8 +1062,6 @@ PODS:
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
-  - react-native-ping (1.2.8):
-    - React
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-splash-screen (3.3.0):
@@ -1221,8 +1219,6 @@ PODS:
     - React-Core
   - RNSha256 (1.4.10):
     - React-Core
-  - RNShare (8.2.2):
-    - React-Core
   - RNSound (0.11.2):
     - React-Core
     - RNSound/Core (= 0.11.2)
@@ -1276,7 +1272,6 @@ DEPENDENCIES:
   - react-native-html-to-pdf (from `../node_modules/react-native-html-to-pdf`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
-  - react-native-ping (from `../node_modules/react-native-ping`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-thermal-receipt-printer-image-qr (from `../node_modules/react-native-thermal-receipt-printer-image-qr`)
@@ -1314,7 +1309,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSha256 (from `../node_modules/react-native-sha256`)
-  - RNShare (from `../node_modules/react-native-share`)
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1424,8 +1418,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
-  react-native-ping:
-    :path: "../node_modules/react-native-ping"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
@@ -1500,8 +1492,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSha256:
     :path: "../node_modules/react-native-sha256"
-  RNShare:
-    :path: "../node_modules/react-native-share"
   RNSound:
     :path: "../node_modules/react-native-sound"
   RNSVG:
@@ -1581,7 +1571,6 @@ SPEC CHECKSUMS:
   react-native-html-to-pdf: 4c5c6e26819fe202971061594058877aa9b25265
   react-native-maps: 8b8bfada2c86205a7f5a07dd1f92f29b33ea83aa
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
-  react-native-ping: e9f64f02087c3cd2a0bc771ad0cf4a88edaa3072
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-thermal-receipt-printer-image-qr: 15e3fbcdf4cb574d6edf17c6d31512901ab3ad8e
@@ -1619,13 +1608,12 @@ SPEC CHECKSUMS:
   RNReanimated: 4c2ecfbeaf98cd03abd4f77b2dfe0fa8f418d4fd
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSha256: e1bc64e9e50b293d5282bb4caa1b2043931f1c9d
-  RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   RNVectorIcons: 654e2b77f7594d3c1ab395cba139c6e7f33d2fac
   Yoga: 8ae716bf8b654fac1c7be1ac81376041837acb2c
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 8f0c9f72f951bb2ed2621608d43a7cf720953ffa
+PODFILE CHECKSUM: b994f4a11265f3b6cef4a4dc4884f6e916f58799
 
 COCOAPODS: 1.12.0

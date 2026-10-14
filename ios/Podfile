@@ -25,7 +25,6 @@ target 'DW' do
   pod 'BEMCheckBox'
   pod 'RNSha256', :path => '../node_modules/react-native-sha256'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-  pod 'RNShare', :path => '../node_modules/react-native-share'
   pod 'RNSound', :path => '../node_modules/react-native-sound'
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
@@ -47,7 +46,6 @@ target 'DW' do
   pod 'RNLocalize', :path => '../node_modules/react-native-localize'
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
   pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path

@@ -2,7 +2,6 @@
 set -e
 
 MODULES=(
-  "node_modules/react-native-ping/android/build.gradle"
   "node_modules/react-native-maps/android/build.gradle"
   "node_modules/react-native-reanimated/android/build.gradle"
   "node_modules/react-native-splash-screen/android/build.gradle"
@@ -20,7 +19,6 @@ MODULES=(
   "node_modules/react-native-geolocation-service/android/build.gradle"
   "node_modules/@react-native-community/datetimepicker/android/build.gradle"
   "node_modules/@react-native-community/masked-view/android/build.gradle"
-  "node_modules/react-native-share/android/build.gradle"
   "node_modules/react-native-sound/android/build.gradle"
   "node_modules/@react-native-google-signin/google-signin/android/build.gradle"
   "node_modules/react-native-device-country/android/build.gradle"
