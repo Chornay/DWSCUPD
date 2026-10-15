@@ -126,7 +126,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
  */
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
-android {
+android {       
     // compileSdkVersion rootProject.ext.compileSdkVersion //DEBUG 20231023 Before update to API 33
     // compileSdkVersion 34 //B4 SDK 35
     namespace "com.dobbywalla.cust"
@@ -200,8 +200,9 @@ android {
                 ndk {
                     abiFilters nativeArchitectures.split(',')
                 }
- 
             }
+ 
+        }
         release {
             signingConfig signingConfigs.release
         }
