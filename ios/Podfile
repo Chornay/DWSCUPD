@@ -65,7 +65,7 @@ end
 
 post_install do |installer|
   react_native_post_install(installer)
-
+  __apply_Xcode_12_5_M1_post_install_workaround(installer)
   # Fix: ABSL_CONST_INIT breaks FirebaseFirestore 8.8.0 on new Xcode.
   firestore_settings = "#{installer.sandbox.root}/FirebaseFirestore/Firestore/Source/API/FIRFirestoreSettings.mm"
   if File.exist?(firestore_settings)

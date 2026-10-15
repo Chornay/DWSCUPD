@@ -29,4 +29,5 @@ android/.cxx/
 android/local.properties
 android/app/debug.keystore
 *.iml
+*.hprof
 .idea/
